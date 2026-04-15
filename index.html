@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Factory Dashboard Menu</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(135deg, #0f001f, #1a0033);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+/* TITLE */
+h1 {
+  margin-bottom: 40px;
+  font-size: 32px;
+  color: #e9d5ff;
+  text-shadow: 0 0 10px rgba(168,85,247,0.6);
+}
+
+/* BUTTON GRID */
+.menu {
+  display: grid;
+  grid-template-columns: repeat(2, 200px);
+  gap: 20px;
+}
+
+/* BUTTON */
+.button {
+  padding: 20px;
+  text-align: center;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.08);
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+
+  transition: all 0.3s ease;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 10px rgba(168,85,247,0.3);
+}
+
+.button:hover {
+  transform: scale(1.05);
+  background: rgba(168,85,247,0.3);
+  box-shadow: 0 0 20px rgba(168,85,247,0.8);
+}
+
+/* FOOTER */
+.footer {
+  position: absolute;
+  bottom: 20px;
+  font-size: 14px;
+  color: #aaa;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Factory Dashboard Control</h1>
+
+<div class="menu">
+  <div class="button" onclick="openPage('f1_fin.html')">Finishing F1</div> 
+  <div class="button" onclick="openPage('f7_fin.html')">Finishing F7</div>
+  <div class="button" onclick="openPage('f8a_fin.html')">Finishing F8A</div>
+  <div class="button" onclick="openPage('f8b_fin.html')">Finishing F8B</div>
+  <div class="button" onclick="openPage('f4_packing.html')">Finishing F9</div>
+  <div class="button" onclick="openPage('f4_packing.html')">Cutting</div>
+  <div class="button" onclick="openPage('f4_packing.html')">Printing</div>
+  <div class="button" onclick="openPage('f4_packing.html')">Embroidery</div>
+  <div class="button" onclick="openPage('f4_packing.html')">Sock</div>
+  <div class="button" onclick="openPage('f4_packing.html')">Packing</div>
+</div>
+
+<div class="footer">Select a dashboard</div>
+
+<script>
+function openPage(page) {
+  window.location.href = page;
+}
+</script>
+
+</body>
+</html>

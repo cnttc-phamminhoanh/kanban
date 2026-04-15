@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Factory TV Dashboard</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: black;
+  overflow: hidden;
+}
+
+/* HEADER - SPACE */
+.header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  color: white;
+  z-index: 10;
+
+  background: url("https://images.unsplash.com/photo-1462331940025-496dfbfc7564") center/cover no-repeat;
+}
+
+/* overlay */
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(20,0,40,0.85), rgba(40,0,80,0.6));
+  z-index: 0;
+}
+
+/* stars */
+.header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(white 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.15;
+  animation: starsMove 20s linear infinite;
+  z-index: 0;
+}
+
+@keyframes starsMove {
+  from { transform: translateY(0); }
+  to { transform: translateY(50px); }
+}
+
+/* đảm bảo text nổi */
+.header > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* HOME BUTTON */
+.home-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.1);
+  color: #e9d5ff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.home-btn:hover {
+  background: rgba(168,85,247,0.4);
+  box-shadow: 0 0 10px rgba(168,85,247,0.8);
+}
+
+/* TITLE */
+.title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #e9d5ff;
+}
+
+/* CLOCK */
+.clock {
+  background: rgba(255,255,255,0.08);
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: #e0c3fc;
+}
+
+/* PAGE */
+.page {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 60px);
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.page.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.page iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <button class="home-btn" onclick="goHome()">🏠 Home</button>
+  <div class="title">Factory 01 (Finishing)</div>
+  <div class="clock" id="clockRight"></div>
+</div>
+
+<!-- PAGE 1 -->
+<div class="page active">
+  <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=8179a714-e66e-497e-8509-e68070224ca3&accessTicket=3b2dfd80-b5c8-4faf-bdc5-0e31d00373d7&dd_orientation=auto"></iframe>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+  <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=917c63dc-a955-414c-b4aa-cfaa1fd4e08a&accessTicket=ee3f2587-51cb-4c92-9a17-2e192eb638b3&dd_orientation=auto"></iframe>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page">
+  <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=84ec7ef0-e293-4e29-9253-0a9ecc3d1863&accessTicket=b3c38ada-3eeb-4a64-8483-64b866a34062&dd_orientation=auto"></iframe>
+</div>
+
+<!-- PAGE 4 (INDEX)
+<div class="page">
+  <iframe src="index.html"></iframe>
+</div> -->
+
+<script>
+// CLOCK
+function updateClock() {
+  const now = new Date();
+  document.getElementById("clockRight").innerHTML = now.toLocaleString();
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// HOME BUTTON
+function goHome() {
+  window.location.href = "index.html";
+}
+
+// SWITCH PAGE
+let currentPage = 0;
+const pages = document.querySelectorAll(".page");
+
+setInterval(() => {
+  pages[currentPage].classList.remove("active");
+  currentPage = (currentPage + 1) % pages.length;
+  pages[currentPage].classList.add("active");
+}, 10000);
+
+// REFRESH IFRAME
+setInterval(() => {
+  document.querySelectorAll("iframe").forEach(i => i.src = i.src);
+}, 300000);
+
+// FULLSCREEN
+document.body.addEventListener("click", () => {
+  document.documentElement.requestFullscreen();
+});
+
+// RELOAD
+setInterval(() => {
+  location.reload();
+}, 1800000);
+</script>
+
+</body>
+</html>

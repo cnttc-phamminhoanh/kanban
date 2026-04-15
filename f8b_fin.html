@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Factory TV Dashboard</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: black;
+  overflow: hidden;
+}
+
+/* HEADER */
+.header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  color: white;
+  z-index: 10;
+
+  background: url("https://images.unsplash.com/photo-1462331940025-496dfbfc7564") center/cover no-repeat;
+}
+
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(20,0,40,0.85), rgba(40,0,80,0.6));
+}
+
+.header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(white 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.15;
+  animation: starsMove 20s linear infinite;
+}
+
+@keyframes starsMove {
+  from { transform: translateY(0); }
+  to { transform: translateY(50px); }
+}
+
+.header > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* HOME */
+.home-btn {
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.1);
+  color: #e9d5ff;
+  border: none;
+  cursor: pointer;
+}
+
+/* TITLE */
+.title {
+  font-size: 22px;
+  color: #e9d5ff;
+}
+
+/* CLOCK */
+.clock {
+  background: rgba(255,255,255,0.08);
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+/* PAGE */
+.page {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 60px);
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+/* DEBUG VIỀN */
+.page.active {
+  opacity: 1;
+  z-index: 1;
+  border: 2px solid purple; /* có thể xóa khi chạy thật */
+}
+
+.page iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <button class="home-btn" onclick="goHome()">🏠 Home</button>
+  <div class="title">Factory 08B (Finishing)</div>
+  <div class="clock" id="clock"></div>
+</div>
+
+<!-- PAGE 1 -->
+<div class="page active" id="page1">
+  <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=3648518b-3197-4133-946c-6b33a4a80dbf&accessTicket=5f5f05cd-ad16-4236-a44c-36ebc5ea9cf4&dd_orientation=auto"></iframe>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+  <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=46b8399a-676e-480c-8e12-2913f5664d90&accessTicket=26aa621f-d6d1-494a-a14c-5b5429abb0ea&dd_orientation=auto"></iframe>
+</div>
+
+<!-- PAGE 3 (ĐÃ FIX KHÔNG TRÙNG) -->
+<div class="page" id="page3">
+  <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=bfb7be3b-349c-47ba-8c36-20c309a03731&accessTicket=f1b110a9-d72b-4da1-a287-9604b5794a70&dd_orientation=auto"></iframe>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page" id="page4">
+  <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=f93e929f-dd11-4eff-9a0d-5fe1ecbbf36c&accessTicket=d8b9cecb-6770-461a-a8a2-7fa3e3318f14&dd_orientation=auto"></iframe>
+</div>
+
+<!-- PAGE 5 (ví dụ index hoặc page khác) -->
+<div class="page" id="page5">
+  <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=abfce991-3d1a-4e8f-abd7-43c1c4e03f97&accessTicket=1d58bbe5-9161-48da-973a-6403da664b61&dd_orientation=auto"></iframe>
+</div>
+
+<script>
+// CLOCK
+setInterval(() => {
+  document.getElementById("clock").innerHTML = new Date().toLocaleString();
+}, 1000);
+
+// HOME
+function goHome() {
+  window.location.href = "index.html";
+}
+
+// SWITCH PAGE (CHUẨN NHẤT)
+let currentPage = 0;
+const pages = document.querySelectorAll(".page");
+
+function showPage(index) {
+  pages.forEach((p, i) => {
+    p.classList.toggle("active", i === index);
+  });
+}
+
+// AUTO LOOP
+setInterval(() => {
+  currentPage = (currentPage + 1) % pages.length;
+  showPage(currentPage);
+
+  console.log("Đang chạy page:", currentPage + 1);
+}, 10000);
+
+// REFRESH IFRAME
+setInterval(() => {
+  document.querySelectorAll("iframe").forEach(i => i.src = i.src);
+}, 300000);
+
+// FULLSCREEN
+document.body.addEventListener("click", () => {
+  document.documentElement.requestFullscreen();
+});
+
+// RELOAD
+setInterval(() => {
+  location.reload();
+}, 1800000);
+</script>
+
+</body>
+</html>
