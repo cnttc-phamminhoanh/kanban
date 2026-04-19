@@ -3,12 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <title>Factory Dashboard Menu</title>
-
+<link rel="icon" href="data:image/svg+xml,
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+<circle cx='50' cy='50' r='40' fill='black'/>
+<circle cx='50' cy='50' r='25' fill='none' stroke='violet' stroke-width='3'/>
+<circle cx='50' cy='50' r='5' fill='violet'/>
+</svg>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Inter:wght@300;400;500&display=swap');
 body {
   margin: 0;
-  font-family: Arial;
-  background: linear-gradient(135deg, #0f001f, #1a0033);
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(circle at 20% 20%, #1a0033, #000),
+            radial-gradient(circle at 80% 30%, #001a33, transparent),
+            radial-gradient(circle at 50% 80%, #33001a, transparent);
   color: white;
   display: flex;
   flex-direction: column;
@@ -16,77 +25,147 @@ body {
   justify-content: center;
   height: 100vh;
 }
-
-/* TITLE */
 h1 {
-  margin-bottom: 40px;
-  font-size: 32px;
-  color: #e9d5ff;
-  text-shadow: 0 0 10px rgba(168,85,247,0.6);
+  font-size: 36px;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, #7c3aed, #22d3ee, #f472b6, #7c3aed);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0 0 4px rgba(168,85,247,0.8),
+    0 0 20px rgba(56,189,248,0.6),
+    0 0 30px rgba(236,72,153,0.5);
+  animation: gradientFlow 6s linear infinite;
 }
-
-/* BUTTON GRID */
+.subtitle {
+  margin-bottom: 50px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  letter-spacing: 3px;
+  background: linear-gradient(90deg, #38bdf8, #a855f7, #f472b6);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0 0 8px rgba(56,189,248,0.6),
+    0 0 15px rgba(168,85,247,0.4);
+  opacity: 0.9;
+}
 .menu {
   display: grid;
-  grid-template-columns: repeat(2, 200px);
-  gap: 20px;
+  grid-template-columns: repeat(3, 220px);
+  gap: 25px;
 }
-
-/* BUTTON */
 .button {
   padding: 20px;
-  text-align: center;
-  border-radius: 15px;
-  background: rgba(255,255,255,0.08);
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(168,85,247,0.3);
   cursor: pointer;
-  font-size: 18px;
-  font-weight: bold;
-
-  transition: all 0.3s ease;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 0 10px rgba(168,85,247,0.3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 15px rgba(168,85,247,0.3);
 }
-
+.button i {
+  font-size: 20px;
+  text-shadow:
+    0 0 6px currentColor,
+    0 0 10px rgba(255,255,255,0.2);
+}
+.button:nth-child(1) i { color: #60a5fa; }   /* xanh dương */
+.button:nth-child(2) i { color: #34d399; }   /* xanh lá */
+.button:nth-child(3) i { color: #fbbf24; }   /* vàng */
+.button:nth-child(4) i { color: #f87171; }   /* đỏ */
+.button:nth-child(5) i { color: #a78bfa; }   /* tím */
+.button:nth-child(6) i { color: #fb7185; }   /* hồng */
+.button:nth-child(7) i { color: #22d3ee; }   /* cyan */
+.button:nth-child(8) i { color: #c084fc; }   /* tím sáng */
+.button:nth-child(9) i { color: #facc15; }   /* vàng sáng */
+.button:nth-child(10) i { color: #4ade80; }  /* xanh neon */
 .button:hover {
-  transform: scale(1.05);
-  background: rgba(168,85,247,0.3);
-  box-shadow: 0 0 20px rgba(168,85,247,0.8);
+  transform: translateY(-4px) scale(1.03);
+  background: rgba(168,85,247,0.15);
+  box-shadow:
+    0 0 40px rgba(168,85,247,0.5),
+    0 0 20px rgba(56,189,248,0.3);
+  border-color: rgba(168,85,247,0.5);
 }
-
-/* FOOTER */
-.footer {
-  position: absolute;
-  bottom: 20px;
-  font-size: 14px;
-  color: #aaa;
+#clock {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  padding: 10px 18px;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(168,85,247,0.4);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: #e9d5ff;
+  box-shadow: 0 0 15px rgba(168,85,247,0.7);
+  z-index: 999;
+  min-width: 235px;
 }
 </style>
 </head>
-
 <body>
-
-<h1>Factory Dashboard Control</h1>
-
+<h1><i class="fa-solid fa-industry"></i> Factory Dashboard</h1>
+<div class="subtitle">Production Control System</div>
+<div id="clock"></div>
 <div class="menu">
-  <div class="button" onclick="openPage('f1_fin.html')">Finishing F1</div> 
-  <div class="button" onclick="openPage('f7_fin.html')">Finishing F7</div>
-  <div class="button" onclick="openPage('f8a_fin.html')">Finishing F8A</div>
-  <div class="button" onclick="openPage('f8b_fin.html')">Finishing F8B</div>
-  <div class="button" onclick="openPage('f4_packing.html')">Finishing F9</div>
-  <div class="button" onclick="openPage('f4_packing.html')">Cutting</div>
-  <div class="button" onclick="openPage('f4_packing.html')">Printing</div>
-  <div class="button" onclick="openPage('f4_packing.html')">Embroidery</div>
-  <div class="button" onclick="openPage('f4_packing.html')">Sock</div>
-  <div class="button" onclick="openPage('f4_packing.html')">Packing</div>
+  <div class="button" onclick="openPage('f1_fin.html')">
+    <i class="fa-solid fa-gears"></i> Finishing F1
+  </div>
+  <div class="button" onclick="openPage('f7_fin.html')">
+    <i class="fa-solid fa-industry"></i> Finishing F7
+  </div>
+  <div class="button" onclick="openPage('f8a_fin.html')">
+    <i class="fa-solid fa-cogs"></i> Finishing F8A
+  </div>
+  <div class="button" onclick="openPage('f8b_fin.html')">
+    <i class="fa-solid fa-microchip"></i> Finishing F8B
+  </div>
+  <div class="button" onclick="openPage('f9_fin.html')">
+    <i class="fa-solid fa-box"></i> Finishing F9
+  </div>
+  <div class="button" onclick="openPage('cut.html')">
+    <i class="fa-solid fa-scissors"></i> Cutting
+  </div>
+  <div class="button" onclick="openPage('pri.html')">
+    <i class="fa-solid fa-print"></i> Printing
+  </div>
+  <div class="button" onclick="openPage('emb.html')">
+    <i class="fa-solid fa-shirt"></i> Embroidery
+  </div>
+  <div class="button" onclick="openPage('soc.html')">
+    <i class="fa-solid fa-socks"></i> Sock
+  </div>
+  <div class="button" onclick="openPage('pac.html')">
+    <i class="fa-solid fa-box-open"></i> Packing
+  </div>
 </div>
-
-<div class="footer">Select a dashboard</div>
-
 <script>
 function openPage(page) {
   window.location.href = page;
 }
+function updateClock() {
+  const now = new Date();
+  const time = now.toLocaleTimeString("en-GB");
+  const date = now.toLocaleDateString("en-GB");
+  document.getElementById("clock").innerHTML =
+    `${date} | ${time}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
 </script>
-
 </body>
 </html>

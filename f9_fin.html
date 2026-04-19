@@ -13,13 +13,13 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<!-- ✅ CSS CHUNG -->
+<!-- CSS CHUNG -->
 <link rel="stylesheet" href="dashboard.css">
 
-<!-- ✅ MÀU RIÊNG F8A -->
+<!-- MÀU RIÊNG F9 -->
 <style>
 :root {
-  --main-color: #f59e0b; /* vàng cam */
+  --main-color: #8b5cf6; /* 🟣 tím */
 }
 </style>
 
@@ -32,7 +32,7 @@
     <i class="fa-solid fa-house"></i> Home
   </button>
 
-  <div class="title">Factory 8A (Finishing)</div>
+  <div class="title">Factory 09 (Finishing)</div>
 
   <div class="clock" id="clockRight"></div>
 </div>
@@ -57,13 +57,8 @@
   <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=f93e929f-dd11-4eff-9a0d-5fe1ecbbf36c&accessTicket=d8b9cecb-6770-461a-a8a2-7fa3e3318f14&dd_orientation=auto"></iframe>
 </div>
 
-<!-- PAGE 5 -->
-<div class="page">
-  <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=abfce991-3d1a-4e8f-abd7-43c1c4e03f97&accessTicket=1d58bbe5-9161-48da-973a-6403da664b61&dd_orientation=auto"></iframe>
-</div>
-
 <script>
-// CLOCK (chuẩn giống F1, F7)
+// CLOCK
 setInterval(updateClock, 1000);
 updateClock();
 
@@ -85,7 +80,7 @@ function goHome() {
   window.location.href = "index.html";
 }
 
-// SWITCH PAGE (mượt + đồng bộ)
+// SWITCH PAGE
 let currentPage = 0;
 const pages = document.querySelectorAll(".page");
 
