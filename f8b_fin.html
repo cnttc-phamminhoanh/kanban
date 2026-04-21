@@ -31,42 +31,59 @@
   <button class="home-btn" onclick="goHome()">
     <i class="fa-solid fa-house"></i> Home
   </button>
+  <div class="control-box">
+    <div class="control-group">
+      <button class="nav-btn" onclick="prevPage()">&#10094;</button>
+      <button class="nav-btn" onclick="nextPage()">&#10095;</button>
+    </div>
+
+    <div class="control-group">
+      <span class="control-label">Auto refresh</span>
+      <input id="intervalInput" type="number" min="0.1" step="0.1">
+      <span class="control-label">min</span>
+    </div>
+
+    <div class="control-group">
+      <button class="preset-btn" onclick="setPreset(this,0.17)">10s</button>
+      <button class="preset-btn" onclick="setPreset(this,0.5)">30s</button>
+      <button class="preset-btn" onclick="setPreset(this,1)">1m</button>
+      <button class="preset-btn" onclick="setPreset(this,5)">5m</button>
+    </div>
+  </div>
 
   <div class="title">Factory 8B (Finishing)</div>
 
   <div class="clock" id="clockRight"></div>
 </div>
-
+<div class="page-indicator" id="pageIndicator"></div>
 <!-- PAGE 1 -->
-<div class="page active">
+<div class="page active" id="page1">
   <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=3648518b-3197-4133-946c-6b33a4a80dbf&accessTicket=5f5f05cd-ad16-4236-a44c-36ebc5ea9cf4&dd_orientation=auto"></iframe>
 </div>
 
 <!-- PAGE 2 -->
-<div class="page">
+<div class="page" id="page2">
   <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=46b8399a-676e-480c-8e12-2913f5664d90&accessTicket=26aa621f-d6d1-494a-a14c-5b5429abb0ea&dd_orientation=auto"></iframe>
 </div>
 
-<!-- PAGE 3 -->
-<div class="page">
+<!-- PAGE 3 (ĐÃ FIX KHÔNG TRÙNG) -->
+<div class="page" id="page3">
   <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=bfb7be3b-349c-47ba-8c36-20c309a03731&accessTicket=f1b110a9-d72b-4da1-a287-9604b5794a70&dd_orientation=auto"></iframe>
 </div>
 
 <!-- PAGE 4 -->
-<div class="page">
+<div class="page" id="page4">
   <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=f93e929f-dd11-4eff-9a0d-5fe1ecbbf36c&accessTicket=d8b9cecb-6770-461a-a8a2-7fa3e3318f14&dd_orientation=auto"></iframe>
 </div>
 
-<!-- PAGE 5 -->
-<div class="page">
+<!-- PAGE 5 (ví dụ index hoặc page khác) -->
+<div class="page" id="page5">
   <iframe src="https://bi.aliyuncs.com/token3rd/dashboard/view/pc.htm?pageId=abfce991-3d1a-4e8f-abd7-43c1c4e03f97&accessTicket=1d58bbe5-9161-48da-973a-6403da664b61&dd_orientation=auto"></iframe>
 </div>
 
 <script>
-// CLOCK (chuẩn)
 setInterval(updateClock, 1000);
 updateClock();
-
 function updateClock() {
   const now = new Date();
   document.getElementById("clockRight").innerHTML =
@@ -79,40 +96,87 @@ function updateClock() {
       second: "2-digit"
     });
 }
-
-// HOME
 function goHome() {
   window.location.href = "index.html";
 }
 
-// SWITCH PAGE (mượt)
+// PAGE
 let currentPage = 0;
 const pages = document.querySelectorAll(".page");
 
-setInterval(() => {
+function showPage(i) {
   pages[currentPage].classList.remove("active");
+  currentPage = (i + pages.length) % pages.length;
+  pages[currentPage].classList.add("active");
+  updateIndicator();
+}
 
-  currentPage = (currentPage + 1) % pages.length;
+// INDICATOR
+function updateIndicator() {
+  pageIndicator.innerHTML = (currentPage + 1) + " / " + pages.length;
+}
 
-  setTimeout(() => {
-    pages[currentPage].classList.add("active");
-  }, 200);
-}, 10000);
+// INTERVAL
+let intervalTime;
+let autoSlide;
 
-// REFRESH IFRAME
+let saved = localStorage.getItem("slideInterval") || 0.17;
+intervalInput.value = saved;
+intervalTime = saved * 60000;
+
+function startAuto() {
+  clearInterval(autoSlide);
+  autoSlide = setInterval(() => {
+    showPage(currentPage + 1);
+  }, intervalTime);
+}
+
+function updateInterval() {
+  let val = parseFloat(intervalInput.value);
+  if (!val || val <= 0) val = 0.17;
+
+  intervalTime = val * 60000;
+  localStorage.setItem("slideInterval", val);
+  startAuto();
+}
+
+function setPreset(el, val) {
+  intervalInput.value = val;
+  updateInterval();
+
+  document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+}
+
+// BUTTON
+function nextPage() { showPage(currentPage + 1); startAuto(); }
+function prevPage() { showPage(currentPage - 1); startAuto(); }
+
+// INIT
+startAuto();
+updateIndicator();
+
+// AUTO HIDE HEADER
+let hideTimer;
+function showHeader() {
+  header.classList.remove("hidden");
+  clearTimeout(hideTimer);
+  hideTimer = setTimeout(() => {
+    header.classList.add("hidden");
+  }, 4000);
+}
+
+document.addEventListener("mousemove", showHeader);
+document.addEventListener("click", showHeader);
+showHeader();
+
 setInterval(() => {
   document.querySelectorAll("iframe").forEach(i => i.src = i.src);
 }, 300000);
 
-// FULLSCREEN
 document.body.addEventListener("click", () => {
   document.documentElement.requestFullscreen();
 });
-
-// AUTO RELOAD
-setInterval(() => {
-  location.reload();
-}, 1800000);
 </script>
 
 </body>
