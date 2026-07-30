@@ -1552,7 +1552,7 @@
       <!-- ======================================================
          KPI TABLE
     ======================================================= -->
-       <section class="kpi-section">
+      <section class="kpi-section">
         <div class="kpi-row">
         <div class="kpi-card">
           <table class="kpi-table">
@@ -1716,19 +1716,20 @@
 
         <!-- TIME PANEL -->
         <div class="time-panel">
-          <div class="time-panel-header">Th&#x1EDD;i gian <span class="en">/ Time</span></div>
+          <div class="time-panel-header">Thời gian <span class="en">/ Time</span></div>
           <table class="time-table">
             <colgroup>
               <col class="time-col-label" />
               <col class="time-col-hr" />
-              <col class="time-col-day" />
             </colgroup>
             <thead>
-              <tr>
+              <!-- <tr>
                 <th></th>
-                <th class="time-th">Hr <span class="en">/ Gi&#x1EDD;</span></th>
-                <th class="time-th">Day <span class="en">/ Ng&#x00E0;y</span></th>
-              </tr>
+                <th class="time-th">
+                  Giá trị
+                  <span class="en">/ Value</span>
+                </th>
+              </tr> -->
             </thead>
             <tbody>
               <tr>
@@ -1736,24 +1737,27 @@
                   <div class="lc-vi">Th&#x1EDD;i gian c&#x1EA7;n thi&#x1EBF;t &#x0111;&#x1EC3; ho&#x00E0;n th&#x00E0;nh SL k&#x1EBF; ho&#x1EA1;ch trong ng&#x00E0;y</div>
                   <div class="lc-en">Time Required to Complete the Planned Units for Today</div>
                 </td>
-                <td class="time-value-cell"><div id="hr1" class="cell-value"></div></td>
-                <td class="time-value-cell"><div id="day1" class="cell-value"></div></td>
+                <td class="time-value-cell">
+                  <div id="hr1" class="cell-value"></div>
+                </td>
               </tr>
               <tr>
                 <td class="time-label-cell pulse-label">
                   <div class="lc-vi">Th&#x1EDD;i gian c&#x1EA7;n thi&#x1EBF;t &#x0111;&#x1EC3; ho&#x00E0;n th&#x00E0;nh SL m&#x1EE5;c ti&#x00EA;u th&#x1EDD;i &#x0111;i&#x1EC3;m hi&#x1EC7;n t&#x1EA1;i</div>
                   <div class="lc-en">Time Required to Complete the Planned Units of Today&#x2019;s Accumulated Time</div>
                 </td>
-                <td class="time-value-cell"><div id="hr2" class="cell-value"></div></td>
-                <td class="time-value-cell"><div id="day2" class="cell-value"></div></td>
+                <td class="time-value-cell">
+                  <div id="h2" class="cell-value"></div>
+                </td>
               </tr>
               <tr>
                 <td class="time-label-cell pulse-label">
                   <div class="lc-vi">Th&#x1EDD;i gian c&#x1EA7;n thi&#x1EBF;t &#x0111;&#x1EC3; ho&#x00E0;n th&#x00E0;nh SL ph&#x00E2;n ph&#x1ED1;i cho chuy&#x1EC1;n</div>
                   <div class="lc-en">Time Required to Complete the Qty Distributed to the Flow</div>
                 </td>
-                <td class="time-value-cell"><div id="hr3" class="cell-value"></div></td>
-                <td class="time-value-cell"><div id="day3" class="cell-value"></div></td>
+                <td class="time-value-cell">
+                  <div id="hr3" class="cell-value"></div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -1815,6 +1819,6 @@
       </section>
     </div>
 
-    <script src="/js/dashboard-v3.js"></script>
+    <script src="/js/dashboard-v4.js"></script>
   </body>
 </html>

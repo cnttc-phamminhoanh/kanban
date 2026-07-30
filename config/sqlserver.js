@@ -17,18 +17,6 @@ const config = {
   },
 };
 
-// let poolPromise;
-
-// async function getPool() {
-//   if (poolPromise) {
-//     return poolPromise;
-//   }
-
-//   poolPromise = await sql.connect(config);
-
-//   return poolPromise;
-// }
-
 let pool;
 
 async function getPool() {

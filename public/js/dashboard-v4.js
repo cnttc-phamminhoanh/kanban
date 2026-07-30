@@ -21,9 +21,6 @@ const defaultData = {
   hr1: '-',
   hr2: '-',
   hr3: '-',
-  day1: '-',
-  day2: '-',
-  day3: '-',
   accQty: "-",
   defectQty: "-",
   defectPercent: "-",
@@ -102,12 +99,12 @@ function renderFlowDashboard(data) {
   document.getElementById("percent1").innerText = data.percent1;
   document.getElementById("percent2").innerText = data.percent2;
   document.getElementById("percent3").innerText = data.percent3;
-  document.getElementById("hr1").innerText = data.hr1;
-  document.getElementById("day1").innerText = data.day1;
-  document.getElementById("hr2").innerText = data.hr2;
-  document.getElementById("day2").innerText = data.day2;
-  document.getElementById("hr3").innerText = data.hr3;
-  document.getElementById("day3").innerText = data.day3;
+  //document.getElementById("hr1").innerText = data.hr1;
+  //document.getElementById("day1").innerText = data.day1;
+  //document.getElementById("hr2").innerText = data.hr2;
+  //document.getElementById("day2").innerText = data.day2;
+  //document.getElementById("hr3").innerText = data.hr3;
+  //document.getElementById("day3").innerText = data.day3;
   document.getElementById("accQty").innerText = data.accQty;
   document.getElementById("defectQty").innerText = data.defectQty;
   document.getElementById("defectPercent").innerText = data.defectPercent;
@@ -306,12 +303,12 @@ async function loadFlowDashboard() {
         percent1,
         percent2,
         percent3,
-        hr1: hr1 < 0 ? "0.00" : hr1,
-        day1: "-",
-        hr2: hr2 < 0 ? "0.00" : hr2,
-        day2: "-",
-        hr3,
-        day3,
+        //hr1: hr1 < 0 ? "0.00" : hr1,
+        //day1: "-",
+        //hr2: hr2 < 0 ? "0.00" : hr2,
+        //day2: "-",
+        //hr3,
+        //day3,
         accQty,
         defectQty,
         defectPercent,
