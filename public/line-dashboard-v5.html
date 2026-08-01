@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Production Dashboard V4 VN</title>
+    <title>Production Dashboard V5</title>
 
     <style>
       :root {
@@ -36,24 +36,24 @@
         --kpi-text-strong: #003532;
         --kpi-muted: #6b7d90;
         /* Keep old variable names so existing CSS does not break */
-        --plan-a: var(--kpi-main);
-        --plan-b: var(--kpi-main);
+        --plan-a: #F2EEE6;
+        --plan-b: #F2EEE6;
         --plan-soft: var(--kpi-bg);
         --plan-text: var(--kpi-text);
-        --actual-a: var(--kpi-main);
-        --actual-b: var(--kpi-main);
+        --actual-a: #F2EEE6;
+        --actual-b: #F2EEE6;
         --actual-soft: var(--kpi-bg);
         --actual-text: var(--kpi-text);
-        --balance-a: var(--kpi-main);
-        --balance-b: var(--kpi-main);
+        --balance-a: #F2EEE6;
+        --balance-b: #F2EEE6;
         --balance-soft: var(--kpi-bg);
         --balance-text: var(--kpi-text);
-        --pct-a: var(--kpi-main);
-        --pct-b: var(--kpi-main);
+        --pct-a: #F2EEE6;
+        --pct-b: #F2EEE6;
         --pct-soft: var(--kpi-bg);
         --pct-text: var(--kpi-text);
-        --time-a: var(--kpi-main);
-        --time-b: var(--kpi-main);
+        --time-a: #F2EEE6;
+        --time-b: #F2EEE6;
         --time-soft: var(--kpi-bg);
         --time-text: var(--kpi-text);
         --danger: #e25555;
@@ -127,13 +127,7 @@
         border-radius: var(--radius);
         padding: var(--header-pad-y) var(--header-pad-x);
         color: #fff;
-        background: linear-gradient(
-          135deg,
-          var(--header-a) 0%,
-          var(--header-b) 36%,
-          var(--header-c) 72%,
-          var(--header-d) 100%
-        );
+        background: #053664;
         box-shadow: var(--shadow-md);
         overflow: hidden;
         display: flex;
@@ -572,43 +566,47 @@
         letter-spacing: 0.01em;
         text-align: center;
         white-space: nowrap;
-        color: #fff;
+        color: #1f4e79;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
       }
       .th-plan {
         background: linear-gradient(
           135deg,
-          var(--plan-a) 0%,
-          var(--plan-b) 100%
+          #c7def3 0%,
+          #c7def3 100%
         );
       }
       .th-actual {
         background: linear-gradient(
           135deg,
-          var(--actual-a) 0%,
-          var(--actual-b) 100%
+          #f1e5be 0%,
+          #f1e5be 100%
         );
       }
       .th-balance {
         background: linear-gradient(
           135deg,
-          var(--balance-a) 0%,
-          var(--balance-b) 100%
+          #f7f6f4 0%,
+          #f7f6f4 100%
         );
       }
       .th-pct {
-        background: linear-gradient(135deg, var(--pct-a) 0%, var(--pct-b) 100%);
+        background: linear-gradient(
+          135deg,
+          #f7f6f4 0%,
+          #f7f6f4 100%
+        );
       }
       .th-time {
         background: linear-gradient(
           135deg,
-          var(--time-a) 0%,
-          var(--time-b) 100%
+          #f7f6f4 0%,
+          #f7f6f4 100%
         );
       }
       .kpi-table thead th .en {
         font-size: var(--fs-th-en);
-        color: rgba(255, 255, 255, 0.86);
+        color: #1f4e79;
         font-weight: 600;
         margin-left: 4px;
       }
@@ -624,7 +622,7 @@
       }
       .label-cell {
         padding: 8px 10px 8px 16px;
-        color: white;
+        color: #1f4e79;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
       }
       .label-cell .lc-vi {
@@ -634,7 +632,7 @@
         letter-spacing: 0.005em;
       }
       .label-cell .lc-en {
-        margin-top: 4px;
+        margin-top: 10px;
         font-size: var(--fs-kpi-label-en);
         line-height: 1.18;
         font-weight: 600;
@@ -644,8 +642,8 @@
       .label-plan {
         background: linear-gradient(
           135deg,
-          var(--plan-a) 0%,
-          var(--plan-b) 100%
+          #f7f6f4 0%,
+          #f7f6f4 100%
         );
       }
       .label-actual {
@@ -658,18 +656,22 @@
       .label-balance {
         background: linear-gradient(
           135deg,
-          var(--balance-a) 0%,
-          var(--balance-b) 100%
+          #f7f6f4 0%,
+          #f7f6f4 100%
         );
       }
       .label-pct {
-        background: linear-gradient(135deg, var(--pct-a) 0%, var(--pct-b) 100%);
+        background: linear-gradient(
+          135deg,
+          #f7f6f4 0%,
+          #f7f6f4 100%
+        );
       }
       .label-time {
         background: linear-gradient(
           135deg,
-          var(--time-a) 0%,
-          var(--time-b) 100%
+          #f7f6f4 0%,
+          #f7f6f4 100%
         );
       }
       .value-cell {
@@ -689,30 +691,30 @@
       .vc-plan {
         background: linear-gradient(
         180deg,
-        #F7F4EE 0%,
-        #F0EDE5 100%
+        #1f4e79 0%,
+        #1f4e79 100%
       );
         border-color: rgba(34, 168, 106, 0.12);
       }
       .vc-plan .cell-value {
-        color: var(--plan-text);
+        color: white;
       }
       .vc-actual {
         background: linear-gradient(
           180deg,
-          var(--actual-soft) 0%,
-          #fff8f4 100%
+          #f3c737 0%,
+          #f3c737 100%
         );
         border-color: rgba(239, 106, 87, 0.12);
       }
       .vc-actual .cell-value {
-        color: var(--actual-text);
+        color: black;
       }
       .vc-balance {
         background: linear-gradient(
           180deg,
-          var(--balance-soft) 0%,
-          #f8fbff 100%
+          #FFFFFF 0%,
+          #FFFFFF 100%
         );
         border-color: rgba(93, 141, 238, 0.12);
       }
@@ -720,14 +722,22 @@
         color: var(--balance-text);
       }
       .vc-pct {
-        background: linear-gradient(180deg, var(--pct-soft) 0%, #fbf9ff 100%);
+        background: linear-gradient(
+          180deg,
+          #FFFFFF 0%,
+          #FFFFFF 100%
+        );
         border-color: rgba(138, 109, 240, 0.12);
       }
       .vc-pct .cell-value {
         color: var(--pct-text);
       }
       .vc-time {
-        background: linear-gradient(180deg, var(--time-soft) 0%, #f9f8ff 100%);
+        background: linear-gradient(
+          180deg,
+          #FFFFFF 0%,
+          #FFFFFF 100%
+        );
         border-color: rgba(91, 75, 181, 0.12);
       }
       .vc-time .cell-value {
@@ -853,8 +863,8 @@
         min-height: 0;
         background: linear-gradient(
           180deg,
-          #F7F4EE 0%,
-          #F0EDE5 100%
+          #FFFFFF 0%,
+          #FFFFFF 100%
         );
         border: 1px solid var(--panel-border);
         border-radius: var(--radius);
@@ -1297,13 +1307,7 @@
       }
 
       .footer-card.header-theme {
-        background: linear-gradient(
-          135deg,
-          var(--header-a) 0%,
-          var(--header-b) 36%,
-          var(--header-c) 72%,
-          var(--header-d) 100%
-        );
+        background: #093966;
         color: #fff;
       }
 
@@ -1409,7 +1413,7 @@
             <!-- <div class="meta-icon">#</div> -->
             <div class="meta-content">
               <!-- <div class="meta-label">Số PO: <span id="po" class="meta-value highlight-value"></span></div> -->
-              <div class="meta-label">Số PO:</div>
+              <div class="meta-label">PO No:</div>
               <div id="po" class="meta-value highlight-value"></div>
             </div>
           </div>
@@ -1427,7 +1431,7 @@
           <div class="meta-item">
             <!-- <div class="meta-icon">👥</div> -->
             <div class="meta-content">
-              <div class="meta-label">Số Công nhân</div>
+              <div class="meta-label">Worker:</div>
               <div id="workers" class="meta-value">
                 <span class="meta-label">TT:</span>
                 <span id="workerAt" class="worker-value"></span>
@@ -1443,7 +1447,7 @@
             <div class="meta-content">
               <div class="schedule-wrap">
                 <div class="schedule-block">
-                  <div class="schedule-caption">Bắt đầu</div>
+                  <div class="schedule-caption">Start Date</div>
                   <div
                     id="startDate"
                     class="schedule-date highlight-value"
@@ -1451,7 +1455,7 @@
                 </div>
                 <div class="schedule-arrow">→</div>
                 <div class="schedule-block">
-                  <div class="schedule-caption">Dự kiến hoàn thành</div>
+                  <div class="schedule-caption">Expected Complete</div>
                   <div id="completeDate" class="schedule-date highlight-value"></div>
                 </div>
               </div>
@@ -1511,14 +1515,16 @@
                 <!-- ROW 1 -->
                 <tr>
                   <td class="label-cell label-plan">
-                    <div class="lc-vi">SL kế hoạch trong ngày</div>
+                    <div class="lc-vi">SL KH ngày</div>
+                    <div class="lc-en">Planned units for today</div>
                   </td>
                   <td class="value-cell vc-plan">
                     <div id="dailyTarget" class="cell-value"></div>
                   </td>
 
                   <td class="label-cell label-actual pulse-label">
-                    <div class="lc-vi">Sản lượng thực hôm nay</div>
+                    <div class="lc-vi">SL hôm nay</div>
+                    <div class="lc-en">Actual output for today</div>
                   </td>
                   <td class="value-cell vc-actual">
                     <div id="output" class="cell-value"></div>
@@ -1526,7 +1532,10 @@
 
                   <td class="label-cell label-balance pulse-label">
                     <div class="lc-vi">
-                      Sản lượng thực hôm nay - SL kế hoạch trong ngày
+                      SL hôm nay - SL KH ngày
+                    </div>
+                    <div class="lc-en">
+                      Actual output for today - Planned units for today
                     </div>
                   </td>
                   <td class="value-cell vc-balance">
@@ -1535,7 +1544,10 @@
 
                   <td class="label-cell label-pct pulse-label">
                     <div class="lc-vi">
-                      Sản lượng thực hôm nay / SL kế hoạch trong ngày
+                      SL hôm nay / SL KH ngày
+                    </div>
+                    <div class="lc-en">
+                      Actual output for today / Planned units for today
                     </div>
                   </td>
                   <td class="value-cell vc-pct">
@@ -1544,7 +1556,10 @@
 
                   <td class="label-cell label-time pulse-label">
                     <div class="lc-vi">
-                      Thời gian để hoàn thành SL kế hoạch trong ngày
+                      Số giờ hoàn thành SL KH ngày
+                    </div>
+                    <div class="lc-en">
+                      Time Required to Complete the Planned Units for Today
                     </div>
                   </td>
                   <td class="value-cell vc-time">
@@ -1555,14 +1570,18 @@
                 <!-- ROW 2 -->
                 <tr>
                   <td class="label-cell label-plan">
-                    <div class="lc-vi">SL mục tiêu thời điểm hiện tại</div>
+                    <div class="lc-vi">SL MT hiện tại</div>
+                    <div class="lc-en">
+                      Planned units of today's accumulated time
+                    </div>
                   </td>
                   <td class="value-cell vc-plan">
                     <div id="targetNow" class="cell-value"></div>
                   </td>
 
                   <td class="label-cell label-actual pulse-label">
-                    <div class="lc-vi">Sản lượng thực hôm nay</div>
+                    <div class="lc-vi">SL hôm nay</div>
+                    <div class="lc-en">Actual output for today</div>
                   </td>
                   <td class="value-cell vc-actual">
                     <div id="output1" class="cell-value"></div>
@@ -1570,7 +1589,10 @@
 
                   <td class="label-cell label-balance pulse-label">
                     <div class="lc-vi">
-                      Sản lượng thực hôm nay - SL mục tiêu thời điểm hiện tại
+                      SL hôm nay - SL MT hiện tại
+                    </div>
+                    <div class="lc-en">
+                      Actual output for today - Planned units of today's accumulated time
                     </div>
                   </td>
                   <td class="value-cell vc-balance">
@@ -1579,7 +1601,10 @@
 
                   <td class="label-cell label-pct pulse-label">
                     <div class="lc-vi">
-                      Sản lượng thực hôm nay / SL mục tiêu thời điểm hiện tại
+                      SL hôm nay / SL MT hiện tại
+                    </div>
+                    <div class="lc-en">
+                      Actual output for today / Planned units of today's accumulated time
                     </div>
                   </td>
                   <td class="value-cell vc-pct">
@@ -1588,8 +1613,9 @@
 
                   <td class="label-cell label-time pulse-label">
                     <div class="lc-vi">
-                      Thời gian để hoàn thành SL mục tiêu thời điểm hiện tại
+                      Số giờ hoàn thành SL MT hiện tại
                     </div>
+                    <div class="lc-en">Time Required to Complete the Planned Units of Today's Accumulated Time</div>
                   </td>
                   <td class="value-cell vc-time">
                     <div id="hr2" class="cell-value"></div>
@@ -1600,6 +1626,7 @@
                 <tr>
                   <td class="label-cell label-plan">
                     <div class="lc-vi">SL phân phối cho chuyền</div>
+                    <div class="lc-en">Quantity distributed to line</div>
                   </td>
                   <td class="value-cell vc-plan">
                     <div id="styleQty" class="cell-value"></div>
@@ -1607,6 +1634,7 @@
 
                   <td class="label-cell label-actual pulse-label">
                     <div class="lc-vi">SL lũy kế</div>
+                    <div class="lc-en">Achieved Quantity</div>
                   </td>
                   <td class="value-cell vc-actual">
                     <div id="accQty" class="cell-value"></div>
@@ -1614,6 +1642,9 @@
 
                   <td class="label-cell label-balance pulse-label">
                     <div class="lc-vi">SL lũy kế - SL phân phối cho chuyền</div>
+                    <div class="lc-en">
+                      Achieved Quantity - Quantity distributed to line
+                    </div>
                   </td>
                   <td class="value-cell vc-balance">
                     <div id="banlance3" class="cell-value"></div>
@@ -1621,6 +1652,9 @@
 
                   <td class="label-cell label-pct pulse-label">
                     <div class="lc-vi">SL lũy kế / SL phân phối cho chuyền</div>
+                    <div class="lc-en">
+                      Achieved Quantity / Quantity distributed to line
+                    </div>
                   </td>
                   <td class="value-cell vc-pct">
                     <div id="percent3" class="cell-value"></div>
@@ -1628,8 +1662,9 @@
 
                   <td class="label-cell label-time pulse-label">
                     <div class="lc-vi">
-                      Thời gian để hoàn thành SL phân phối cho chuyền
+                      Số giờ hoàn thành SL phân phối cho chuyền
                     </div>
+                    <div class="lc-en">Time Required to Complete the Qty Distributed to the Flow</div>
                   </td>
                   <td class="value-cell vc-time">
                     <div id="hr3" class="cell-value"></div>
@@ -1646,13 +1681,6 @@
         <div class="footer-grid">
           <!-- Quality -->
           <div class="footer-card header-theme">
-            <div class="footer-card-header">
-              <!-- <div class="footer-icon footer-icon-quality">⚠</div> -->
-              <!-- <div class="footer-title-wrap">
-                <div class="footer-title-vi">Chất lượng</div>
-              </div> -->
-            </div>
-
             <div class="metric-box-grid">
               <div class="metric-box quality-box">
                 <div class="metric-label metric-label-top">
@@ -1692,6 +1720,6 @@
       </section>
     </div>
 
-    <script src="/js/dashboard-v4-vn.js"></script>
+    <script src="/js/dashboard-v5.js"></script>
   </body>
 </html>
