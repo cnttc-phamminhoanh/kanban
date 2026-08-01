@@ -78,18 +78,21 @@ function renderFlowDashboard(data) {
   document.getElementById("flowName").innerText = data.flow;
   document.getElementById("style").innerText = data.style;
   //document.getElementById("brand").innerText = data.buyer;
-  document.getElementById("brand").innerHTML = `
-    <span class="brand-label">Brand:</span>
-    <span class="brand-value">${data.buyer}</span>
-  `;
+  // document.getElementById("brand").innerHTML = `
+  //   <span class="brand-label">Brand:</span>
+  //   <span class="brand-value">${data.buyer}</span>
+  // `;
+  document.getElementById("brand").innerHTML = data.buyer;
   document.getElementById("po").innerText = data.orderNo;
   document.getElementById("smv").innerText = data.smv;
-  document.getElementById("workers").innerHTML = `
-    <span class="worker-label">Actual:</span>
-    <span class="worker-value">${data.worker_at}</span>
-    <span class="worker-label"> / Plan:</span>
-    <span class="worker-value">${data.worker_tg}</span>
-  `;
+  // document.getElementById("workers").innerHTML = `
+  //   <span class="worker-label">Actual:</span>
+  //   <span class="worker-value">${data.worker_at}</span>
+  //   <span class="worker-label"> / Plan:</span>
+  //   <span class="worker-value">${data.worker_tg}</span>
+  // `;
+  document.getElementById("workerAt").innerText = data.worker_at;
+  document.getElementById("workerTg").innerText = data.worker_tg;
   document.getElementById("styleQty").innerText = data.styleQty;
   document.getElementById("startDate").innerText = data.startDate;
   document.getElementById("completeDate").innerText = data.completeDate;
@@ -103,12 +106,9 @@ function renderFlowDashboard(data) {
   document.getElementById("percent1").innerText = data.percent1;
   document.getElementById("percent2").innerText = data.percent2;
   document.getElementById("percent3").innerText = data.percent3;
-  document.getElementById("hr1").innerText = data.hr1;
-  //document.getElementById("day1").innerText = data.day1;
-  document.getElementById("hr2").innerText = data.hr2;
-  //document.getElementById("day2").innerText = data.day2;
-  document.getElementById("hr3").innerText = data.hr3;
-  //document.getElementById("day3").innerText = data.day3;
+  document.getElementById("hr1").innerText = data.hr1 != '-' ? `${data.hr1} Hr` : data.hr1;
+  document.getElementById("hr2").innerText = data.hr2 != '-' ? `${data.hr2} Hr` : data.hr2;
+  document.getElementById("hr3").innerHTML = data.hr3 != '-' ? `${data.hr3} Hr <span class="time-day">(${data.day3} Days)</span>` : data.hr3;
   document.getElementById("accQty").innerText = data.accQty;
   document.getElementById("defectQty").innerText = data.defectQty;
   document.getElementById("defectPercent").innerText = data.defectPercent;
@@ -339,8 +339,8 @@ async function loadFlowDashboard() {
         //day1: "-",
         hr2: hr2 < 0 ? "0" : hr2,
         //day2: "-",
-        hr3: hr3 + " Hr " + ' ~ ' + day3 + " Days",
-        //day3,
+        hr3,
+        day3,
         accQty,
         defectQty,
         defectPercent,

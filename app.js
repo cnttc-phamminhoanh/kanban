@@ -30,6 +30,10 @@ app.get("/pms/monitor/flowDashboard/v4/:flow", (req, res) => {
   res.sendFile(path.join(__dirname, "public/line-dashboard-v4.html"));
 });
 
+app.get("/pms/monitor/flowDashboard/v4/vn/:flow", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/line-dashboard-v4-vn.html"));
+});
+
 app.use("/pms/monitor", monitorRoute);
 
 module.exports = app;
