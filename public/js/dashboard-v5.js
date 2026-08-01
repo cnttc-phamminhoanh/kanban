@@ -77,20 +77,9 @@ function calculateTargetNow(dailyTarget, workingHours) {
 function renderFlowDashboard(data) {
   document.getElementById("flowName").innerText = data.flow;
   document.getElementById("style").innerText = data.style;
-  //document.getElementById("brand").innerText = data.buyer;
-  // document.getElementById("brand").innerHTML = `
-  //   <span class="brand-label">Brand:</span>
-  //   <span class="brand-value">${data.buyer}</span>
-  // `;
   document.getElementById("brand").innerHTML = data.buyer;
   document.getElementById("po").innerText = data.orderNo;
   document.getElementById("smv").innerText = data.smv;
-  // document.getElementById("workers").innerHTML = `
-  //   <span class="worker-label">Actual:</span>
-  //   <span class="worker-value">${data.worker_at}</span>
-  //   <span class="worker-label"> / Plan:</span>
-  //   <span class="worker-value">${data.worker_tg}</span>
-  // `;
   document.getElementById("workerAt").innerText = data.worker_at;
   document.getElementById("workerTg").innerText = data.worker_tg;
   document.getElementById("styleQty").innerText = data.styleQty;
@@ -282,16 +271,16 @@ async function loadFlowDashboard() {
       // Hr row1 = (Còn lại row1 x smv ) / Số công nhân kế hoạch / 60
       const hr1 =
         worker_tg > 0
-          ? ((banlance1 * smv) / worker_tg / 60).toFixed(2)
-          : "0.00";
+          ? ((banlance1 * smv) / worker_tg / 60)
+          : 0;
       // Day row1 đặt = 1
       const day1 = 1;
       // Hr row2 = (Còn lại row2 x smv ) / Số công nhân kế hoạch / 60
       const hr2 =
         worker_tg > 0
-          ? ((banlance2 * smv) / worker_tg / 60).toFixed(2)
-          : "0.00";
-      
+          ? ((banlance2 * smv) / worker_tg / 60)
+          : 0;
+
       // Day row1 đặt = 1
       const day2 = 1;
       // Hr row3 = (Còn lại row3 / Kế hoạch row1) x 24 -> Kết quả làm tròn lên
@@ -335,10 +324,8 @@ async function loadFlowDashboard() {
         percent1,
         percent2,
         percent3,
-        hr1: hr1 < 0 ? "0" : hr1,
-        //day1: "-",
-        hr2: hr2 < 0 ? "0" : hr2,
-        //day2: "-",
+        hr1: hr1 > 0 ? hr1.toFixed(2) : 0,
+        hr2: hr2 > 0 ? hr2.toFixed(2) : 0,
         hr3,
         day3,
         accQty,
