@@ -124,6 +124,22 @@ async function getFlowDashBoard(req, res, next) {
   }
 }
 
+async function getFlowSemiFGoods(req, res, next) {
+  try {
+    const flow = req.query.flow;
+
+    const data = await service.getFlowSemiFGoods(flow);
+
+    res.json({
+      success: true,
+      count: data.length,
+      data,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   getMonitor,
   getFlowStyleSMV,
@@ -133,4 +149,5 @@ module.exports = {
   getDefects,
   getWorkerQty,
   getFlowDashBoard,
+  getFlowSemiFGoods,
 };

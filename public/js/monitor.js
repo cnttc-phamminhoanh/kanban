@@ -32,7 +32,7 @@ function renderFlows(data) {
 
     card.addEventListener("click", () => {
       const flow = item.flow;
-      window.location.href = `/pms/monitor/flowDashboard/v3/${flow}`;
+      window.location.href = `/pms/monitor/flowDashboard/v6/${flow}`;
     });
 
     container.appendChild(card);
