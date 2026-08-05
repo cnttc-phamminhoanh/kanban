@@ -99,12 +99,11 @@ function renderStyleBlock(styleData) {
       </div>
 
       <div class="section-title">
-        OUTPUT (Step 450)
+        Matching Semi-FGs
       </div>
 
       <div class="table-wrap">
         <table class="output-table">
-
           <thead>
             <tr>
               <th class="col-product">Product</th>
@@ -121,7 +120,6 @@ function renderStyleBlock(styleData) {
           <tbody>
             ${rows.map(renderRow).join("")}
           </tbody>
-
         </table>
       </div>
 
@@ -139,17 +137,12 @@ function renderRow(row) {
 
   const isOutputMax = row.output === maxValue;
 
-  const statusClass = isOutputMax
-    ? "status-green"
-    : "status-red";
+  const statusClass = isOutputMax ? "status-green" : "status-red";
 
-  const outputClass = isOutputMax
-    ? "output-green"
-    : "output-red";
+  const outputClass = isOutputMax ? "output-green" : "output-red";
 
   return `
     <tr>
-
       <td class="product-cell">
         ${escapeHtml(row.product)}
       </td>
@@ -163,27 +156,19 @@ function renderRow(row) {
       </td>
 
       <td class="semi-group ${statusClass} grouped-cell">
-        ${row.semi
-          .map(
-            semi => `
-              <div class="semi-line">
-                ${escapeHtml(semi.name)}
-              </div>
-            `
-          )
-          .join("")}
+        ${row.semi.map(semi => `
+          <div class="semi-line">
+            ${escapeHtml(semi.name)}
+          </div>
+        `).join("")}
       </td>
 
       <td class="semi-output-group grouped-cell">
-        ${row.semi
-          .map(
-            semi => `
-              <div class="semi-output-line">
-                ${Number(semi.output).toLocaleString()}
-              </div>
-            `
-          )
-          .join("")}
+        ${row.semi.map(semi => `
+          <div class="semi-output-line">
+            ${Number(semi.output).toLocaleString()}
+          </div>
+        `).join("")}
       </td>
 
       <td class="available-value">
@@ -197,7 +182,6 @@ function renderRow(row) {
       <td class="percent-value">
         ${row.percent}%
       </td>
-
     </tr>
   `;
 }
