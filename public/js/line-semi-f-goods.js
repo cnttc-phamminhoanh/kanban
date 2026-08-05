@@ -46,7 +46,7 @@ function renderData(data) {
         product: item.ProType,
         size: item.sizx,
         output: Number(item.OutPut || 0),
-        sizxQty: Number(item.sizxQty || 0),
+        sizxQty: Number(item.SizxQty || 0),
         semi: [],
         available: 0,
         completed: 0,
@@ -110,7 +110,7 @@ function renderStyleBlock(styleData) {
               <th class="col-size">Size</th>
               <th class="col-output">Output</th>
               <th class="col-semi">Other Semi-FGs</th>
-              <th class="col-semi-output">Output</th>
+              <th class="col-semi-output">Other Semi-FGs Output</th>
               <th class="col-available">Quantity Available for Matching</th>
               <th class="col-completed">Qty to be<br>completed</th>
               <th class="col-percent">%</th>
