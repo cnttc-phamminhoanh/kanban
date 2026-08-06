@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sewing Line Plan</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Inter, "Segoe UI", Arial, sans-serif;
+        background: #eef3f8;
+        color: #334155;
+      }
+
+      .container {
+        width: 96%;
+        max-width: 1700px;
+        margin: 25px auto;
+      }
+
+      /* TITLE */
+      .title {
+        background: #3883ce;
+        color: white;
+        border-radius: 14px;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.18);
+        margin-bottom: 15px;
+      }
+
+      .title h2 {
+        font-size: 26px;
+        margin-bottom: 6px;
+      }
+
+      .title h3 {
+        font-size: 16px;
+        color: #dbeafe;
+        font-weight: 500;
+      }
+
+      /* TOOLBAR */
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 25px;
+        background: white;
+        padding: 22px;
+        border-radius: 14px;
+        margin-bottom: 18px;
+        border: 1px solid #dbe3ee;
+        box-shadow: 0 4px 15px rgba(15, 23, 42, 0.08);
+      }
+
+      .toolbar-left {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .form-group label {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #64748b;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 220px;
+        height: 44px;
+        padding: 0 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        font-size: 15px;
+        transition: 0.2s;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+      }
+
+      .query-btn {
+        height: 44px;
+        padding: 0 30px;
+        border: none;
+        border-radius: 10px;
+        background: #1a5794;
+        color: white;
+        cursor: pointer;
+        font-weight: 700;
+        transition: 0.2s;
+      }
+
+      .query-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+      }
+
+      /* TABLE */
+
+      .table-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid #dbe3ee;
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      thead th {
+        background: #1a5794;
+        color: white;
+        padding: 14px;
+        border: 1px solid #6c8bb0;
+        font-size: 14px;
+      }
+
+      tbody td {
+        border: 1px solid #d6dee8;
+        padding: 13px;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      tbody tr:nth-child(even) {
+        background: #f8fafc;
+      }
+
+      tbody tr:hover td {
+        background: #edf6ff;
+      }
+
+      /* BUTTON */
+
+      .edit-btn {
+        border: none;
+        background: #2563eb;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s;
+      }
+
+      .edit-btn:hover {
+        background: #1d4ed8;
+      }
+
+      /* MODAL */
+
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 999;
+      }
+
+      .modal-overlay.show {
+        display: flex;
+      }
+
+      .modal {
+        width: 500px;
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 22px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .modal-header h3 {
+        font-size: 20px;
+      }
+
+      .modal-header button {
+        border: none;
+        background: none;
+        font-size: 30px;
+        cursor: pointer;
+      }
+
+      .modal-body {
+        padding: 22px;
+      }
+
+      .modal-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 18px;
+      }
+
+      .modal-group label {
+        margin-bottom: 6px;
+        font-weight: 600;
+      }
+
+      .modal-group input {
+        height: 42px;
+        padding: 0 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 15px;
+      }
+
+      .modal-group input:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+      }
+
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        padding: 18px 22px;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .btn-cancel {
+        border: none;
+        background: #e2e8f0;
+        padding: 10px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .btn-save {
+        border: none;
+        background: #2563eb;
+        color: white;
+        padding: 10px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .btn-save:hover {
+        background: #1d4ed8;
+      }
+
+      /* TOAST */
+
+      .toast {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        background: #16a34a;
+        color: white;
+        padding: 14px 22px;
+        border-radius: 10px;
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        transform: translateX(150%);
+        transition: 0.35s;
+        z-index: 9999;
+      }
+
+      .toast.show {
+        transform: translateX(0);
+      }
+
+      .search-box {
+        width: 100%;
+      }
+
+      .search-box input {
+        width: 100%;
+        height: 46px;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        padding: 0 18px;
+        font-size: 15px;
+        transition: 0.2s;
+      }
+
+      .search-box input:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+      }
+
+      .search-box {
+        position: relative;
+      }
+
+      .search-box::before {
+        content: "🔍";
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .search-box input {
+        padding-left: 45px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- TITLE -->
+      <div class="title">
+        <h2>Sewing Line Plan Setting</h2>
+        <h3>Worker & Break Time Configuration</h3>
+      </div>
+
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+        <div class="search-box">
+          <input type="text" id="search" placeholder="Search flow..." />
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 40px">No</th>
+              <th>Flow</th>
+              <th style="width: 140px">Worker Actual</th>
+              <th style="width: 160px">Break From</th>
+              <th style="width: 160px">Break To</th>
+              <th style="width: 120px">Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EDIT MODAL -->
+
+    <div id="editModal" class="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Edit Sewing Line Plan</h3>
+
+          <button id="closeModal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="modal-group">
+            <label> Flow </label>
+
+            <input id="modalFlow" readonly />
+          </div>
+
+          <div class="modal-group">
+            <label> Worker Actual </label>
+
+            <input id="modalWorker" type="number" />
+          </div>
+
+          <div class="modal-group">
+            <label> Break From </label>
+
+            <input id="modalBreakFrom" type="time" />
+          </div>
+
+          <div class="modal-group">
+            <label> Break To </label>
+
+            <input id="modalBreakTo" type="time" />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="cancelBtn" class="btn-cancel">Cancel</button>
+
+          <button id="saveBtn" class="btn-save">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST -->
+
+    <div id="toast" class="toast">Saved successfully</div>
+
+    <script src="/js/line-plan.js"></script>
+  </body>
+</html>

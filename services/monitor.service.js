@@ -32,6 +32,14 @@ async function getFlowSemiFGoods(flow) {
   return repository.getFlowSemiFGoods(flow);
 }
 
+async function getFlowPlan() {
+  return repository.getFlowPlan();
+}
+
+async function updateFlowPlan(data) {
+  return repository.updateFlowPlan(data);
+}
+
 module.exports = {
   getMonitor,
   getFlowStyleSMV,
@@ -41,4 +49,6 @@ module.exports = {
   getDefects,
   getWorkerQty,
   getFlowSemiFGoods,
+  getFlowPlan,
+  updateFlowPlan,
 };

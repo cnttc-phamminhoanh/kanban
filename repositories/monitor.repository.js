@@ -1,5 +1,5 @@
 const pool = require("../config/database");
-const { getPool, sql } = require("../config/sqlserver")
+const { getPool, sql } = require("../config/sqlserver");
 
 async function getMonitorData() {
   const [rows] = await pool.execute(
@@ -11,7 +11,7 @@ async function getMonitorData() {
         and flow like 'SEW%'
         and flow not like '%F9%'
         order by flow
-    `
+    `,
   );
 
   return rows;
@@ -28,7 +28,7 @@ async function getFlowStyleInfo(flow) {
       where flow = ?
       group by flow, o.style, o.orderNo
     `,
-    [flow]
+    [flow],
   );
 
   return rows;
@@ -71,7 +71,7 @@ async function getFlowStyleSMV(flow) {
       ) x
       group by flow, style, orderNo;
     `,
-    [flow, flow]
+    [flow, flow],
   );
 
   return rows;
@@ -89,7 +89,7 @@ async function getFlowStyleAccQtyStartCompelete(flow) {
       where r.StepNo = 450 and r.flow = ?
       group by r.flow, o.style, o.orderNo
     `,
-    [flow]
+    [flow],
   );
 
   return rows;
@@ -107,7 +107,7 @@ async function getFlowStyleOutput(flow) {
       where r.stepNo = 450 and r.flow = ?
       group by r.regDate, r.flow, o.style, o.orderNo
     `,
-    [flow]
+    [flow],
   );
 
   return rows;
@@ -127,7 +127,7 @@ async function getDefects(flow) {
       where w.rewDate= curdate() and t.flow = ?
       group by o.style, o.orderNo, concat(r.ReasonCode, c.description), t.flow
     `,
-    [flow]
+    [flow],
   );
 
   return rows;
@@ -162,14 +162,14 @@ async function getFlowSemiFGoods(flow) {
       left join pyregsum r on o.WrkOrder = r.WrkOrder and r.sizx = x.sizx and r.stepNo in (450, 100)
       group by x.extfield10, x.style, x.OrderNo, x.Sizx, x.output, x.sizxqty, o.style, x.ExtField01 
     `,
-    [flow]
-  )
+    [flow],
+  );
 
-  return rows
+  return rows;
 }
 
 async function getWorkerQty(flow) {
-  const pool = await getPool()
+  const pool = await getPool();
 
   const result = await pool
     .request()
@@ -179,10 +179,41 @@ async function getWorkerQty(flow) {
         select *
         from kanban_plan
         where igm_dept = @flow
-      `
+      `,
     );
 
   return result.recordset;
+}
+
+async function getFlowPlan() {
+  const pool = await getPool();
+
+  const result = await pool.request().query(
+    `
+        select igm_dept, worker_at, work_hr, break_time_fr, break_time_to
+        from kanban_plan
+      `,
+  );
+
+  return result.recordset;
+}
+
+async function updateFlowPlan(data) {
+  const pool = await getPool();
+
+  await pool
+    .request()
+    .input("igm_dept", sql.VarChar, data.igm_dept)
+    .input("worker_at", sql.Int, data.worker_at)
+    .input("break_time_fr", sql.VarChar, data.break_time_fr)
+    .input("break_time_to", sql.VarChar, data.break_time_to).query(`
+      UPDATE kanban_plan
+      SET
+          worker_at = @worker_at,
+          break_time_fr = @break_time_fr,
+          break_time_to = @break_time_to
+      WHERE igm_dept = @igm_dept
+    `);
 }
 
 module.exports = {
@@ -194,4 +225,6 @@ module.exports = {
   getDefects,
   getWorkerQty,
   getFlowSemiFGoods,
+  getFlowPlan,
+  updateFlowPlan,
 };

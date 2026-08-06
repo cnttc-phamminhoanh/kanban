@@ -102,14 +102,21 @@ async function getFlowDashBoard(req, res, next) {
   try {
     const flow = req.query.flow;
 
-    const [infoData, smvData, accQtyStartCompeleteData, outputData, defectsData, workersData] = await Promise.all([
+    const [
+      infoData,
+      smvData,
+      accQtyStartCompeleteData,
+      outputData,
+      defectsData,
+      workersData,
+    ] = await Promise.all([
       service.getFlowStyleInfo(flow),
       service.getFlowStyleSMV(flow),
       service.getFlowStyleAccQtyStartCompelete(flow),
       service.getFlowStyleOutput(flow),
       service.getDefects(flow),
       service.getWorkerQty(flow),
-    ])
+    ]);
 
     res.json({
       infoData,
@@ -140,6 +147,40 @@ async function getFlowSemiFGoods(req, res, next) {
   }
 }
 
+async function getFlowPlan(req, res, next) {
+  try {
+    const data = await service.getFlowPlan();
+
+    res.json({
+      success: true,
+      count: data.length,
+      data,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function updateFlowPlan(req, res, next) {
+  try {
+    const { igm_dept, worker_at, break_time_fr, break_time_to } = req.body;
+
+    await service.updateFlowPlan({
+      igm_dept,
+      worker_at,
+      break_time_fr,
+      break_time_to,
+    });
+
+    res.json({
+      success: true,
+      message: "Updated successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   getMonitor,
   getFlowStyleSMV,
@@ -150,4 +191,6 @@ module.exports = {
   getWorkerQty,
   getFlowDashBoard,
   getFlowSemiFGoods,
+  getFlowPlan,
+  updateFlowPlan,
 };

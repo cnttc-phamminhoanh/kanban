@@ -5,6 +5,10 @@ router.get('/', controller.getMonitor);
 
 router.get('/flowDashboard', controller.getFlowDashBoard);
 
-router.get('/semiFGoods', controller.getFlowSemiFGoods);
+router.get('/flowSemiFGoods', controller.getFlowSemiFGoods);
+
+router.get('/api/flowPlan', controller.getFlowPlan);
+
+router.put('/api/flowPlan', controller.updateFlowPlan);
 
 module.exports = router;

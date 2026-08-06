@@ -42,6 +42,14 @@ app.get("/pms/monitor/semiFGoods/:flow", (req, res) => {
   res.sendFile(path.join(__dirname, "public/line-semi-f-goods.html"));
 });
 
+app.get("/pms/monitor/flowEfficiency", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/line-efficiency.html"));
+});
+
+app.get("/pms/monitor/flowPlan", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/line-plan.html"));
+});
+
 app.use("/pms/monitor", monitorRoute);
 
 module.exports = app;
