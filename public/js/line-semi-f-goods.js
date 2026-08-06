@@ -6,7 +6,7 @@ async function init() {
 
     document.getElementById("flowName").textContent = flow;
 
-    const response = await fetch(`/pms/monitor/semiFGoods?flow=${flow}`);
+    const response = await fetch(`/pms/monitor/flowSemiFGoods?flow=${flow}`);
 
     const result = await response.json();
 
