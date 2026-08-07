@@ -141,6 +141,8 @@ function renderRow(row) {
 
   const outputClass = isOutputMax ? "output-green" : "output-red";
 
+  const completeClass = isOutputMax ? "complete-green" : "complete-red";
+
   return `
     <tr>
       <td class="product-cell">
@@ -175,7 +177,7 @@ function renderRow(row) {
         ${row.available.toLocaleString()}
       </td>
 
-      <td class="completed-value">
+      <td class="${completeClass}">
         ${row.completed.toLocaleString()}
       </td>
 

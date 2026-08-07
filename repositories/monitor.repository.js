@@ -146,7 +146,7 @@ async function getFlowSemiFGoods(flow) {
           from (
             select o.ExtField10, o.style, o.orderNo, r.Sizx, o.WrkOrder, sum(r.Qty) as output, o.ExtField01 
             from pywrkord o 
-            left join pyregsum r on o.WrkOrder = r.WrkOrder and r.StepNo = 450 
+            left join pyregsum r on o.WrkOrder = r.WrkOrder and r.StepNo in (450, 480)
             where o.WrkOrder in (
               select distinct WrkOrder from pyregsum 
               where RegDate = curdate() and flow = ?
@@ -159,7 +159,7 @@ async function getFlowSemiFGoods(flow) {
         group by x.style, x.OrderNo, x.extfield10, x.sizx, x.ExtField01
       ) x
       left join pywrkord o on o.ExtField10 = x.extfield10 and o.OrderNo = x.OrderNo and o.ExtField10 <> o.style  and o.style <> x.style
-      left join pyregsum r on o.WrkOrder = r.WrkOrder and r.sizx = x.sizx and r.stepNo in (450, 100)
+      left join pyregsum r on o.WrkOrder = r.WrkOrder and r.sizx = x.sizx and r.stepNo in (450, 480, 100)
       group by x.extfield10, x.style, x.OrderNo, x.Sizx, x.output, x.sizxqty, o.style, x.ExtField01 
     `,
     [flow],
