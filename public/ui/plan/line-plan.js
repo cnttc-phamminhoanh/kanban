@@ -1,55 +1,4 @@
-// MOCK DATA
-// const plans = [
-//   {
-//     igm_dept: "SEWING-GA-F1-01A",
-//     worker_at: 26,
-//     break_time_fr: "11:00",
-//     break_time_to: "12:00",
-//   },
-//   {
-//     igm_dept: "SEWING-GA-F1-02A",
-//     worker_at: 23,
-//     break_time_fr: "11:00",
-//     break_time_to: "12:00",
-//   },
-//   {
-//     igm_dept: "SEWING-GA-F1-03A",
-//     worker_at: 24,
-//     break_time_fr: "11:00",
-//     break_time_to: "12:00",
-//   },
-//   {
-//     igm_dept: "SEWING-GI-F1-06A",
-//     worker_at: 9,
-//     break_time_fr: "11:30",
-//     break_time_to: "12:30",
-//   },
-//   {
-//     igm_dept: "SEWING-GI-F8A-02A",
-//     worker_at: 12,
-//     break_time_fr: "11:30",
-//     break_time_to: "12:30",
-//   },
-//   {
-//     igm_dept: "SEWING-GI-F1-08A",
-//     worker_at: 10,
-//     break_time_fr: "12:00",
-//     break_time_to: "13:30",
-//   },
-//   {
-//     igm_dept: "SEWING-GD-F1-01A",
-//     worker_at: 17,
-//     break_time_fr: "12:00",
-//     break_time_to: "13:30",
-//   },
-// ];
-
 let plans = [];
-
-// GLOBAL
-function getFactory(flow) {
-  return flow.replace(/-[^-]+$/, "");
-}
 
 let currentIndex = null;
 
@@ -68,8 +17,6 @@ async function loadPlans() {
     }
 
     plans = result.data || [];
-
-    console.log(plans)
 
     renderTable(plans);
   } catch (error) {
@@ -117,6 +64,7 @@ function queryData() {
 
   renderTable(result);
 }
+
 // RENDER
 function renderTable(data) {
   const tbody = document.getElementById("tbody");
@@ -158,7 +106,6 @@ function renderTable(data) {
 }
 
 // EDIT
-
 function bindEditButtons() {
   document.querySelectorAll(".edit-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -168,7 +115,6 @@ function bindEditButtons() {
 }
 
 // OPEN
-
 function openModal(flow) {
   currentIndex = plans.findIndex((x) => x.igm_dept === flow);
 
@@ -177,13 +123,9 @@ function openModal(flow) {
   const row = plans[currentIndex];
 
   document.getElementById("modalFlow").value = row.igm_dept;
-
   document.getElementById("modalWorker").value = row.worker_at;
-
   document.getElementById("modalBreakFrom").value = row.break_time_fr;
-
   document.getElementById("modalBreakTo").value = row.break_time_to;
-
   document.getElementById("editModal").classList.add("show");
 }
 
@@ -193,29 +135,14 @@ function closeModal() {
 }
 
 // SAVE
-
 async function saveData() {
   const worker = Number(document.getElementById("modalWorker").value);
-
   const breakFrom = document.getElementById("modalBreakFrom").value;
-
   const breakTo = document.getElementById("modalBreakTo").value;
 
   plans[currentIndex].worker_at = worker;
-
   plans[currentIndex].break_time_fr = breakFrom;
-
   plans[currentIndex].break_time_to = breakTo;
-
-  // console.log({
-  //   igm_dept: plans[currentIndex].igm_dept,
-
-  //   worker_at: worker,
-
-  //   break_time_fr: breakFrom,
-
-  //   break_time_to: breakTo,
-  // });
 
   await fetch("/pms/monitor/api/flowPlan", {
     method: "PUT",

@@ -552,7 +552,7 @@
       }
 
       .value-cell .cell-value {
-        font-size: clamp(24px,2.2vw,44px);
+        font-size: clamp(24px, 2.2vw, 44px);
         line-height: 1;
         font-weight: 900;
         font-variant-numeric: tabular-nums;
@@ -662,13 +662,13 @@
         overflow: hidden;
       }
 
-      .footer-grid{
-        width:100%;
-        height:100%;
-        display:grid;
-        grid-template-columns:.8fr .8fr 1.4fr;
-        gap:var(--gap);
-        min-height:0;
+      .footer-grid {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 0.8fr 0.8fr 1.4fr;
+        gap: var(--gap);
+        min-height: 0;
       }
 
       .footer-card {
@@ -739,7 +739,7 @@
       }
 
       /* Inner metric boxes */
-      .metric-box-grid{
+      .metric-box-grid {
         flex: 1;
         min-height: 0;
         display: grid;
@@ -747,14 +747,14 @@
         gap: 10px;
       }
 
-      .metric-box{
+      .metric-box {
         min-width: 0;
         min-height: 0;
         border-radius: var(--radius-sm);
         border: 1px solid var(--panel-border);
         background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
         box-shadow: var(--shadow-xs);
-        padding:8px;
+        padding: 8px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -821,13 +821,13 @@
         gap: 10px;
       }
 
-      .defect-item{
-        display:grid;
-        grid-template-columns:42px minmax(0,1fr);
-        align-items:center;
-        gap:12px;
-        padding:2px 0;
-        width:100%;
+      .defect-item {
+        display: grid;
+        grid-template-columns: 42px minmax(0, 1fr);
+        align-items: center;
+        gap: 12px;
+        padding: 2px 0;
+        width: 100%;
       }
 
       .defect-count {
@@ -838,14 +838,14 @@
         font-variant-numeric: tabular-nums;
       }
 
-      .defect-name{
-        font-size:var(--fs-defect-name);
-        font-weight:700;
-        color:#34465c;
-        min-width:0;
-        white-space:nowrap;
-        overflow:hidden;
-        text-overflow:ellipsis;
+      .defect-name {
+        font-size: var(--fs-defect-name);
+        font-weight: 700;
+        color: #34465c;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       /* =========================================================
@@ -950,8 +950,8 @@
           padding: 9px 10px;
         }
 
-        .defect-item{
-          grid-template-columns:42px minmax(0,1fr);
+        .defect-item {
+          grid-template-columns: 42px minmax(0, 1fr);
         }
       }
 
@@ -965,7 +965,7 @@
         }
 
         .footer-grid {
-          grid-template-columns:.8fr .8fr 1.4fr;
+          grid-template-columns: 0.8fr 0.8fr 1.4fr;
         }
       }
 
@@ -1009,8 +1009,8 @@
           grid-column: span 2;
         }
 
-        .defect-item{
-          grid-template-columns:42px minmax(0,1fr);
+        .defect-item {
+          grid-template-columns: 42px minmax(0, 1fr);
         }
       }
 
@@ -1105,14 +1105,14 @@
         }
 
         .defect-item {
-          grid-template-columns:42px minmax(0,1fr);
+          grid-template-columns: 42px minmax(0, 1fr);
         }
       }
 
-      .highlight-value{
-        color:#ffd84d !important;
-        font-weight:900;
-        text-shadow: 0 0 6px rgba(255,216,77,.45);
+      .highlight-value {
+        color: #ffd84d !important;
+        font-weight: 900;
+        text-shadow: 0 0 6px rgba(255, 216, 77, 0.45);
       }
 
       .footer-card.header-theme {
@@ -1502,6 +1502,6 @@
       </section>
     </div>
 
-    <script src="/js/dashboard-v2.js"></script>
+    <script src="/ui/dashboard/v2/dashboard-v2.js"></script>
   </body>
 </html>

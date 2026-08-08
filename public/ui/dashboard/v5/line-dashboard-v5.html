@@ -3,17 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Production Dashboard v3</title>
+    <title>Production Dashboard V5</title>
 
     <style>
       :root {
-        /* =========================================================
-         COLOR SYSTEM - Professional dashboard palette
-         - Clean / modern / soft / readable on TV & monitor
-      ========================================================= */
-        --bg: #eef3f9;
-        --bg-2: #f6f9fc;
-        --panel: rgba(255, 255, 255, 0.96);
+      /* COLOR SYSTEM - Professional dashboard palette- Clean / modern / soft / readable on TV & monitor */
+        --bg: #ffffff;
+        --bg-2: #ffffff;
+        --panel: #F0EDE5;
         --panel-strong: #ffffff;
         --panel-border: rgba(148, 163, 184, 0.18);
 
@@ -23,81 +20,72 @@
         --line: rgba(148, 163, 184, 0.18);
 
         /* Header */
-        --header-a: #1f4e79;
-        --header-b: #255f93;
-        --header-c: #1c5c94;
-        --header-d: #296ea7;
+        --header-a: #326586;
+        --header-b: #326586;
+        --header-c: #326586;
+        --header-d: #326586;
 
-        /* KPI tones */
-        --plan-a: #22a843;
-        --plan-b: #22a843;
-        --plan-soft: #effcf5;
-        --plan-text: #22a843;
+        /* KPI COLOR SYSTEM */
+        --kpi-main: #326586;
+        --kpi-main-dark: #003532;
+        --kpi-bg: #F2EEE6;
+        --kpi-bg-soft: #F2EEE6;
+        --kpi-border: #F2EEE6;
+        --kpi-text: #326586;
+        --kpi-text-strong: #003532;
+        --kpi-muted: #6b7d90;
 
-        --actual-a: #d29533;
-        --actual-b: #d29533;
-        --actual-soft: #edfafa;
-        --actual-text: #d29533;
-
-        --balance-a: #03a5c2;
-        --balance-b: #03a5c2;
-        --balance-soft: #f2f7ff;
-        --balance-text: #03a5c2;
-
-        --pct-a: #076683;
-        --pct-b: #076683;
-        --pct-soft: #f6f2ff;
-        --pct-text: #076683;
-
-        --time-a: #03545a;
-        --time-b: #03545a;
-        --time-soft: #f5f3ff;
-        --time-text: #03545a;
-
+        --plan-a: #F2EEE6;
+        --plan-b: #F2EEE6;
+        --plan-soft: var(--kpi-bg);
+        --plan-text: var(--kpi-text);
+        --actual-a: #F2EEE6;
+        --actual-b: #F2EEE6;
+        --actual-soft: var(--kpi-bg);
+        --actual-text: var(--kpi-text);
+        --balance-a: #F2EEE6;
+        --balance-b: #F2EEE6;
+        --balance-soft: var(--kpi-bg);
+        --balance-text: var(--kpi-text);
+        --pct-a: #F2EEE6;
+        --pct-b: #F2EEE6;
+        --pct-soft: var(--kpi-bg);
+        --pct-text: var(--kpi-text);
+        --time-a: #F2EEE6;
+        --time-b: #F2EEE6;
+        --time-soft: var(--kpi-bg);
+        --time-text: var(--kpi-text);
         --danger: #e25555;
         --danger-soft: #fff4f4;
         --danger-soft-2: #ffecee;
-
         --shadow-xs: 0 4px 12px rgba(15, 23, 42, 0.04);
         --shadow-sm: 0 10px 24px rgba(15, 23, 42, 0.06);
         --shadow-md: 0 18px 40px rgba(15, 23, 42, 0.1);
-
-        /* =========================================================
-         Sizing
-      ========================================================= */
+        /* Sizing */
         --page-pad: clamp(8px, 0.9vw, 16px);
-        --gap: clamp(8px, 0.75vw, 14px);
-
+        --gap: clamp(6px, 0.6vw, 10px);
         --radius: 12px;
         --radius-sm: 9px;
         --radius-xs: 8px;
-
         --header-pad-y: clamp(8px, 0.8vw, 12px);
         --header-pad-x: clamp(10px, 1vw, 16px);
-
-        --fs-clock: clamp(12px, 0.95vw, 18px);
+        --fs-clock: clamp(14px, 1vw, 20px);
         --fs-badge: clamp(10px, 0.82vw, 14px);
-
-        --fs-meta-label: clamp(10px, 0.75vw, 13px);
-        --fs-meta-value: clamp(14px, 1vw, 19px);
+        --fs-meta-label: clamp(13.5px, 0.85vw, 14px);
+        --fs-meta-value: clamp(15px, 1.2vw, 20px);
         --fs-meta-sub: clamp(10px, 0.72vw, 13px);
-
-        --fs-th: clamp(12px, 0.95vw, 18px);
+        --fs-th: clamp(15px, 1.1vw, 24px);
         --fs-th-en: clamp(10px, 0.76vw, 13px);
-
-        --fs-kpi-label-vi: clamp(11px, 0.9vw, 16px);
+        --fs-kpi-label-vi: clamp(15px, 1.1vw, 24px);
         --fs-kpi-label-en: clamp(10px, 0.75vw, 13px);
-        --fs-kpi-value: clamp(20px, 1.9vw, 42px);
-
-        --fs-card-title: clamp(15px, 1.1vw, 20px);
+        --fs-kpi-value: clamp(22px, 2vw, 44px);
+        --fs-card-title: clamp(15px, 1.1vw, 24px);
         --fs-card-sub: clamp(11px, 0.9vw, 14px);
         --fs-stat: clamp(22px, 1.8vw, 40px);
-        --fs-stat-label: clamp(12px, 0.95vw, 16px);
-
-        --fs-defect-name: clamp(12px, 0.95vw, 17px);
-        --fs-defect-count: clamp(12px, 0.95vw, 17px);
-
-        --footer-h: 25vh;
+        --fs-stat-label: clamp(15px, 1.2vw, 20px);
+        --fs-defect-name: clamp(12px, 1vw, 17px);
+        --fs-defect-count: clamp(12px, 1vw, 17px);
+        --footer-h: 14vh;
       }
 
       * {
@@ -122,7 +110,6 @@
         -moz-osx-font-smoothing: grayscale;
         overflow: hidden;
       }
-
       .dashboard {
         width: 100%;
         height: 100vh;
@@ -133,21 +120,13 @@
         overflow: hidden;
       }
 
-      /* =========================================================
-       HEADER
-    ========================================================= */
+      /* HEADER */
       .header {
         position: relative;
         border-radius: var(--radius);
         padding: var(--header-pad-y) var(--header-pad-x);
         color: #fff;
-        background: linear-gradient(
-          135deg,
-          var(--header-a) 0%,
-          var(--header-b) 36%,
-          var(--header-c) 72%,
-          var(--header-d) 100%
-        );
+        background: #053664;
         box-shadow: var(--shadow-md);
         overflow: hidden;
         display: flex;
@@ -220,7 +199,7 @@
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: #86f6c6;
+        background: #0be989;
         position: relative;
         flex-shrink: 0;
         top: 0;
@@ -296,19 +275,19 @@
         color: #f3fbff;
       }
 
-      /* =========================================================
-       META GRID
-    ========================================================= */
+      /* META GRID */
       .meta-grid {
-        display: grid;
+        display:grid;
         grid-template-columns:
-          1.15fr
-          0.75fr
-          0.85fr
-          0.95fr
-          1.2fr;
-        gap: clamp(8px, 0.65vw, 12px);
-        align-items: stretch;
+          1fr
+          0.77fr
+          0.5fr
+          0.4fr
+          0.65fr
+          1.4fr
+          0.8fr;
+        gap:8px;
+        align-items:stretch;
       }
 
       .meta-item {
@@ -412,38 +391,34 @@
         margin: 0 4px;
       }
 
-      /* =========================================================
-       KPI SECTION
-    ========================================================= */
+      /* KPI SECTION */
       .kpi-section {
         min-height: 0;
         overflow: hidden;
       }
-
       .kpi-row {
         display: flex;
         gap: var(--gap);
         height: 100%;
         min-height: 0;
+        align-items: stretch;
       }
-
       .kpi-card {
         flex: 1;
         min-width: 0;
         min-height: 0;
         border-radius: var(--radius);
-        background: var(--panel);
+        background: white;
         border: 1px solid var(--panel-border);
         box-shadow: var(--shadow-sm);
-        padding: 6px;
+        padding: 2px;
         overflow: hidden;
       }
-
-      /* Time Panel */
       .time-panel {
         flex: 0 0 18%;
         min-width: 0;
         min-height: 0;
+        height: 100%;
         border-radius: var(--radius);
         background: var(--panel);
         border: 1px solid var(--panel-border);
@@ -451,10 +426,14 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
+        align-self: stretch;
       }
-
       .time-panel-header {
-        background: linear-gradient(135deg, var(--time-a) 0%, var(--time-b) 100%);
+        background: linear-gradient(
+          135deg,
+          var(--time-a) 0%,
+          var(--time-b) 100%
+        );
         color: #fff;
         font-size: clamp(10px, 0.72vw, 13px);
         font-weight: 800;
@@ -471,19 +450,33 @@
         font-weight: 600;
         margin-left: 4px;
       }
-
       .time-table {
         width: 100%;
-        flex: 1;
+        height: 100%;
+        flex: 1 1 auto;
         table-layout: fixed;
         border-collapse: separate;
         border-spacing: 4px;
       }
+      .time-table thead {
+        height: 34px;
+      }
 
-      .time-table col.time-col-label { width: 48%; }
-      .time-table col.time-col-hr { width: 26%; }
-      .time-table col.time-col-day { width: 26%; }
-
+      .time-table tbody {
+        height: calc(100% - 34px);
+      }
+      .time-table tbody tr {
+        height: 33.333%;
+      }
+      .time-table col.time-col-label {
+        width: 48%;
+      }
+      .time-table col.time-col-hr {
+        width: 26%;
+      }
+      .time-table col.time-col-day {
+        width: 26%;
+      }
       .time-table thead th {
         border-radius: var(--radius-sm);
         padding: 4px 2px;
@@ -493,7 +486,11 @@
         text-align: center;
         white-space: nowrap;
         color: #fff;
-        background: linear-gradient(135deg, var(--time-a) 0%, var(--time-b) 100%);
+        background: linear-gradient(
+          135deg,
+          var(--time-a) 0%,
+          var(--time-b) 100%
+        );
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
       }
       .time-table thead th .en {
@@ -506,7 +503,6 @@
       .time-table tbody tr {
         height: calc((100% - 48px) / 3);
       }
-
       .time-label-cell {
         border-radius: var(--radius-sm);
         vertical-align: middle;
@@ -514,7 +510,11 @@
         position: relative;
         padding: 4px 6px 4px 8px;
         color: white;
-        background: linear-gradient(135deg, var(--time-a) 0%, var(--time-b) 100%);
+        background: linear-gradient(
+          135deg,
+          var(--time-a) 0%,
+          var(--time-b) 100%
+        );
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
       }
       .time-label-cell .lc-vi {
@@ -530,7 +530,6 @@
         font-weight: 600;
         opacity: 0.9;
       }
-
       .time-value-cell {
         border-radius: var(--radius-sm);
         vertical-align: middle;
@@ -550,7 +549,6 @@
         white-space: nowrap;
         color: var(--time-text);
       }
-
       .kpi-table {
         width: 100%;
         height: 100%;
@@ -558,7 +556,6 @@
         border-collapse: separate;
         border-spacing: 5px;
       }
-
       .kpi-table thead th {
         border-radius: var(--radius-sm);
         padding: 8px 8px;
@@ -568,53 +565,53 @@
         letter-spacing: 0.01em;
         text-align: center;
         white-space: nowrap;
-        color: #fff;
+        color: #1f4e79;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
       }
-
       .th-plan {
         background: linear-gradient(
           135deg,
-          var(--plan-a) 0%,
-          var(--plan-b) 100%
+          #c7def3 0%,
+          #c7def3 100%
         );
       }
-
       .th-actual {
         background: linear-gradient(
           135deg,
-          var(--actual-a) 0%,
-          var(--actual-b) 100%
+          #f1e5be 0%,
+          #f1e5be 100%
         );
       }
-
       .th-balance {
         background: linear-gradient(
           135deg,
-          var(--balance-a) 0%,
-          var(--balance-b) 100%
+          #f7f6f4 0%,
+          #f7f6f4 100%
         );
       }
-
       .th-pct {
-        background: linear-gradient(135deg, var(--pct-a) 0%, var(--pct-b) 100%);
+        background: linear-gradient(
+          135deg,
+          #f7f6f4 0%,
+          #f7f6f4 100%
+        );
       }
-
       .th-time {
-        background: linear-gradient(135deg, var(--time-a) 0%, var(--time-b) 100%);
+        background: linear-gradient(
+          135deg,
+          #f7f6f4 0%,
+          #f7f6f4 100%
+        );
       }
-
       .kpi-table thead th .en {
         font-size: var(--fs-th-en);
-        color: rgba(255, 255, 255, 0.86);
+        color: #1f4e79;
         font-weight: 600;
         margin-left: 4px;
       }
-
       .kpi-table tbody tr {
         height: calc((100% - 56px) / 3);
       }
-
       .label-cell,
       .value-cell {
         border-radius: var(--radius-sm);
@@ -622,37 +619,32 @@
         overflow: hidden;
         position: relative;
       }
-
       .label-cell {
         padding: 8px 10px 8px 16px;
-        color: white;
+        color: #1f4e79;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
       }
-
       .label-cell .lc-vi {
         font-size: var(--fs-kpi-label-vi);
         line-height: 1.2;
         font-weight: 800;
         letter-spacing: 0.005em;
       }
-
       .label-cell .lc-en {
-        margin-top: 4px;
+        margin-top: 10px;
         font-size: var(--fs-kpi-label-en);
         line-height: 1.18;
         font-weight: 600;
         opacity: 0.9;
       }
-
       /* Label colors */
       .label-plan {
         background: linear-gradient(
           135deg,
-          var(--plan-a) 0%,
-          var(--plan-b) 100%
+          #f7f6f4 0%,
+          #f7f6f4 100%
         );
       }
-
       .label-actual {
         background: linear-gradient(
           135deg,
@@ -660,87 +652,105 @@
           var(--actual-b) 100%
         );
       }
-
       .label-balance {
         background: linear-gradient(
           135deg,
-          var(--balance-a) 0%,
-          var(--balance-b) 100%
+          #f7f6f4 0%,
+          #f7f6f4 100%
         );
       }
-
       .label-pct {
-        background: linear-gradient(135deg, var(--pct-a) 0%, var(--pct-b) 100%);
+        background: linear-gradient(
+          135deg,
+          #f7f6f4 0%,
+          #f7f6f4 100%
+        );
       }
-
       .label-time {
-        background: linear-gradient(135deg, var(--time-a) 0%, var(--time-b) 100%);
+        background: linear-gradient(
+          135deg,
+          #f7f6f4 0%,
+          #f7f6f4 100%
+        );
       }
-
       .value-cell {
         text-align: center;
         padding: 6px 8px;
-        border: 1px solid rgba(148, 163, 184, 0.12);
-        background: #fff;
+        border: 1px solid var(--kpi-border);
+        background: var(--kpi-bg-soft);
       }
-
       .value-cell .cell-value {
-        font-size: clamp(24px,2.2vw,44px);
+        font-size: clamp(24px, 2.2vw, 44px);
         line-height: 1;
         font-weight: 900;
         font-variant-numeric: tabular-nums;
         letter-spacing: -0.02em;
         white-space: nowrap;
       }
-
       .vc-plan {
-        background: linear-gradient(180deg, var(--plan-soft) 0%, #f7fff9 100%);
+        background: linear-gradient(
+        180deg,
+        #1f4e79 0%,
+        #1f4e79 100%
+      );
         border-color: rgba(34, 168, 106, 0.12);
       }
       .vc-plan .cell-value {
-        color: var(--plan-text);
+        color: white;
       }
-
       .vc-actual {
         background: linear-gradient(
           180deg,
-          var(--actual-soft) 0%,
-          #fff8f4 100%
+          #f3c737 0%,
+          #f3c737 100%
         );
         border-color: rgba(239, 106, 87, 0.12);
       }
       .vc-actual .cell-value {
-        color: var(--actual-text);
+        color: #454141;
       }
-
       .vc-balance {
         background: linear-gradient(
           180deg,
-          var(--balance-soft) 0%,
-          #f8fbff 100%
+          #FFFFFF 0%,
+          #FFFFFF 100%
         );
         border-color: rgba(93, 141, 238, 0.12);
       }
       .vc-balance .cell-value {
-        color: var(--balance-text);
+        color: #454141;
       }
-
       .vc-pct {
-        background: linear-gradient(180deg, var(--pct-soft) 0%, #fbf9ff 100%);
+        background: linear-gradient(
+          180deg,
+          #FFFFFF 0%,
+          #FFFFFF 100%
+        );
         border-color: rgba(138, 109, 240, 0.12);
       }
       .vc-pct .cell-value {
-        color: var(--pct-text);
+        color: #454141;
       }
-
       .vc-time {
-        background: linear-gradient(180deg, var(--time-soft) 0%, #f9f8ff 100%);
+        background: linear-gradient(
+          180deg,
+          #FFFFFF 0%,
+          #FFFFFF 100%
+        );
         border-color: rgba(91, 75, 181, 0.12);
       }
       .vc-time .cell-value {
-        color: var(--time-text);
+        color: #454141;
+        font-size: clamp(30px, 1.8vw, 40px);
       }
-
+      .time-day {
+        display: block;
+        margin-top: 6px;
+        font-size: 0.55em;
+        font-weight: 700;
+        color: var(--text-muted);
+        letter-spacing: 0;
+      }
       /* Time split layout: Hr and Day side by side in each cell */
       .label-time .time-split {
         display: flex;
@@ -786,23 +796,17 @@
         font-variant-numeric: tabular-nums;
         color: var(--time-text);
       }
-
       .kpi-table col.col-label {
-        width: 16%;
+        width: 11%;
       }
       .kpi-table col.col-value {
         width: 9%;
       }
-
-      /* =========================================================
-       Pulse chỉ ở box THỰC TẾ / CÒN LẠI / %
-       => chỉ gắn cho label-cell, không gắn cho value-cell
-    ========================================================= */
+      /* Pulse chỉ ở box THỰC TẾ / CÒN LẠI / % => chỉ gắn cho label-cell, không gắn cho value-cell */
       .pulse-label {
         position: relative;
         overflow: visible;
       }
-
       .pulse-label::before {
         content: "";
         position: absolute;
@@ -811,12 +815,11 @@
         width: 7px;
         height: 7px;
         border-radius: 50%;
-        background: #ffffff;
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.42);
+        background: #1b4e7d;
+        box-shadow: 0 0 0 0 rgba(225, 239, 121, 0.18);
         animation: kpiPulse 1.8s infinite;
         z-index: 3;
       }
-
       .pulse-label::after {
         content: "";
         position: absolute;
@@ -825,43 +828,43 @@
         width: 15px;
         height: 15px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.14);
+        background: rgba(46, 7, 238, 0.18);
         z-index: 2;
       }
 
       @keyframes kpiPulse {
         0% {
-          box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.42);
+          box-shadow: 0 0 0 0 rgba(81, 106, 229, 0.42);
         }
         70% {
-          box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+          box-shadow: 0 0 0 8px rgba(134, 246, 198, 0);
         }
         100% {
-          box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+          box-shadow: 0 0 0 0 rgba(134, 246, 198, 0);
         }
       }
 
-      /* =========================================================
-       FOOTER
-    ========================================================= */
+      /* FOOTER */
       .footer-section {
         min-height: 0;
         overflow: hidden;
       }
-
-        .footer-grid{
-        width:100%;
-        height:100%;
-        display:grid;
-        grid-template-columns:1fr 2fr;
-        gap:var(--gap);
-        min-height:0;
+      .footer-grid {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 0.6fr 2fr;
+        gap: var(--gap);
+        min-height: 0;
       }
-
       .footer-card {
         min-width: 0;
         min-height: 0;
-        background: var(--panel);
+        background: linear-gradient(
+          180deg,
+          #FFFFFF 0%,
+          #FFFFFF 100%
+        );
         border: 1px solid var(--panel-border);
         border-radius: var(--radius);
         box-shadow: var(--shadow-sm);
@@ -870,16 +873,14 @@
         flex-direction: column;
         overflow: hidden;
       }
-
       .footer-card-header {
         display: flex;
         align-items: center;
         gap: 10px;
-        margin-bottom: 10px;
+        /* margin-bottom: 5px; */
         flex-shrink: 0;
         min-width: 0;
       }
-
       .footer-icon {
         width: 34px;
         height: 34px;
@@ -890,21 +891,17 @@
         font-size: 12px;
         flex-shrink: 0;
       }
-
       .footer-icon-time {
         background: rgba(47, 105, 217, 0.1);
         color: #2f69d9;
       }
-
       .footer-icon-quality {
         background: rgba(226, 85, 85, 0.1);
         color: var(--danger);
       }
-
       .footer-title-wrap {
         min-width: 0;
       }
-
       .footer-title-vi,
       .footer-title-red {
         font-size: var(--fs-card-title);
@@ -912,11 +909,9 @@
         line-height: 1.1;
         color: var(--text);
       }
-
       .footer-title-red {
         color: var(--danger);
       }
-
       .footer-title-en {
         margin-top: 2px;
         font-size: var(--fs-card-sub);
@@ -924,41 +919,39 @@
         color: var(--text-muted);
         font-weight: 600;
       }
-
-      /* Inner metric boxes */
-      .metric-box-grid{
+      .metric-box-grid {
         flex: 1;
         min-height: 0;
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 10px;
       }
-
-      .metric-box{
+      .metric-box {
         min-width: 0;
         min-height: 0;
         border-radius: var(--radius-sm);
         border: 1px solid var(--panel-border);
         background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
         box-shadow: var(--shadow-xs);
-        padding:8px;
+        padding: 8px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         text-align: center;
       }
-
       .metric-box.time-box {
         background: linear-gradient(180deg, #f6faff 0%, #edf5ff 100%);
         border-color: rgba(93, 141, 238, 0.12);
       }
-
       .metric-box.quality-box {
-        background: linear-gradient(180deg, #fff8f8 0%, #fff1f1 100%);
+        background: linear-gradient(
+        180deg,
+        #F7F4EE 0%,
+        #F0EDE5 100%
+      );
         border-color: rgba(226, 85, 85, 0.12);
       }
-
       .metric-number {
         font-size: var(--fs-stat);
         line-height: 1;
@@ -967,15 +960,12 @@
         font-variant-numeric: tabular-nums;
         white-space: nowrap;
       }
-
       .metric-number-dark {
         color: #234b89;
       }
-
       .metric-number-red {
         color: var(--danger);
       }
-
       .metric-label {
         margin-top: 7px;
         font-size: var(--fs-stat-label);
@@ -983,82 +973,82 @@
         color: var(--text);
         font-weight: 800;
       }
-
       .metric-label span {
         color: var(--text-muted);
         font-weight: 700;
       }
 
-      /* =========================================================
-       DEFECT LIST
-    ========================================================= */
+      /* DEFECT LIST */
       .defect-card-body {
+        margin-top: 10px;
         flex: 1;
         min-height: 0;
         display: flex;
         flex-direction: column;
         overflow: hidden;
       }
-
       .defect-list {
         flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        gap: 10px;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        /* gap: 5px 2px; */
+        align-content: stretch;
       }
-
-      .defect-item{
-        display:grid;
-        grid-template-columns:42px minmax(0,1fr);
-        align-items:center;
-        gap:12px;
-        padding:2px 0;
-        width:100%;
+      .defect-item {
+        display: grid;
+        grid-template-columns: 42px minmax(0, 1fr);
+        align-items: center;
+        /* gap: 5px; */
+        /* padding: 2px 0; */
+        width: 100%;
       }
-
       .defect-count {
-        text-align: right;
+        text-align: center;
         font-size: var(--fs-defect-count);
         font-weight: 900;
         color: var(--danger);
         font-variant-numeric: tabular-nums;
       }
-
-      .defect-name{
-        font-size:var(--fs-defect-name);
-        font-weight:700;
-        color:#34465c;
-        min-width:0;
-        white-space:nowrap;
-        overflow:hidden;
-        text-overflow:ellipsis;
+      .defect-name {
+        font-size: var(--fs-defect-name);
+        font-weight: 700;
+        color: #34465c;
+        min-width: 0;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        overflow-wrap: anywhere;
+        word-break: normal;
+        line-height: 1.2;
+      }
+      .balance-negative {
+        color: var(--danger) !important;
+        font-weight: 800;
       }
 
-      /* =========================================================
-       RESPONSIVE
-    ========================================================= */
+      /* RESPONSIVE */
       @media (max-width: 1600px) {
         :root {
-          --footer-h: 26vh;
+          --footer-h: 14vh;
         }
-
-        .meta-grid {
+        .meta-grid{
           grid-template-columns:
             1fr
-            0.66fr
-            0.9fr
+            0.77fr
+            0.5fr
+            0.4fr
+            0.65fr
+            1.4fr
             0.8fr
-            1.3fr;
         }
-
         .defect-item {
           display: grid;
           grid-template-columns: 32px 1fr;
           gap: 10px;
           align-items: center;
         }
-
         .time-panel {
           flex: 0 0 16%;
         }
@@ -1068,83 +1058,64 @@
         :root {
           --page-pad: 8px;
           --gap: 8px;
-          --footer-h: 27vh;
-
+          --footer-h: 12vh;
           --fs-clock: clamp(11px, 0.9vw, 16px);
           --fs-badge: clamp(9px, 0.75vw, 12px);
-
           --fs-meta-label: clamp(8px, 0.62vw, 11px);
           --fs-meta-value: clamp(11px, 0.82vw, 15px);
           --fs-meta-sub: clamp(8px, 0.62vw, 11px);
-
           --fs-th: clamp(11px, 0.88vw, 16px);
           --fs-th-en: clamp(9px, 0.7vw, 12px);
-
           --fs-kpi-label-vi: clamp(9px, 0.72vw, 12px);
           --fs-kpi-label-en: clamp(8px, 0.62vw, 10px);
           --fs-kpi-value: clamp(18px, 1.8vw, 34px);
-
           --fs-card-title: clamp(12px, 0.88vw, 16px);
           --fs-card-sub: clamp(9px, 0.72vw, 12px);
           --fs-stat: clamp(18px, 1.6vw, 30px);
           --fs-stat-label: clamp(10px, 0.72vw, 13px);
-
           --fs-s-name: clamp(9px, 0.7vw, 12px);
           --fs-defect-count: clamp(9px, 0.7vw, 12px);
         }
-
         .header {
           gap: 6px;
         }
-
         .meta-item {
-          padding: 7px 9px;
+          padding: 5px 6px;
           max-height: 70px;
         }
-
         .meta-icon {
           width: 26px;
           height: 26px;
           font-size: 12px;
           border-radius: 7px;
         }
-
         .schedule-wrap {
           gap: 14px;
         }
-
         .kpi-card {
           padding: 5px;
         }
-
         .kpi-table {
           border-spacing: 4px;
         }
-
         .label-cell {
           padding: 7px 8px 7px 15px;
         }
-
         .value-cell {
           padding: 5px 6px;
         }
-
         .footer-card {
           padding: 10px;
         }
-
         .metric-box-grid {
           gap: 8px;
         }
-
         .metric-box {
           padding: 9px 10px;
         }
-
-        .defect-item{
-          grid-template-columns:42px minmax(0,1fr);
+        .defect-item {
+          grid-template-columns: 42px minmax(0, 1fr);
         }
-
         .time-panel {
           flex: 0 0 15%;
         }
@@ -1164,39 +1135,31 @@
 
       @media (max-width: 1200px) {
         :root {
-          --footer-h: 29vh;
+          --footer-h: 10vh;
         }
-
         .meta-grid {
           grid-template-columns: repeat(3, minmax(0, 1fr));
         }
-
         .footer-grid {
-          grid-template-columns:1fr 2fr;
+          grid-template-columns: 1fr 2fr;
         }
-
-        /* Stack time panel below KPI table on narrow screens */
         .kpi-row {
           flex-direction: column;
           overflow: hidden;
         }
-
         .kpi-card {
           flex: none;
           overflow: visible;
         }
-
         .kpi-table {
           display: block;
           overflow-x: auto;
           white-space: nowrap;
         }
-
         .time-panel {
           flex: none;
           width: 100%;
         }
-
         .time-table {
           min-height: 80px;
         }
@@ -1206,7 +1169,7 @@
         :root {
           --page-pad: 8px;
           --gap: 7px;
-          --footer-h: 32vh;
+          --footer-h: 8vh;
           --fs-kpi-value: clamp(16px, 1.6vw, 26px);
           --fs-stat: clamp(16px, 1.5vw, 24px);
         }
@@ -1215,44 +1178,35 @@
         body {
           overflow: auto;
         }
-
         .dashboard {
           height: auto;
           min-height: 100vh;
         }
-
         .header-top {
           flex-direction: column;
           align-items: flex-start;
         }
-
         .badges {
           width: 100%;
           justify-content: flex-start;
         }
-
         .meta-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
-
         .schedule-wrap {
           gap: 12px;
         }
-
         .kpi-table thead th .en,
         .label-cell .lc-en,
         .time-label-cell .lc-en {
           display: none;
         }
-
         .footer-grid {
           grid-template-columns: 1fr 1fr;
         }
-
-        .defect-item{
-          grid-template-columns:42px minmax(0,1fr);
+        .defect-item {
+          grid-template-columns: 42px minmax(0, 1fr);
         }
-
         .time-panel-header .en {
           display: none;
         }
@@ -1266,45 +1220,36 @@
         body {
           overflow: auto;
         }
-
         .dashboard {
           height: auto;
           min-height: 100vh;
           grid-template-rows: auto auto auto;
         }
-
         .meta-grid {
           grid-template-columns: 1fr;
         }
-
         .schedule-wrap {
           flex-wrap: wrap;
           gap: 10px;
         }
-
         .kpi-card,
         .footer-card {
           overflow: visible;
         }
-
         .kpi-table {
           display: block;
           overflow-x: auto;
           white-space: nowrap;
         }
-
         .footer-grid {
           grid-template-columns: 1fr;
         }
-
         .metric-box-grid {
           grid-template-columns: 1fr;
         }
-
         .time-panel {
           width: 100%;
         }
-
         .time-table {
           min-height: 100px;
         }
@@ -1316,27 +1261,21 @@
           --gap: 18px;
           --radius: 14px;
           --radius-sm: 10px;
-          --footer-h: 23vh;
-
+          --footer-h: 16vh;
           --fs-clock: 24px;
           --fs-badge: 18px;
-
           --fs-meta-label: 13px;
           --fs-meta-value: 22px;
           --fs-meta-sub: 13px;
-
           --fs-th: 24px;
           --fs-th-en: 17px;
-
           --fs-kpi-label-vi: 16px;
           --fs-kpi-label-en: 13px;
           --fs-kpi-value: 58px;
-
           --fs-card-title: 22px;
           --fs-card-sub: 15px;
           --fs-stat: 50px;
           --fs-stat-label: 16px;
-
           --fs-defect-name: 16px;
           --fs-defect-count: 16px;
         }
@@ -1356,24 +1295,18 @@
         }
 
         .defect-item {
-          grid-template-columns:42px minmax(0,1fr);
+          grid-template-columns: 42px minmax(0, 1fr);
         }
       }
 
-      .highlight-value{
-        color:#ffd84d !important;
-        font-weight:900;
-        text-shadow: 0 0 6px rgba(255,216,77,.45);
+      .highlight-value {
+        color: #ffd84d !important;
+        font-weight: 900;
+        text-shadow: 0 0 6px rgba(255, 216, 77, 0.45);
       }
 
       .footer-card.header-theme {
-        background: linear-gradient(
-          135deg,
-          var(--header-a) 0%,
-          var(--header-b) 36%,
-          var(--header-c) 72%,
-          var(--header-d) 100%
-        );
+        background: #093966;
         color: #fff;
       }
 
@@ -1413,373 +1346,342 @@
         color: #245d90 !important;
       }
 
-      .brand-label{
-        color:#fff;
-        font-size:var(--fs-meta-sub);
-        font-weight:700;
-        text-transform:none;
+      .brand-label {
+        color: #fff;
+        font-size: var(--fs-meta-sub);
+        font-weight: 700;
+        text-transform: none;
       }
 
-      .brand-value{
-        color:#ffd84d;
-        font-size:var(--fs-meta-sub);
-        font-weight:800;
-        text-shadow:0 0 6px rgba(255,216,77,.45);
+      .brand-value {
+        color: #ffd84d;
+        font-size: var(--fs-meta-sub);
+        font-weight: 800;
+        text-shadow: 0 0 6px rgba(255, 216, 77, 0.45);
       }
 
-      /* .brand-label{
-        color:#cfe6ff;
-        font-size:var(--fs-meta-label);
-        font-weight:700;
-        display:block;
-        margin-top:4px;
+      .worker-label {
+        color: #eef7ff;
+        font-size: var(--fs-meta-sub);
+        font-weight: 600;
+        text-transform: none;
       }
 
-      .brand-value{
-        color:#ffd84d;
-        font-size:var(--fs-meta-value);
-        font-weight:900;
-        text-shadow:0 0 6px rgba(255,216,77,.45);
-      } */
-
-      .worker-label{
-        color:#eef7ff;
-        font-size:var(--fs-meta-sub);
-        font-weight:600;
-        text-transform:none;
+      .worker-value {
+        color: #ffd84d;
+        font-size: var(--fs-meta-value);
+        font-weight: 800;
+        text-shadow: 0 0 6px rgba(255, 216, 77, 0.45);
       }
-
-      .worker-value{
-        color:#ffd84d;
-        font-size:var(--fs-meta-value);
-        font-weight:800;
-        text-shadow:0 0 6px rgba(255,216,77,.45);
-      }
-  </style>
+    </style>
   </head>
   <body>
     <div class="dashboard">
-      <!-- ======================================================
-         HEADER
-    ======================================================= -->
+      <!-- HEADER -->
       <header class="header">
-        <div class="header-top">
-          <div class="live-clock">
-            <div class="pulse-dot"></div>
-            <span class="clock-text" id="live-clock">----/--/-- --:--:--</span>
-          </div>
-
-          <div class="badges">
-            <span id="flowName" class="badge badge-line highlight-value"
-              >🏭
-            </span>
-            <span class="badge badge-flow">
-              📶 Flow Efficiency :
-              <span id="flowEfficiency" class="highlight-value"></span>
-            </span>
-          </div>
-        </div>
-
         <div class="meta-grid">
+          <div class="meta-item">
+            <div class="meta-content">
+              <div class="meta-label">
+                Flow: <span id="flowName" class="meta-value highlight-value"></span>
+              </div>
+
+              <div class="meta-label">
+                Efficiency: <span id="flowEfficiency" class="meta-value highlight-value"></span>
+              </div>
+            </div>
+          </div>
+
           <!-- STYLE -->
           <div class="meta-item">
-            <div class="meta-icon">📋</div>
+            <!-- <div class="meta-icon">📋</div> -->
             <div class="meta-content">
-              <div class="meta-label">Style</div>
-              <div id="style" class="meta-value highlight-value"></div>
-              <div id="brand" class="meta-sub">
+              <div class="meta-label">
+                Style: <span id="style" class="meta-value highlight-value"></span>
+              </div>
+              <div class="meta-label">
+                Brand: <span id="brand" class="meta-value highlight-value"></span>
               </div>
             </div>
           </div>
 
           <!-- PO -->
           <div class="meta-item">
-            <div class="meta-icon">#</div>
+            <!-- <div class="meta-icon">#</div> -->
             <div class="meta-content">
-              <div class="meta-label">Số PO / PO No.</div>
+              <!-- <div class="meta-label">Số PO: <span id="po" class="meta-value highlight-value"></span></div> -->
+              <div class="meta-label">PO No:</div>
               <div id="po" class="meta-value highlight-value"></div>
             </div>
           </div>
 
           <!-- SMV -->
           <div class="meta-item">
-            <div class="meta-icon">📦</div>
+            <!-- <div class="meta-icon">📦</div> -->
             <div class="meta-content">
-              <div class="meta-label">SMV / Standard Minute Value</div>
+              <div class="meta-label">SMV</div>
               <div id="smv" class="meta-value highlight-value"></div>
             </div>
           </div>
 
           <!-- WORKERS -->
           <div class="meta-item">
-            <div class="meta-icon">👥</div>
+            <!-- <div class="meta-icon">👥</div> -->
             <div class="meta-content">
-              <div class="meta-label">Công nhân / Workers</div>
+              <div class="meta-label">Worker:</div>
               <div id="workers" class="meta-value">
+                <span class="meta-label">TT:</span>
+                <span id="workerAt" class="worker-value"></span>
+                <span class="meta-label"> / KH:</span>
+                <span id="workerTg" class="worker-value"></span>
               </div>
             </div>
           </div>
 
           <!-- SCHEDULE -->
           <div class="meta-item">
-            <div class="meta-icon">📅</div>
+            <!-- <div class="meta-icon">📅</div> -->
             <div class="meta-content">
-              <!-- <div class="meta-label">Lịch trình / Schedule</div> -->
               <div class="schedule-wrap">
                 <div class="schedule-block">
-                  <div class="schedule-caption">Start</div>
+                  <div class="schedule-caption">Start Date</div>
                   <div
                     id="startDate"
                     class="schedule-date highlight-value"
                   ></div>
                 </div>
-
                 <div class="schedule-arrow">→</div>
-
                 <div class="schedule-block">
                   <div class="schedule-caption">Expected Complete</div>
-                  <div
-                    id="completeDate"
-                    class="schedule-date highlight-value"
-                  ></div>
+                  <div id="completeDate" class="schedule-date highlight-value"></div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="meta-item">
+            <div class="meta-content">
+              <div class="clock-text" style="display:flex;align-items:center;gap:8px;">
+                <div class="pulse-dot"></div>
+                <span id="live-clock">----/--/-- --:--:--</span>
               </div>
             </div>
           </div>
         </div>
       </header>
 
-      <!-- ======================================================
-         KPI TABLE
-    ======================================================= -->
-       <section class="kpi-section">
+      <!-- KPI TABLE -->
+      <section class="kpi-section">
         <div class="kpi-row">
-        <div class="kpi-card">
-          <table class="kpi-table">
-            <colgroup>
-              <col class="col-label" />
-              <col class="col-value" />
-              <col class="col-label" />
-              <col class="col-value" />
-              <col class="col-label" />
-              <col class="col-value" />
-              <col class="col-label" />
-              <col class="col-value" />
-            </colgroup>
+          <div class="kpi-card">
+            <table class="kpi-table">
+              <colgroup>
+                <col class="col-label" />
+                <col class="col-value" />
+                <col class="col-label" />
+                <col class="col-value" />
+                <col class="col-label" />
+                <col class="col-value" />
+                <col class="col-label" />
+                <col class="col-value" />
+                <col class="col-label" />
+                <col class="col-value" />
+              </colgroup>
 
-            <thead>
-              <tr>
-                <th colspan="2" class="th-plan">
-                  Kế hoạch <span class="en">/ Plan</span>
-                </th>
-                <th colspan="2" class="th-actual">
-                  Thực tế <span class="en">/ Actual</span>
-                </th>
-                <th colspan="2" class="th-balance">
-                  Còn lại <span class="en">/ Balance</span>
-                </th>
-                <th colspan="2" class="th-pct">%</th>
-              </tr>
-            </thead>
+              <thead>
+                <tr>
+                  <th colspan="2" class="th-plan">
+                    Kế hoạch
+                  </th>
+                  <th colspan="2" class="th-actual">
+                    Thực tế</span>
+                  </th>
+                  <th colspan="2" class="th-balance">
+                    Còn lại</span>
+                  </th>
+                  <th colspan="2" class="th-pct">
+                    Tỷ Lệ
+                  </th>
+                  <th colspan="2" class="th-time">
+                    Thời gian
+                  </th>
+                </tr>
+              </thead>
 
-            <tbody>
-              <!-- ROW 1 -->
-              <tr>
-                <td class="label-cell label-plan">
-                  <div class="lc-vi">SL kế hoạch trong ngày</div>
-                  <div class="lc-en">Planned units for today</div>
-                </td>
-                <td class="value-cell vc-plan">
-                  <div id="dailyTarget" class="cell-value"></div>
-                </td>
+              <tbody>
+                <!-- ROW 1 -->
+                <tr>
+                  <td class="label-cell label-plan">
+                    <div class="lc-vi">SL KH ngày</div>
+                    <div class="lc-en">Planned units for today</div>
+                  </td>
+                  <td class="value-cell vc-plan">
+                    <div id="dailyTarget" class="cell-value"></div>
+                  </td>
 
-                <td class="label-cell label-actual pulse-label">
-                  <div class="lc-vi">Sản lượng thực hôm nay</div>
-                  <div class="lc-en">Actual output for today</div>
-                </td>
-                <td class="value-cell vc-actual">
-                  <div id="output" class="cell-value"></div>
-                </td>
+                  <td class="label-cell label-actual pulse-label">
+                    <div class="lc-vi">SL hôm nay</div>
+                    <div class="lc-en">Actual output for today</div>
+                  </td>
+                  <td class="value-cell vc-actual">
+                    <div id="output" class="cell-value"></div>
+                  </td>
 
-                <td class="label-cell label-balance pulse-label">
-                  <div class="lc-vi">
-                    Sản lượng thực hôm nay - SL kế hoạch trong ngày
-                  </div>
-                  <div class="lc-en">
-                    Actual output for today - Planned units for today
-                  </div>
-                </td>
-                <td class="value-cell vc-balance">
-                  <div id="banlance1" class="cell-value"></div>
-                </td>
+                  <td class="label-cell label-balance pulse-label">
+                    <div class="lc-vi">
+                      SL hôm nay - SL KH ngày
+                    </div>
+                    <div class="lc-en">
+                      Actual output for today - Planned units for today
+                    </div>
+                  </td>
+                  <td class="value-cell vc-balance">
+                    <div id="banlance1" class="cell-value"></div>
+                  </td>
 
-                <td class="label-cell label-pct pulse-label">
-                  <div class="lc-vi">
-                    Sản lượng thực hôm nay / SL kế hoạch trong ngày
-                  </div>
-                  <div class="lc-en">
-                    Actual output for today / Planned units for today
-                  </div>
-                </td>
-                <td class="value-cell vc-pct">
-                  <div id="percent1" class="cell-value"></div>
-                </td>
-              </tr>
+                  <td class="label-cell label-pct pulse-label">
+                    <div class="lc-vi">
+                      SL hôm nay / SL KH ngày
+                    </div>
+                    <div class="lc-en">
+                      Actual output for today / Planned units for today
+                    </div>
+                  </td>
+                  <td class="value-cell vc-pct">
+                    <div id="percent1" class="cell-value"></div>
+                  </td>
 
-              <!-- ROW 2 -->
-              <tr>
-                <td class="label-cell label-plan">
-                  <div class="lc-vi">SL mục tiêu thời điểm hiện tại</div>
-                  <div class="lc-en">
-                    Planned units of today's accumulated time
-                  </div>
-                </td>
-                <td class="value-cell vc-plan">
-                  <div id="targetNow" class="cell-value"></div>
-                </td>
+                  <td class="label-cell label-time pulse-label">
+                    <div class="lc-vi">
+                      Số giờ hoàn thành SL KH ngày
+                    </div>
+                    <div class="lc-en">
+                      Time Required to Complete the Planned Units for Today
+                    </div>
+                  </td>
+                  <td class="value-cell vc-time">
+                    <div id="hr1" class="cell-value"></div>
+                  </td>
+                </tr>
 
-                <td class="label-cell label-actual pulse-label">
-                  <div class="lc-vi">Sản lượng thực hôm nay</div>
-                  <div class="lc-en">Actual output for today</div>
-                </td>
-                <td class="value-cell vc-actual">
-                  <div id="output1" class="cell-value"></div>
-                </td>
+                <!-- ROW 2 -->
+                <tr>
+                  <td class="label-cell label-plan">
+                    <div class="lc-vi">SL MT hiện tại</div>
+                    <div class="lc-en">
+                      Planned units of today's accumulated time
+                    </div>
+                  </td>
+                  <td class="value-cell vc-plan">
+                    <div id="targetNow" class="cell-value"></div>
+                  </td>
 
-                <td class="label-cell label-balance pulse-label">
-                  <div class="lc-vi">
-                    Sản lượng thực hôm nay - SL mục tiêu thời điểm hiện tại
-                  </div>
-                  <div class="lc-en">
-                    Actual output for today - Planned units of today's accumulated time
-                  </div>
-                </td>
-                <td class="value-cell vc-balance">
-                  <div id="banlance2" class="cell-value"></div>
-                </td>
+                  <td class="label-cell label-actual pulse-label">
+                    <div class="lc-vi">SL hôm nay</div>
+                    <div class="lc-en">Actual output for today</div>
+                  </td>
+                  <td class="value-cell vc-actual">
+                    <div id="output1" class="cell-value"></div>
+                  </td>
 
-                <td class="label-cell label-pct pulse-label">
-                  <div class="lc-vi">
-                    Sản lượng thực hôm nay / SL mục tiêu thời điểm hiện tại
-                  </div>
-                  <div class="lc-en">
-                    Actual output for today / Planned units of today's
-                    accumulated time
-                  </div>
-                </td>
-                <td class="value-cell vc-pct">
-                  <div id="percent2" class="cell-value"></div>
-                </td>
-              </tr>
+                  <td class="label-cell label-balance pulse-label">
+                    <div class="lc-vi">
+                      SL hôm nay - SL MT hiện tại
+                    </div>
+                    <div class="lc-en">
+                      Actual output for today - Planned units of today's accumulated time
+                    </div>
+                  </td>
+                  <td class="value-cell vc-balance">
+                    <div id="banlance2" class="cell-value"></div>
+                  </td>
 
-              <!-- ROW 3 -->
-              <tr>
-                <td class="label-cell label-plan">
-                  <div class="lc-vi">SL phân phối cho chuyền</div>
-                  <div class="lc-en">Qty distributed to line</div>
-                </td>
-                <td class="value-cell vc-plan">
-                  <div id="styleQty" class="cell-value"></div>
-                </td>
+                  <td class="label-cell label-pct pulse-label">
+                    <div class="lc-vi">
+                      SL hôm nay / SL MT hiện tại
+                    </div>
+                    <div class="lc-en">
+                      Actual output for today / Planned units of today's accumulated time
+                    </div>
+                  </td>
+                  <td class="value-cell vc-pct">
+                    <div id="percent2" class="cell-value"></div>
+                  </td>
 
-                <td class="label-cell label-actual pulse-label">
-                  <div class="lc-vi">SL lũy kế</div>
-                  <div class="lc-en">Achieved Qty</div>
-                </td>
-                <td class="value-cell vc-actual">
-                  <div id="accQty" class="cell-value"></div>
-                </td>
+                  <td class="label-cell label-time pulse-label">
+                    <div class="lc-vi">
+                      Số giờ hoàn thành SL MT hiện tại
+                    </div>
+                    <div class="lc-en">Time Required to Complete the Planned Units of Today's Accumulated Time</div>
+                  </td>
+                  <td class="value-cell vc-time">
+                    <div id="hr2" class="cell-value"></div>
+                  </td>
+                </tr>
 
-                <td class="label-cell label-balance pulse-label">
-                  <div class="lc-vi">SL lũy kế - SL phân phối cho chuyền</div>
-                  <div class="lc-en">
-                    Achieved Qty - Qty distributed to line
-                  </div>
-                </td>
-                <td class="value-cell vc-balance">
-                  <div id="banlance3" class="cell-value"></div>
-                </td>
+                <!-- ROW 3 -->
+                <tr>
+                  <td class="label-cell label-plan">
+                    <div class="lc-vi">SL phân phối cho chuyền</div>
+                    <div class="lc-en">Quantity distributed to line</div>
+                  </td>
+                  <td class="value-cell vc-plan">
+                    <div id="styleQty" class="cell-value"></div>
+                  </td>
 
-                <td class="label-cell label-pct pulse-label">
-                  <div class="lc-vi">SL lũy kế / SL phân phối cho chuyền</div>
-                  <div class="lc-en">
-                    Achieved Qty / Qty distributed to line
-                  </div>
-                </td>
-                <td class="value-cell vc-pct">
-                  <div id="percent3" class="cell-value"></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                  <td class="label-cell label-actual pulse-label">
+                    <div class="lc-vi">SL lũy kế</div>
+                    <div class="lc-en">Achieved Quantity</div>
+                  </td>
+                  <td class="value-cell vc-actual">
+                    <div id="accQty" class="cell-value"></div>
+                  </td>
 
-        <!-- TIME PANEL -->
-        <div class="time-panel">
-          <div class="time-panel-header">Th&#x1EDD;i gian <span class="en">/ Time</span></div>
-          <table class="time-table">
-            <colgroup>
-              <col class="time-col-label" />
-              <col class="time-col-hr" />
-              <col class="time-col-day" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th></th>
-                <th class="time-th">Hr <span class="en">/ Gi&#x1EDD;</span></th>
-                <th class="time-th">Day <span class="en">/ Ng&#x00E0;y</span></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="time-label-cell pulse-label">
-                  <div class="lc-vi">Th&#x1EDD;i gian c&#x1EA7;n thi&#x1EBF;t &#x0111;&#x1EC3; ho&#x00E0;n th&#x00E0;nh SL k&#x1EBF; ho&#x1EA1;ch trong ng&#x00E0;y</div>
-                  <div class="lc-en">Time Required to Complete the Planned Units for Today</div>
-                </td>
-                <td class="time-value-cell"><div id="hr1" class="cell-value"></div></td>
-                <td class="time-value-cell"><div id="day1" class="cell-value"></div></td>
-              </tr>
-              <tr>
-                <td class="time-label-cell pulse-label">
-                  <div class="lc-vi">Th&#x1EDD;i gian c&#x1EA7;n thi&#x1EBF;t &#x0111;&#x1EC3; ho&#x00E0;n th&#x00E0;nh SL m&#x1EE5;c ti&#x00EA;u th&#x1EDD;i &#x0111;i&#x1EC3;m hi&#x1EC7;n t&#x1EA1;i</div>
-                  <div class="lc-en">Time Required to Complete the Planned Units of Today&#x2019;s Accumulated Time</div>
-                </td>
-                <td class="time-value-cell"><div id="hr2" class="cell-value"></div></td>
-                <td class="time-value-cell"><div id="day2" class="cell-value"></div></td>
-              </tr>
-              <tr>
-                <td class="time-label-cell pulse-label">
-                  <div class="lc-vi">Th&#x1EDD;i gian c&#x1EA7;n thi&#x1EBF;t &#x0111;&#x1EC3; ho&#x00E0;n th&#x00E0;nh SL ph&#x00E2;n ph&#x1ED1;i cho chuy&#x1EC1;n</div>
-                  <div class="lc-en">Time Required to Complete the Qty Distributed to the Flow</div>
-                </td>
-                <td class="time-value-cell"><div id="hr3" class="cell-value"></div></td>
-                <td class="time-value-cell"><div id="day3" class="cell-value"></div></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                  <td class="label-cell label-balance pulse-label">
+                    <div class="lc-vi">SL lũy kế - SL phân phối cho chuyền</div>
+                    <div class="lc-en">
+                      Achieved Quantity - Quantity distributed to line
+                    </div>
+                  </td>
+                  <td class="value-cell vc-balance">
+                    <div id="banlance3" class="cell-value"></div>
+                  </td>
+
+                  <td class="label-cell label-pct pulse-label">
+                    <div class="lc-vi">SL lũy kế / SL phân phối cho chuyền</div>
+                    <div class="lc-en">
+                      Achieved Quantity / Quantity distributed to line
+                    </div>
+                  </td>
+                  <td class="value-cell vc-pct">
+                    <div id="percent3" class="cell-value"></div>
+                  </td>
+
+                  <td class="label-cell label-time pulse-label">
+                    <div class="lc-vi">
+                      Số giờ hoàn thành SL phân phối cho chuyền
+                    </div>
+                    <div class="lc-en">Time Required to Complete the Qty Distributed to the Flow</div>
+                  </td>
+                  <td class="value-cell vc-time">
+                    <div id="hr3" class="cell-value"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
-      <!-- ======================================================
-         FOOTER
-    ======================================================= -->
+      <!-- FOOTER -->
       <section class="footer-section">
         <div class="footer-grid">
           <!-- Quality -->
           <div class="footer-card header-theme">
-            <div class="footer-card-header">
-              <div class="footer-icon footer-icon-quality">⚠</div>
-              <div class="footer-title-wrap">
-                <div class="footer-title-vi">Chất lượng</div>
-                <div class="footer-title-en">Quality</div>
-              </div>
-            </div>
-
             <div class="metric-box-grid">
               <div class="metric-box quality-box">
                 <div class="metric-label metric-label-top">
-                  Defect Qty <span>/ Tổng lỗi</span>
+                  Tổng lỗi
                 </div>
                 <div
                   id="defectQty"
@@ -1789,7 +1691,7 @@
 
               <div class="metric-box quality-box">
                 <div class="metric-label metric-label-top">
-                  Defect % <span>/ Tỷ lệ lỗi</span>
+                  Tỷ lệ lỗi
                 </div>
                 <div
                   id="defectPercent"
@@ -1803,7 +1705,7 @@
           <div class="footer-card">
             <div class="footer-card-header">
               <div class="footer-title-wrap">
-                <div class="footer-title-red">Top 5 Defects</div>
+                <div class="footer-title-red">Xếp hạng 5 lỗi nhiều nhất</div>
               </div>
             </div>
 
@@ -1815,6 +1717,6 @@
       </section>
     </div>
 
-    <script src="/js/dashboard-v3.js"></script>
+    <script src="/ui/dashboard/v5/dashboard-v5.js"></script>
   </body>
 </html>

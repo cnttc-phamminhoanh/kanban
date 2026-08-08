@@ -146,7 +146,7 @@ async function getFlowSemiFGoods(flow) {
           from (
             select o.ExtField10, o.style, o.orderNo, r.Sizx, o.WrkOrder, sum(r.Qty) as output, o.ExtField01 
             from pywrkord o 
-            left join pyregsum r on o.WrkOrder = r.WrkOrder and r.StepNo in (450, 480)
+            left join pyregsum r on o.WrkOrder = r.WrkOrder and r.StepNo = 450
             where o.WrkOrder in (
               select distinct WrkOrder from pyregsum 
               where RegDate = curdate() and flow = ?
@@ -190,9 +190,9 @@ async function getFlowPlan() {
 
   const result = await pool.request().query(
     `
-        select igm_dept, worker_at, work_hr, break_time_fr, break_time_to
-        from kanban_plan
-      `,
+      select igm_dept, worker_at, work_hr, break_time_fr, break_time_to
+      from kanban_plan
+    `,
   );
 
   return result.recordset;
@@ -209,9 +209,9 @@ async function updateFlowPlan(data) {
     .input("break_time_to", sql.VarChar, data.break_time_to).query(`
       UPDATE kanban_plan
       SET
-          worker_at = @worker_at,
-          break_time_fr = @break_time_fr,
-          break_time_to = @break_time_to
+        worker_at = @worker_at,
+        break_time_fr = @break_time_fr,
+        break_time_to = @break_time_to
       WHERE igm_dept = @igm_dept
     `);
 }

@@ -137,6 +137,8 @@ async function getFlowSemiFGoods(req, res, next) {
 
     const data = await service.getFlowSemiFGoods(flow);
 
+    console.log(data)
+
     res.json({
       success: true,
       count: data.length,
