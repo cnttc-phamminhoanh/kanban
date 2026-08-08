@@ -274,8 +274,8 @@
           0.77fr
           0.5fr
           0.4fr
-          0.65fr
-          1.4fr
+          0.9fr
+          1.3fr
           0.8fr;
         gap:8px;
         align-items:stretch;
@@ -1028,8 +1028,8 @@
             0.77fr
             0.5fr
             0.4fr
-            0.65fr
-            1.4fr
+            0.9fr
+            1.3fr
             0.8fr
         }
         .defect-item {
@@ -1384,6 +1384,68 @@
       .flow-item:active {
         transform: translateY(0);
       }
+
+      .worker-en {
+        margin-top: 2px;
+        font-size: var(--fs-meta-sub);
+        line-height: 1.1;
+        color: rgba(255, 255, 255, 0.75);
+        font-weight: 600;
+      }
+
+      .kpi-table thead th .en {
+        font-size: var(--fs-th-en);
+        color: #1f4e79;
+        font-weight: 600;
+        margin-left: 4px;
+      }
+
+      .footer-title-red .footer-title-en {
+        display: block;
+        margin-top: 3px;
+        font-size: var(--fs-card-sub);
+        color: var(--text-muted);
+        font-weight: 600;
+      }
+
+      .metric-en {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .footer-title-en {
+        font-size: 13px;
+        font-weight: 600;
+        color: #e53935;
+      }
+ 
+      .meta-en {
+        font-size: 11px;
+        font-weight: 500;
+      }
+
+      .footer-title-red {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        color: #e53935;
+      }
+
+      .footer-title-vn {
+        font-size: 20px;
+        line-height: 1;
+        font-weight: 700;
+        color: #e53935;
+        white-space: nowrap;
+      }
+
+      .footer-title-en {
+        font-size: 12px;
+        line-height: 1;
+        font-weight: 600;
+        color: #e53935;
+        white-space: nowrap;
+      }
     </style>
   </head>
   <body>
@@ -1440,10 +1502,18 @@
             <!-- <div class="meta-icon">👥</div> -->
             <div class="meta-content">
               <div class="meta-label">Worker:</div>
-              <div id="workers" class="meta-value">
+              <!-- <div id="workers" class="meta-value">
                 <span class="meta-label">TT:</span>
                 <span id="workerAt" class="worker-value"></span>
                 <span class="meta-label"> / KH:</span>
+                <span id="workerTg" class="worker-value"></span>
+              </div> -->
+
+              <div id="workers" class="meta-value">
+                <span class="meta-label">TT <span class="meta-en">(actual)</span>:</span>
+                <span id="workerAt" class="worker-value"></span>
+
+                <span class="meta-label"> / KH <span class="meta-en">(plan)</span>:</span>
                 <span id="workerTg" class="worker-value"></span>
               </div>
             </div>
@@ -1499,7 +1569,7 @@
                 <col class="col-value" />
               </colgroup>
 
-              <thead>
+              <!-- <thead>
                 <tr>
                   <th colspan="2" class="th-plan">
                     Kế hoạch
@@ -1515,6 +1585,35 @@
                   </th>
                   <th colspan="2" class="th-time">
                     Thời gian
+                  </th>
+                </tr>
+              </thead> -->
+
+              <thead>
+                <tr>
+                  <th colspan="2" class="th-plan">
+                    Kế hoạch
+                    <span class="en">(Plan)</span>
+                  </th>
+
+                  <th colspan="2" class="th-actual">
+                    Thực tế
+                    <span class="en">(Actual)</span>
+                  </th>
+
+                  <th colspan="2" class="th-balance">
+                    Còn lại
+                    <span class="en">(Balance)</span>
+                  </th>
+
+                  <th colspan="2" class="th-pct">
+                    Tỷ Lệ
+                    <span class="en">(Rate)</span>
+                  </th>
+
+                  <th colspan="2" class="th-time">
+                    Thời gian
+                    <span class="en">(Time)</span>
                   </th>
                 </tr>
               </thead>
@@ -1691,9 +1790,13 @@
           <div class="footer-card header-theme">
             <div class="metric-box-grid">
               <div class="metric-box quality-box">
-                <div class="metric-label metric-label-top">
+                <!-- <div class="metric-label metric-label-top">
                   Tổng lỗi
-                  <!-- <span>Defect Total</span> -->
+                    <span>Defect Total</span>
+                </div> -->
+
+                <div class="metric-label metric-label-top">
+                  Tổng lỗi <span class="metric-en">(Defect Total)</span>
                 </div>
                 <div
                   id="defectQty"
@@ -1702,8 +1805,11 @@
               </div>
 
               <div class="metric-box quality-box">
-                <div class="metric-label metric-label-top">
+                <!-- <div class="metric-label metric-label-top">
                   Tỷ lệ lỗi
+                </div> -->
+                <div class="metric-label metric-label-top">
+                  Tỷ lệ lỗi <span class="metric-en">(Defect Rate)</span>
                 </div>
                 <div
                   id="defectPercent"
@@ -1717,7 +1823,19 @@
           <div class="footer-card">
             <div class="footer-card-header">
               <div class="footer-title-wrap">
-                <div class="footer-title-red">Xếp hạng 5 lỗi nhiều nhất - <span class="lc-en">Top 5 Defects</span></div>
+                <!-- <div class="footer-title-red">Xếp hạng 5 lỗi nhiều nhất -
+                  <span class="lc-en">Top 5 Defects</span>
+                </div> -->
+
+                <div class="footer-title-red">
+                  <span class="footer-title-vn">
+                    Xếp hạng 5 lỗi nhiều nhất
+                  </span>
+
+                  <span class="footer-title-en">
+                    (Top 5 Defects)
+                  </span>
+                </div>
               </div>
             </div>
 

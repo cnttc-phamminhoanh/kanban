@@ -266,30 +266,20 @@ async function loadFlowDashboard() {
 
       // ==THỜI GIAN==
       // Hr row1 = (Còn lại row1 x smv ) / Số công nhân kế hoạch / 60
-      const hr1 =
-        worker_tg > 0
-          ? ((banlance1 * smv) / worker_tg / 60)
-          : 0;
+      const hr1 = worker_tg > 0 ? (((banlance1 * -1) * smv) / worker_tg / 60) : 0;
       // Day row1 đặt = 1
       const day1 = 1;
-      // Hr row2 = (Còn lại row2 x smv ) / Số công nhân kế hoạch / 60
-      const hr2 =
-        worker_tg > 0
-          ? ((banlance2 * smv) / worker_tg / 60)
-          : 0;
 
+      // Hr row2 = (Còn lại row2 x smv ) / Số công nhân kế hoạch / 60
+      const hr2 = worker_tg > 0 ? (((banlance2 * -1) * smv) / worker_tg / 60) : 0;
       // Day row1 đặt = 1
       const day2 = 1;
+
       // Hr row3 = (Còn lại row3 / Kế hoạch row1) x 24 -> Kết quả làm tròn lên
-      const hr3 =
-        dailyTargetStyle > 0
-          ? Math.ceil((banlance3 / dailyTargetStyle) * 24 * -1)
-          : 0;
+      const hr3 = dailyTargetStyle > 0 ? Math.ceil((banlance3 * -1 / dailyTargetStyle) * 24) : 0;
       // Day row3 = Còn lại row3 / Kế hoạch row1 -> Kết quả làm tròn lên
       const day3 =
-        dailyTargetStyle > 0
-          ? Math.ceil((banlance3 / dailyTargetStyle) * -1)
-          : 0;
+        dailyTargetStyle > 0 ? Math.ceil((banlance3 * -1) / dailyTargetStyle) : 0;
 
       const startDate = acc?.startDate ? acc.startDate.split("T")[0] : "-";
       const today = new Date(
