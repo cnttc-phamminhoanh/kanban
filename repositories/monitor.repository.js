@@ -1,7 +1,9 @@
-const pool = require("../config/database");
-const { getPool, sql } = require("../config/sqlserver");
+const { getIgPool } = require("../config/database");
+const { getT8Pool, sql } = require("../config/sqlserver");
 
 async function getMonitorData() {
+  const pool = await getIgPool();
+
   const [rows] = await pool.execute(
     `
       select distinct flow
@@ -18,6 +20,8 @@ async function getMonitorData() {
 }
 
 async function getFlowStyleInfo(flow) {
+  const pool = await getIgPool();
+
   const [rows] = await pool.execute(
     `
       select flow, o.style, o.buyer, o.orderNo, sum(o.qty) as styleQty, 0 as targetQty, 0 as targetNow
@@ -35,6 +39,8 @@ async function getFlowStyleInfo(flow) {
 }
 
 async function getFlowStyleSMV(flow) {
+  const pool = await getIgPool();
+
   const [rows] = await pool.execute(
     `
       select flow, style, orderNo, sum(smv) as smv
@@ -78,6 +84,8 @@ async function getFlowStyleSMV(flow) {
 }
 
 async function getFlowStyleAccQtyStartCompelete(flow) {
+  const pool = await getIgPool();
+
   const [rows] = await pool.execute(
     `
       select r.flow, o.style, o.orderNo, min(regDate) as startDate, max(regDate) as completeDate, sum(r.Qty) as accQty
@@ -96,6 +104,8 @@ async function getFlowStyleAccQtyStartCompelete(flow) {
 }
 
 async function getFlowStyleOutput(flow) {
+  const pool = await getIgPool();
+
   const [rows] = await pool.execute(
     `
       select r.regDate, r.flow, o.style, o.orderNo, sum(r.Qty) as output
@@ -114,6 +124,8 @@ async function getFlowStyleOutput(flow) {
 }
 
 async function getDefects(flow) {
+  const pool = await getIgPool();
+
   const [rows] = await pool.execute(
     `
       select t.flow, o.style, o.orderNo, c.description as description, sum(w.qty) as reWorkQty
@@ -121,7 +133,7 @@ async function getDefects(flow) {
       inner join pywrkord o on o.wrkOrder = w.wrkOrder 
       inner join (
         select distinct WrkOrder, Flow from pyregsum where StepNo between '302' and '450' and RegDate = curdate()
-      ) t on t.wrkOrder = w.wrkOrder 
+      ) t on t.wrkOrder = w.wrkOrder and w.Flow = t.Flow
       inner join pyrereason r on r.wrkOrder = w.wrkOrder and r.seqNo = w.seqNo and r.bundleNo = w.bundleNo 
       inner join pycode c on c.code = r.reasonCode and c.CType = 'REWORKREASON'
       where w.rewDate= curdate() and t.flow = ?
@@ -134,6 +146,8 @@ async function getDefects(flow) {
 }
 
 async function getFlowSemiFGoods(flow) {
+  const pool = await getIgPool();
+
   const [rows] = await pool.execute(
     `
       select
@@ -169,7 +183,7 @@ async function getFlowSemiFGoods(flow) {
 }
 
 async function getWorkerQty(flow) {
-  const pool = await getPool();
+  const pool = await getT8Pool();
 
   const result = await pool
     .request()
@@ -186,7 +200,7 @@ async function getWorkerQty(flow) {
 }
 
 async function getFlowPlan() {
-  const pool = await getPool();
+  const pool = await getT8Pool();
 
   const result = await pool.request().query(
     `
@@ -199,7 +213,7 @@ async function getFlowPlan() {
 }
 
 async function updateFlowPlan(data) {
-  const pool = await getPool();
+  const pool = await getT8Pool();
 
   await pool
     .request()
