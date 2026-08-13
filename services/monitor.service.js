@@ -4,6 +4,10 @@ async function getMonitor() {
   return repository.getMonitorData();
 }
 
+async function getMonitorByUser(user) {
+  return repository.getMonitorDataByUser(user);
+}
+
 async function getFlowStyleSMV(flow) {
   return repository.getFlowStyleSMV(flow);
 }
@@ -42,6 +46,7 @@ async function updateFlowPlan(data) {
 
 module.exports = {
   getMonitor,
+  getMonitorByUser,
   getFlowStyleSMV,
   getFlowStyleInfo,
   getFlowStyleAccQtyStartCompelete,

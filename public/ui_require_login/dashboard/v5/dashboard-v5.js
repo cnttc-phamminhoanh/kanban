@@ -103,13 +103,17 @@ function renderFlowDashboard(data) {
   document.getElementById("defectPercent").innerText = data.defectPercent;
   document.getElementById("flowEfficiency").innerText = data.flowEfficiency;
 
-  ["banlance1", "banlance2", "banlance3"].forEach(id => {
-    const el = document.getElementById(id);
-    const value = Number(el.innerText);
+  document
+    .getElementById("banlance1")
+    .classList.toggle("balance-negative", Number(data.banlance1) < 0);
 
-    el.classList.toggle("balance-positive", value > 0);
-    el.classList.toggle("balance-negative", value < 0);
-  });
+  document
+    .getElementById("banlance2")
+    .classList.toggle("balance-negative", Number(data.banlance2) < 0);
+
+  document
+    .getElementById("banlance3")
+    .classList.toggle("balance-negative", Number(data.banlance3) < 0);
 }
 
 let slideInterval = null;
@@ -118,7 +122,7 @@ let refreshInterval = null;
 async function loadFlowDashboard() {
   try {
     const flow = window.location.pathname.split("/").pop();
-    const response = await fetch(`/api/monitor/private/flowDashboard?flow=${flow}`);
+    const response = await fetch(`/pms/monitor/flowDashboard?flow=${flow}`);
 
     const data = await response.json();
 
@@ -218,13 +222,8 @@ async function loadFlowDashboard() {
       const now = new Date();
       const startTime = new Date();
       startTime.setHours(7, 30, 0, 0);
-
-      const endTime = new Date(startTime);
-      const workHours = Number(workers.work_hr || 0);
-      // + workHours + 1 giờ nghỉ trưa
-      endTime.setHours(
-        endTime.getHours() + workHours + 1
-      )
+      const endTime = new Date();
+      endTime.setHours(16, 30, 0, 0);
 
       // Nếu Thực tế row2 >= Kế hoạch row1 (dailyTargetStyle) thì Kế hoạch row2 = 0 & Phần trăm row2 = 100%
       // Ngược lại Thực tế row2 < Kế hoạch row1
@@ -240,10 +239,14 @@ async function loadFlowDashboard() {
         percent2 = "100%";
       } else if (now > endTime) {
         targetNow = dailyTargetStyle;
-        percent2 = dailyTargetStyle > 0 ? Math.ceil((outputQty / dailyTargetStyle) * 100) + "%" : "0%";
+        percent2 =
+          dailyTargetStyle > 0
+            ? Math.ceil((outputQty / dailyTargetStyle) * 100) + "%"
+            : "0%";
       } else if (now >= startTime) {
         targetNow = calculateTargetNow(dailyTargetStyle, workers.work_hr);
-        percent2 = targetNow > 0 ? Math.ceil((outputQty / targetNow) * 100) + "%" : "0%";
+        percent2 =
+          targetNow > 0 ? Math.ceil((outputQty / targetNow) * 100) + "%" : "0%";
       }
 
       // ==CÒN LẠI==
@@ -266,20 +269,30 @@ async function loadFlowDashboard() {
 
       // ==THỜI GIAN==
       // Hr row1 = (Còn lại row1 x smv ) / Số công nhân kế hoạch / 60
-      const hr1 = worker_tg > 0 ? (((banlance1 * -1) * smv) / worker_tg / 60) : 0;
+      const hr1 =
+        worker_tg > 0
+          ? ((banlance1 * smv) / worker_tg / 60)
+          : 0;
       // Day row1 đặt = 1
       const day1 = 1;
-
       // Hr row2 = (Còn lại row2 x smv ) / Số công nhân kế hoạch / 60
-      const hr2 = worker_tg > 0 ? (((banlance2 * -1) * smv) / worker_tg / 60) : 0;
+      const hr2 =
+        worker_tg > 0
+          ? ((banlance2 * smv) / worker_tg / 60)
+          : 0;
+
       // Day row1 đặt = 1
       const day2 = 1;
-
       // Hr row3 = (Còn lại row3 / Kế hoạch row1) x 24 -> Kết quả làm tròn lên
-      const hr3 = dailyTargetStyle > 0 ? Math.ceil((banlance3 * -1 / dailyTargetStyle) * 24) : 0;
+      const hr3 =
+        dailyTargetStyle > 0
+          ? Math.ceil((banlance3 / dailyTargetStyle) * 24 * -1)
+          : 0;
       // Day row3 = Còn lại row3 / Kế hoạch row1 -> Kết quả làm tròn lên
       const day3 =
-        dailyTargetStyle > 0 ? Math.ceil((banlance3 * -1) / dailyTargetStyle) : 0;
+        dailyTargetStyle > 0
+          ? Math.ceil((banlance3 / dailyTargetStyle) * -1)
+          : 0;
 
       const startDate = acc?.startDate ? acc.startDate.split("T")[0] : "-";
       const today = new Date(
@@ -351,17 +364,3 @@ setInterval(updateClock, 1000);
 refreshInterval = setInterval(() => {
   loadFlowDashboard();
 }, 180000);
-
-const flowItem = document.querySelector(".flow-item");
-
-flowItem.addEventListener("click", function () {
-  const flowValue = document.getElementById("flowName").textContent.trim();
-  const styleValue = document.getElementById("style").textContent.trim();
-  const poValue = document.getElementById("po").textContent.trim();
-
-  if (!flowValue || flowValue === "-" || !styleValue || styleValue === "-" || !poValue || poValue === "-") {
-    return;
-  }
-
-  window.location.href = `/pms/monitor/semiFGoods/${flowValue}`;
-});

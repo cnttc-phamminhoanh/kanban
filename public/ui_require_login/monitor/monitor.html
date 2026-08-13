@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Factory Dashboard</title>
+    <link rel="icon" type="image/png" href="/favicons/monitor-favicon.png">
+
+    <link rel="stylesheet" href="/ui_require_login/monitor/monitor.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="title">FACTORY DASHBOARD</h1>
+
+      <button class="management-btn" onclick="goToManagement()">
+        ⚙ MANAGEMENT
+      </button>
+
+      <div class="search-box">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search sewing line..."
+        />
+      </div>
+
+      <div id="flowContainer" class="flow-grid"></div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/ui_require_login/monitor/monitor.js"></script>
+  </body>
+</html>

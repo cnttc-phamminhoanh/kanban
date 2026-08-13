@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Production Dashboard v1</title>
+    <link rel="stylesheet" href="/ui/dashboard/v1/dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+  </head>
+  <body>
+    <div class="dashboard">
+      <!-- HEADER -->
+      <div class="top-bar">
+        <div class="box clock" id="clock"></div>
+        <div class="box title">Production Progress Monitor System</div>
+      </div>
+      <!-- INFO -->
+      <div class="info-row">
+        <!-- Flow -->
+        <div class="info-box line-name">
+          <div class="flow-content">
+            <div class="flow-title" id="flowName"></div>
+
+            <div class="flow-info">
+              Flow Efficiency:
+              <span id="flowEfficiency" class="flow-efficiency">0%</span>
+            </div>
+          </div>
+        </div>
+        <!-- Style -->
+        <div class="info-box style-box">
+          <h1 id="style"></h1>
+          <p>
+            Brand:
+            <span id="brand"></span>
+            &nbsp;&nbsp;&nbsp; PO:
+            <span id="po"></span>
+          </p>
+          <p>
+            SMV:
+            <span id="smv"></span>
+            &nbsp;&nbsp;&nbsp; Workers:
+            <span id="workers" class="worker-value"></span>
+          </p>
+        </div>
+        <!-- Style Qty -->
+        <div class="info-box qty-box">
+          <span id="styleQty"></span>
+          <span class="unit">pcs</span>
+        </div>
+        <!-- Date -->
+        <div class="date-box">
+          <div class="date-item">
+            <span class="date-label">Start</span>
+            <span class="date-value" id="startDate"></span>
+          </div>
+          <div class="date-item">
+            <span class="date-label">Expected Complete</span>
+            <span class="date-value" id="completeDate"></span>
+          </div>
+        </div>
+      </div>
+      <!-- BODY -->
+      <div class="body-grid">
+        <!-- Daily Target -->
+        <div class="label">
+          <i class="fa-solid fa-bullseye icon-target"></i>
+          <div>
+            Mục Tiêu Ngày
+            <br />
+            Daily Target
+          </div>
+        </div>
+        <div class="value green" id="dailyTarget"></div>
+        <!-- Defect Qty -->
+        <div class="label defect-qty-label">
+          <i class="fa-solid fa-bug icon-defect"></i>
+          <div>
+            SL Lỗi
+            <br />
+            Defect Qty
+          </div>
+        </div>
+        <div class="value defect-qty-value" id="defectQty"></div>
+
+        <!-- Remaining cards -->
+        <div class="remain-card remain-qty">
+          <div class="remain-title">SL Còn Lại (Remaining Qty)</div>
+          <div class="remain-value" id="remainingQty"></div>
+        </div>
+
+        <div class="remain-card remain-percent">
+          <div class="remain-title">Hiệu Suất Thực Tế (Actual Efficiency %)</div>
+          <div class="remain-value" id="efficiencyPercent"></div>
+        </div>
+
+
+        <!-- Target Now -->
+        <div class="label">
+          <i class="fa-solid fa-chart-column icon-now"></i>
+          <div>
+            Mục Tiêu Hiện Tại
+            <br />
+            Now Target
+          </div>
+        </div>
+        <div class="value" id="targetNow"></div>
+        <!-- Defect % -->
+        <div class="label defect-percent-label">
+          <i class="fa-solid fa-percent icon-percent"></i>
+          <div>
+            Tỉ Lệ Lỗi
+            <br />
+            Defect %
+          </div>
+        </div>
+        <div class="value defect-percent-value" id="defectPercent"></div>
+        <!-- Output -->
+        <div class="label large">
+          <i class="fa-solid fa-box-open icon-output"></i>
+          <div>
+            Thực Hiện
+            <br />
+            Output
+          </div>
+        </div>
+        <div class="value large green" id="output"></div>
+
+        
+        <!-- Top defects -->
+        <div class="defect-panel" id="topDefects">
+          <h3>Top 5 Defects</h3>
+          <ul id="defectList"></ul>
+        </div>
+
+        <!-- Achieve -->
+        <div class="label large" id="achieveLabel">
+          <i class="fa-solid fa-award icon-achieve"></i>
+          <div>
+            Tỉ Lệ Đạt Hiện Tại
+            <br />
+            Now Achieve %
+          </div>
+        </div>
+        <div class="value large" id="achieve"></div>
+        <!-- Acc Qty -->
+        <div class="label large" id="accLabel">
+          <i class="fa-solid fa-boxes-stacked icon-acc"></i>
+          <div>
+            SL Lũy Kế
+            <br />
+            Acc Qty
+          </div>
+        </div>
+        <div class="value large" id="accQty"></div>
+      </div>
+    </div>
+    <script src="/ui/dashboard/v1/dashboard.js"></script>
+  </body>
+</html>

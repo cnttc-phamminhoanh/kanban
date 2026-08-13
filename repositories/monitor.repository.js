@@ -1,5 +1,5 @@
 const { getIgPool } = require("../config/database");
-const { getT8Pool, sql } = require("../config/sqlserver");
+const { getT8Pool, getBIPool, sql } = require("../config/sqlserver");
 
 async function getMonitorData() {
   const pool = await getIgPool();
@@ -17,6 +17,42 @@ async function getMonitorData() {
   );
 
   return rows;
+}
+
+async function getMonitorDataByUser(user) {
+  const igPool = await getIgPool();
+
+  // Lấy toàn bộ flow đang hoạt động hôm nay
+  const [rows] = await igPool.execute(
+    `
+      SELECT DISTINCT flow
+      FROM pytckreg
+      WHERE
+        RegDate = CURDATE()
+        AND flow LIKE 'SEW%'
+        AND flow NOT LIKE '%F9%'
+      ORDER BY flow
+    `,
+  );
+
+  // LẤY FLOW ĐƯỢC PHÉP
+  const biPool = await getBIPool();
+
+  const result = await biPool
+    .request()
+    .input("userNo", sql.VarChar, user.id)
+    .query(
+      `
+        SELECT flow
+        FROM kanban.dbo.kanban_flow
+        WHERE user_no = @userNo
+      `,
+    );
+
+  // FILTER FLOW
+  const allowedFlows = new Set(result.recordset.map((row) => row.flow));
+
+  return rows.filter((row) => allowedFlows.has(row.flow));
 }
 
 async function getFlowStyleInfo(flow) {
@@ -241,4 +277,5 @@ module.exports = {
   getFlowSemiFGoods,
   getFlowPlan,
   updateFlowPlan,
+  getMonitorDataByUser,
 };

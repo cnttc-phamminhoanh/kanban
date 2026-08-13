@@ -1,0 +1,133 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background:
+    radial-gradient(circle at top,
+    #001d3d,
+    #000814);
+
+  min-height: 100vh;
+  font-family: Arial;
+  color: white;
+}
+
+.container {
+  width: 90%;
+  margin: auto;
+  padding: 30px;
+}
+
+.title {
+  text-align: center;
+  font-size: 48px;
+  color: #67d8ff;
+  text-shadow:
+    0 0 10px #67d8ff,
+    0 0 20px #67d8ff;
+  margin-bottom: 30px;
+}
+
+.search-box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.search-box input {
+  width: 400px;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #1d3557;
+  background: #04162e;
+  color: white;
+  outline: none;
+}
+
+.flow-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fill, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.flow-card {
+    background: #021428;
+    border-radius: 15px;
+    padding: 20px;
+    min-height: 110px;
+    box-shadow:
+      0 0 15px rgba(0,0,0,0.5);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.flow-card:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 0 20px rgba(103,216,255,0.5);
+}
+
+.flow-card h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.flow-card p {
+  color: #a9c4e2;
+}
+
+/* ================================
+   DASHBOARD HEADER
+================================ */
+
+.dashboard-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70px;
+  margin-bottom: 30px;
+}
+
+/* MANAGEMENT BUTTON */
+.management-btn {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  z-index: 9999;
+  padding: 12px 22px;
+  border: 1px solid #67d8ff;
+  border-radius: 10px;
+  background: rgba(4, 22, 46, 0.95);
+  color: #67d8ff;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow:
+    0 0 8px rgba(103, 216, 255, 0.25);
+  transition:
+    background 0.25s,
+    color 0.25s,
+    box-shadow 0.25s,
+    transform 0.25s;
+}
+
+/* Hover */
+.management-btn:hover {
+  background: #67d8ff;
+  color: #001d3d;
+  box-shadow:
+    0 0 12px rgba(103, 216, 255, 0.7),
+    0 0 25px rgba(103, 216, 255, 0.3);
+
+  transform: scale(1.05);
+}
+
+/* Click */
+.management-btn:active {
+  transform: scale(0.98);
+}

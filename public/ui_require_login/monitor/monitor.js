@@ -32,7 +32,7 @@ function renderFlows(data) {
 
     card.addEventListener("click", () => {
       const flow = item.flow;
-      window.location.href = `/pms/monitor/flowDashboard/v6/${flow}`;
+      window.location.href = `/login/pms/monitor/flowDashboard/v6/${flow}`;
     });
 
     container.appendChild(card);
@@ -41,7 +41,7 @@ function renderFlows(data) {
 
 async function loadFlows() {
   try {
-    const response = await fetch("/pms/monitor");
+    const response = await authFetch("/api/monitor/flows");
 
     const result = await response.json();
 
@@ -66,5 +66,5 @@ input.addEventListener("input", (e) => {
 loadFlows();
 
 function goToManagement() {
-  window.location.href = "/pms/monitor/flowPlan";
+  window.location.href = "/login/pms/monitor/flowPlan";
 }

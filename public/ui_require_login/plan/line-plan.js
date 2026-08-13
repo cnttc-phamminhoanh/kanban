@@ -7,7 +7,7 @@ init();
 
 async function loadPlans() {
   try {
-    const response = await fetch("/api/monitor/private/flowPlan");
+    const response = await authFetch("/api/monitor/flowPlan");
 
     const result = await response.json();
 
@@ -144,7 +144,7 @@ async function saveData() {
   plans[currentIndex].break_time_fr = breakFrom;
   plans[currentIndex].break_time_to = breakTo;
 
-  await fetch("/app/monitor/private/flowPlan", {
+  await fetch("/pms/monitor/api/flowPlan", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

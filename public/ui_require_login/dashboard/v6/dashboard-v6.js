@@ -118,7 +118,7 @@ let refreshInterval = null;
 async function loadFlowDashboard() {
   try {
     const flow = window.location.pathname.split("/").pop();
-    const response = await fetch(`/api/monitor/private/flowDashboard?flow=${flow}`);
+    const response = await authFetch(`/api/monitor/flowDashboard?flow=${flow}`);
 
     const data = await response.json();
 
@@ -363,5 +363,5 @@ flowItem.addEventListener("click", function () {
     return;
   }
 
-  window.location.href = `/pms/monitor/semiFGoods/${flowValue}`;
+  window.location.href = `/login/pms/monitor/semiFGoods/${flowValue}`;
 });

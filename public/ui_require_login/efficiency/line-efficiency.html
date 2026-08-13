@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sewing Line Efficiency</title>
+    <link rel="icon" type="image/png" href="/favicons/sewing-line-efficiency-favicon.png">
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Inter, "Segoe UI", Arial, sans-serif;
+        background: #eef3f8;
+        color: #334155;
+      }
+
+      .container {
+        width: 96%;
+        max-width: 1800px;
+        margin: 25px auto;
+      }
+
+      .title {
+        background: #3883ce;
+        color: white;
+        border-radius: 14px;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.18);
+        margin-bottom: 12px;
+      }
+
+      .title h2 {
+        color: white;
+        font-size: 26px;
+        margin-bottom: 8px;
+        font-weight: 700;
+      }
+
+      .title h3 {
+        color: #dbeafe;
+        font-weight: 500;
+      }
+
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 24px;
+        background: #fff;
+        padding: 22px 24px;
+        border-radius: 14px;
+        margin-bottom: 12px;
+        border: 1px solid #dbe3ee;
+        box-shadow: 0 4px 15px rgba(15,23,42,.08);
+      }
+
+      .toolbar-left {
+        display:flex;
+        gap:20px;
+        flex-wrap:wrap;
+      }
+
+      .form-group {
+        display:flex;
+        flex-direction:column;
+        gap:8px;
+      }
+
+      .form-group label {
+        font-size:12px;
+        color:#64748b;
+        text-transform:uppercase;
+        letter-spacing:.5px;
+        font-weight:600;
+      }
+
+      .form-group input,
+      .form-group select {
+        width:220px;
+        height:44px;
+        padding:0 14px;
+        border:1px solid #cbd5e1;
+        border-radius:10px;
+        font-size:15px;
+        transition:.2s;
+        background:#fff;
+        color:#334155;
+        cursor:pointer;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        outline:none;
+        border-color:#2563eb;
+        box-shadow:0 0 0 4px rgba(37,99,235,.12);
+      }
+
+      .form-group select {
+        appearance:none;
+        -webkit-appearance:none;
+        -moz-appearance:none;
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 1 1 .708.708L8.354 10.354a.5.5 0 0 1-.708 0L4.646 7.354a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+        background-repeat:no-repeat;
+        background-position:right 14px center;
+        padding-right:42px;
+      }
+
+      .query-btn {
+        height:44px;
+        padding:0 30px;
+        border:none;
+        border-radius:10px;
+        background:linear-gradient(
+            135deg,
+            #1a5794,
+            #1a5794
+        );
+        color:#fff;
+        font-size:15px;
+        font-weight:700;
+        cursor:pointer;
+        transition:.2s;
+      }
+
+      .query-btn:hover{
+        transform:translateY(-2px);
+        box-shadow:
+            0 10px 20px rgba(37,99,235,.25);
+      }
+
+      /* INFORMATION */
+      .line-info {
+        margin-bottom: 20px;
+      }
+
+      .line-items {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .info-box {
+        flex: 1;
+        min-width: 220px;
+        background: #fff;
+        border-radius: 14px;
+        padding: 15px 22px;
+        border: 1px solid #dbe3ee;
+        box-shadow: 0 4px 15px rgba(15, 23, 42, 0.08);
+      }
+
+      .info-label {
+        font-size: 13px;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+
+      .info-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .info-value.work-hour {
+        color: #dc2626;
+      }
+
+      /* TABLE */
+
+      .table-card {
+        background: #fff;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 12px 28px rgba(15,23,42,.08);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #cbd5e1;
+      }
+
+      thead th {
+        background: #1a5794;
+        color:white;
+        font-size:14px;
+        font-weight:700;
+        /* letter-spacing:.3px; */
+        padding:14px 10px;
+        border: 1px solid #95a4d8;
+      }
+
+      /* tbody td {
+        border: 1px solid #e5e7eb;
+        padding: 11px;
+        text-align: center;
+        font-size: 14px;
+      } */
+
+      tbody td {
+        padding:13px 10px;
+        border:1px solid #d6dee8;
+        font-size:14px;
+        color:#334155;
+        text-align: center;
+      }
+
+      tbody tr:nth-child(even) {
+        background: #f8fafc;
+      }
+
+      tbody tr:hover td {
+        background:#eaf4ff;
+      }
+
+      /* COLORS */
+
+      .yellow {
+        background:#fff8dc;
+        font-weight:700;
+      }
+
+      .positive {
+        color:#16a34a;
+        font-weight:700;
+      }
+
+      .negative {
+        color:#dc2626;
+        font-weight: 700;
+      }
+
+      .percent-good {
+        color: #16a34a;
+        font-weight: 700;
+      }
+
+      .percent-normal {
+        color: #d97706;
+        font-weight: 700;
+      }
+
+      .percent-bad {
+        color: #dc2626;
+        font-weight: 700;
+      }
+
+      .reason{
+        display:inline-block;
+        padding:4px 10px;
+        border-radius:999px;
+        background:#fee2e2;
+        color:#dc2626;
+        font-size:12px;
+        font-weight:700;
+      }
+
+      tbody td:first-child{
+        border-left:none;
+      }
+
+      tbody td:last-child{
+        border-right:none;
+      }
+
+      tbody td + td,
+      thead th + th {
+        border-left-color: #b9c5d3;
+      }
+
+      thead th {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+      }
+
+      /* MODAL */
+      .modal-overlay {
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.35);
+        display:none;
+        justify-content:center;
+        align-items:center;
+        z-index:999;
+      }
+
+      .modal-overlay.show {
+        display:flex;
+      }
+
+      .modal{
+        width:500px;
+        background:#fff;
+        border-radius:14px;
+        overflow:hidden;
+        box-shadow:0 20px 60px rgba(0,0,0,.25);
+      }
+
+      .modal-header {
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding:18px 22px;
+        border-bottom:1px solid #e2e8f0;
+      }
+
+      .modal-header h3 {
+        font-size:20px;
+      }
+
+      .modal-header button {
+        border:none;
+        background:none;
+        font-size:28px;
+        cursor:pointer;
+      }
+
+      .modal-body{
+        padding:22px;
+      }
+
+      .modal-body label {
+        display:block;
+        margin-bottom:10px;
+        font-weight:600;
+      }
+
+      .modal-body textarea {
+        width:100%;
+        resize:vertical;
+        border:1px solid #cbd5e1;
+        border-radius:10px;
+        padding:12px;
+        font-size:15px;
+      }
+
+      .modal-footer {
+        display:flex;
+        justify-content:flex-end;
+        gap:12px;
+        padding:18px 22px;
+        border-top:1px solid #e2e8f0;
+      }
+
+      .btn-cancel {
+        border:none;
+        background:#e2e8f0;
+        padding:10px 18px;
+        border-radius:8px;
+        cursor:pointer;
+      }
+
+      .btn-save {
+        border:none;
+        background:#2563eb;
+        color:#fff;
+        padding:10px 22px;
+        border-radius:8px;
+        cursor:pointer;
+      }
+
+      .btn-save:hover {
+        background:#1d4ed8;
+      }
+
+      /* TOAST*/
+      .toast {
+        position:fixed;
+        right:30px;
+        top:30px;
+        background:#16a34a;
+        color:white;
+        padding:14px 20px;
+        border-radius:10px;
+        box-shadow:0 10px 30px rgba(0,0,0,.2);
+        transform:translateX(150%);
+        transition:.35s;
+        z-index:9999;
+      }
+
+      .toast.show {
+        transform:translateX(0);
+      }
+
+      .reason-btn {
+        width:100%;
+        border:none;
+        background:transparent;
+        cursor:pointer;
+        padding:6px;
+        color:#2563eb;
+        font-weight:600;
+        border-radius:6px;
+        transition:.2s;
+      }
+
+      .reason-btn:hover {
+        background:#eef5ff;
+      }
+
+      .reason-btn:focus {
+        outline:none;
+      }
+
+      .reason-btn.has-value{
+        color:#dc2626;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="title">
+        <h2>Bảng thống kê hiệu suất theo chuyền may</h2>
+        <h3>Sewing Line Efficiency Summary</h3>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <div class="form-group">
+            <label>
+              Production Date
+            </label>
+            <input
+                type="date"
+                id="date">
+          </div>
+
+          <div class="form-group">
+            <label>
+              Sewing Flow
+            </label>
+
+            <select id="flow">
+              <option value="" selected disabled hidden>Select Flow</option>
+            </select>
+          </div>
+        </div>
+
+        <button
+            id="queryBtn"
+            class="query-btn">
+            Query
+        </button>
+      </div>
+
+      <div class="line-info">
+        <div class="line-items">
+            <div class="info-box">
+                <div class="info-label">
+                    FLOW
+                </div>
+
+                <div class="info-value" id="flowInfor">
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">
+                    DATE
+                </div>
+
+                <div class="info-value" id="dateInfor"></div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">
+                    Work Hour
+                </div>
+
+                <div class="info-value work-hour" id="workHour">
+                    9 Hours
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Brand</th>
+              <th>Style</th>
+              <th>PO No</th>
+              <th>SMV</th>
+              <th>Actual Workers</th>
+              <th>Target Workers</th>
+              <th>Planned Units For Today</th>
+              <th>STT</th>
+              <th>Time</th>
+              <th>Target Qty</th>
+              <th>Actual Output</th>
+              <th>Balance</th>
+              <th>%</th>
+              <th>Delay Reason</th>
+            </tr>
+          </thead>
+
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Delay Reason Modal -->
+    <div id="reasonModal" class="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Delay Reason</h3>
+          <button id="closeModal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <label>Please enter delay reason</label>
+
+          <textarea
+            id="reasonInput"
+            rows="5"
+            placeholder="Example: Machine breakdown..."
+          ></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-cancel" id="cancelBtn">
+            Cancel
+          </button>
+
+          <button class="btn-save" id="saveBtn">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+      Saved successfully
+    </div>
+    
+    <script src="/ui/efficiency/line-efficiency.js"></script>
+  </body>
+</html>

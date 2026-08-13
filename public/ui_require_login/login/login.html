@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kanban Login</title>
+    <link rel="icon" href="/favicon.png" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Arial, Helvetica, sans-serif;
+        color: white;
+        background: radial-gradient(circle at top, #001d3d, #000814);
+      }
+
+      .login-container {
+        width: 100%;
+        max-width: 420px;
+        padding: 20px;
+      }
+
+      .login-card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 18px;
+        padding: 40px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+      }
+
+      .logo {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #00b4d8, #0077b6);
+        font-size: 30px;
+        font-weight: bold;
+        box-shadow: 0 10px 30px rgba(0, 180, 216, 0.25);
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #9fb3c8;
+        font-size: 14px;
+        margin-bottom: 32px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #c9d6e4;
+      }
+
+      input {
+        width: 100%;
+        padding: 13px 15px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(0, 0, 0, 0.2);
+        color: white;
+        outline: none;
+        font-size: 15px;
+        transition:
+          border 0.2s,
+          box-shadow 0.2s;
+      }
+
+      input:focus {
+        border-color: #00b4d8;
+        box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.12);
+      }
+
+      input::placeholder {
+        color: #718096;
+      }
+
+      .login-button {
+        width: 100%;
+        border: none;
+        border-radius: 10px;
+        padding: 14px;
+        margin-top: 5px;
+        background: linear-gradient(135deg, #00b4d8, #0077b6);
+        color: white;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition:
+          transform 0.2s,
+          opacity 0.2s;
+      }
+
+      .login-button:hover {
+        transform: translateY(-1px);
+      }
+
+      .login-button:disabled {
+        opacity: 0.6;
+
+        cursor: not-allowed;
+
+        transform: none;
+      }
+
+      .error-message {
+        display: none;
+        margin-bottom: 20px;
+        padding: 12px 14px;
+        border-radius: 8px;
+        background: rgba(220, 38, 38, 0.15);
+        border: 1px solid rgba(248, 113, 113, 0.3);
+        color: #fca5a5;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .footer {
+        margin-top: 25px;
+        text-align: center;
+        color: #64748b;
+        font-size: 12px;
+      }
+
+      .password-wrapper {
+        position: relative;
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: none;
+        color: #94a3b8;
+        cursor: pointer;
+        font-size: 13px;
+      }
+
+      @media (max-width: 480px) {
+        .login-card {
+          padding: 30px 25px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="login-container">
+      <div class="login-card">
+        <div class="logo">K</div>
+
+        <h1>Kanban System</h1>
+
+        <div class="subtitle">Production Monitoring System</div>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="username"> Username </label>
+
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Enter username"
+              autocomplete="username"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password"> Password </label>
+
+            <div class="password-wrapper">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter password"
+                autocomplete="current-password"
+                required
+              />
+
+              <button type="button" class="toggle-password" id="togglePassword">
+                Show
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="login-button" id="loginButton">
+            Sign In
+          </button>
+        </form>
+
+        <div class="footer">Kanban Production Monitoring</div>
+      </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script>
+      const form = document.getElementById("loginForm");
+      const usernameInput = document.getElementById("username");
+      const passwordInput = document.getElementById("password");
+      const loginButton = document.getElementById("loginButton");
+      const errorMessage = document.getElementById("errorMessage");
+      const togglePassword = document.getElementById("togglePassword");
+
+      /*
+       * =========================================
+       * Nếu đã login rồi
+       * thì không cần login lại.
+       * =========================================
+      */
+      document.addEventListener("DOMContentLoaded", async () => {
+        const token = KanbanAuth.getToken();
+
+        if (!token) {
+          return;
+        }
+
+        const valid = await KanbanAuth.checkAuth();
+
+        if (valid) {
+          redirectAfterLogin();
+        }
+      });
+
+      // SHOW / HIDE PASSWORD
+      togglePassword.addEventListener("click", () => {
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+
+          togglePassword.textContent = "Hide";
+        } else {
+          passwordInput.type = "password";
+
+          togglePassword.textContent = "Show";
+        }
+      });
+
+      // LOGIN
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        hideError();
+
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+
+        if (!username || !password) {
+          showError("Please enter username and password.");
+          return;
+        }
+
+        loginButton.disabled = true;
+        loginButton.textContent = "Signing in...";
+
+        try {
+          const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username,
+              password,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            showError(data.message || "Login failed.");
+            return;
+          }
+
+          if (!data.success || !data.token) {
+            showError("Invalid server response.");
+            return;
+          }
+
+          // SAVE TOKEN
+          KanbanAuth.setToken(data.token);
+
+          //SAVE USER
+          KanbanAuth.setUser(data.user);
+
+          //REDIRECT
+          redirectAfterLogin();
+        } catch (error) {
+          console.error("Login error:", error);
+          showError("Cannot connect to server.");
+        } finally {
+          loginButton.disabled = false;
+          loginButton.textContent = "Sign In";
+        }
+      });
+
+      // REDIRECT AFTER LOGIN
+      function redirectAfterLogin() {
+        const params = new URLSearchParams(window.location.search);
+
+        const redirect = params.get("redirect");
+
+        if (redirect && redirect.startsWith("/")) {
+          window.location.href = redirect;
+          return;
+        }
+
+        // Mặc định: login/pms/monitor
+        window.location.href = "login/pms/monitor";
+      }
+
+      // ERROR
+      function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = "block";
+      }
+
+      function hideError() {
+        errorMessage.textContent = "";
+        errorMessage.style.display = "none";
+      }
+    </script>
+  </body>
+</html>

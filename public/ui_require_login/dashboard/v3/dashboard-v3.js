@@ -12,15 +12,18 @@ const defaultData = {
   dailyTarget: "-",
   targetNow: "-",
   output: "-",
-  banlance1: "-",
-  banlance2: "-",
-  banlance3: "-",
-  percent1: "-",
-  percent2: "-",
-  percent3: "-",
-  hr1: "-",
-  hr2: "-",
-  hr3: "-",
+  banlance1: '-',
+  banlance2: '-',
+  banlance3: '-',
+  percent1: '-',
+  percent2: '-',
+  percent3: '-',
+  hr1: '-',
+  hr2: '-',
+  hr3: '-',
+  day1: '-',
+  day2: '-',
+  day3: '-',
   accQty: "-",
   defectQty: "-",
   defectPercent: "-",
@@ -35,8 +38,7 @@ function updateClock() {
   const h = String(now.getHours()).padStart(2, "0");
   const mi = String(now.getMinutes()).padStart(2, "0");
   const s = String(now.getSeconds()).padStart(2, "0");
-  document.getElementById("live-clock").textContent =
-    `${y}-${mo}-${d} ${h}:${mi}:${s}`;
+  document.getElementById("live-clock").textContent = `${y}-${mo}-${d} ${h}:${mi}:${s}`;
 }
 
 function renderDefects(defects = []) {
@@ -47,7 +49,7 @@ function renderDefects(defects = []) {
     return;
   }
 
-  defects.slice(0, 5).forEach((item) => {
+  defects.slice(0, 5).forEach(item => {
     const row = document.createElement("div");
     row.className = "defect-item";
     const count = document.createElement("span");
@@ -67,21 +69,26 @@ function calculateTargetNow(dailyTarget, workingHours) {
 
   const startTime = new Date();
   startTime.setHours(7, 30, 0, 0);
-  const elapsedMinutes = Math.max(
-    0,
-    (Date.now() - startTime.getTime()) / (1000 * 60),
-  );
+  const elapsedMinutes = Math.max(0, (Date.now() - startTime.getTime()) / (1000 * 60));
   return Math.floor(elapsedMinutes * (dailyTarget / workingHours / 60));
 }
 
 function renderFlowDashboard(data) {
   document.getElementById("flowName").innerText = data.flow;
   document.getElementById("style").innerText = data.style;
-  document.getElementById("brand").innerHTML = data.buyer;
+  //document.getElementById("brand").innerText = data.buyer;
+  document.getElementById("brand").innerHTML = `
+    <span class="brand-label">Brand:</span>
+    <span class="brand-value">${data.buyer}</span>
+  `;
   document.getElementById("po").innerText = data.orderNo;
   document.getElementById("smv").innerText = data.smv;
-  document.getElementById("workerAt").innerText = data.worker_at;
-  document.getElementById("workerTg").innerText = data.worker_tg;
+  document.getElementById("workers").innerHTML = `
+    <span class="worker-label">Actual:</span>
+    <span class="worker-value">${data.worker_at}</span>
+    <span class="worker-label"> / Plan:</span>
+    <span class="worker-value">${data.worker_tg}</span>
+  `;
   document.getElementById("styleQty").innerText = data.styleQty;
   document.getElementById("startDate").innerText = data.startDate;
   document.getElementById("completeDate").innerText = data.completeDate;
@@ -95,21 +102,16 @@ function renderFlowDashboard(data) {
   document.getElementById("percent1").innerText = data.percent1;
   document.getElementById("percent2").innerText = data.percent2;
   document.getElementById("percent3").innerText = data.percent3;
-  document.getElementById("hr1").innerText = data.hr1 != '-' ? `${data.hr1} Hr` : data.hr1;
-  document.getElementById("hr2").innerText = data.hr2 != '-' ? `${data.hr2} Hr` : data.hr2;
-  document.getElementById("hr3").innerHTML = data.hr3 != '-' ? `${data.hr3} Hr <span class="time-day">(${data.day3} Days)</span>` : data.hr3;
+  document.getElementById("hr1").innerText = data.hr1;
+  document.getElementById("day1").innerText = data.day1;
+  document.getElementById("hr2").innerText = data.hr2;
+  document.getElementById("day2").innerText = data.day2;
+  document.getElementById("hr3").innerText = data.hr3;
+  document.getElementById("day3").innerText = data.day3;
   document.getElementById("accQty").innerText = data.accQty;
   document.getElementById("defectQty").innerText = data.defectQty;
   document.getElementById("defectPercent").innerText = data.defectPercent;
   document.getElementById("flowEfficiency").innerText = data.flowEfficiency;
-
-  ["banlance1", "banlance2", "banlance3"].forEach(id => {
-    const el = document.getElementById(id);
-    const value = Number(el.innerText);
-
-    el.classList.toggle("balance-positive", value > 0);
-    el.classList.toggle("balance-negative", value < 0);
-  });
 }
 
 let slideInterval = null;
@@ -118,7 +120,13 @@ let refreshInterval = null;
 async function loadFlowDashboard() {
   try {
     const flow = window.location.pathname.split("/").pop();
-    const response = await fetch(`/api/monitor/private/flowDashboard?flow=${flow}`);
+    const response = await fetch(`/pms/monitor/flowDashboard?flow=${flow}`);
+    
+    // -- DATE PICKER
+    // const flow = window.location.pathname.split("/").pop();
+    // const response = await fetch(
+    // `/pms/monitor/flowDashboard?flow=${flow}&date=${formatDate(selectedDate)}`
+    // );
 
     const data = await response.json();
 
@@ -171,19 +179,16 @@ async function loadFlowDashboard() {
       const smvObject = smvMap[key];
       const acc = accMap[key];
       const output = outputMap[key];
-      const defects = (defectMap[key] || []).sort(
-        (a, b) => Number(b.reWorkQty) - Number(a.reWorkQty),
-      );
+      const defects = (defectMap[key] || []).sort((a, b) => Number(b.reWorkQty) - Number(a.reWorkQty));
       const smv = Number(smvObject?.smv || 0).toFixed(2);
       const work_hr = workers?.work_hr || 0;
       const worker_tg = workers?.worker_tg || 0;
       const worker_at = workers?.worker_at || 0;
-      const num_eff = workers?.num_eff;
+      const num_eff = workers?.num_eff
 
       // Hiệu quả chuyền
-      const flowEfficiency = workers.num_eff
-        ? Math.ceil(workers.num_eff * 100) + "%"
-        : "0%";
+      const flowEfficiency = workers.num_eff ? Math.ceil(workers.num_eff * 100) + "%" : "0%";
+
 
       // ==THỰC TẾ==
       // Thực tế row3
@@ -191,22 +196,20 @@ async function loadFlowDashboard() {
       // Thực tế row1 và row2
       const outputQty = Number(output?.output || 0);
 
+
       // ==CHẤT LƯỢNG==
       // Số lượng lỗi
-      const defectQty = defects.reduce(
-        (sum, x) => sum + Number(x.reWorkQty),
-        0,
-      );
+      const defectQty = defects.reduce((sum, x) => sum + Number(x.reWorkQty), 0);
       // Phần trăm lỗi
-      const defectPercent =
-        outputQty > 0 ? Math.ceil((defectQty / outputQty) * 100) + "%" : "0%";
+      const defectPercent = outputQty > 0 ? Math.ceil((defectQty / outputQty) * 100) + "%" : "0%";
+
 
       // ==KẾ HOẠCH==
       // Kế hoạch row1 = (60 / smv) x số giờ làm việc x số công nhân kế hoạch x số hiêu quả -> Kết quả làm tròn lên
-      const dailyTarget =
-        smv > 0 ? Math.ceil((60 / smv) * work_hr * worker_tg * num_eff) : 0;
+      const dailyTarget = smv > 0 ? Math.ceil((60 / smv) * work_hr * worker_tg * num_eff) : 0;
       // Kế hoạch row3
       const styleQty = Number(info?.styleQty || 0);
+
 
       // ==KẾ HOẠCH & PHẦN TRĂM ROW2==
       // Kế hoạch row2
@@ -218,13 +221,8 @@ async function loadFlowDashboard() {
       const now = new Date();
       const startTime = new Date();
       startTime.setHours(7, 30, 0, 0);
-
-      const endTime = new Date(startTime);
-      const workHours = Number(workers.work_hr || 0);
-      // + workHours + 1 giờ nghỉ trưa
-      endTime.setHours(
-        endTime.getHours() + workHours + 1
-      )
+      const endTime = new Date();
+      endTime.setHours(16, 30, 0, 0);
 
       // Nếu Thực tế row2 >= Kế hoạch row1 (dailyTargetStyle) thì Kế hoạch row2 = 0 & Phần trăm row2 = 100%
       // Ngược lại Thực tế row2 < Kế hoạch row1
@@ -246,46 +244,43 @@ async function loadFlowDashboard() {
         percent2 = targetNow > 0 ? Math.ceil((outputQty / targetNow) * 100) + "%" : "0%";
       }
 
+
       // ==CÒN LẠI==
       // Còn lại row1 = Kế hoạch row1 - Thực tế row1
-      const banlance1 = outputQty - dailyTargetStyle;
+      const banlance1 = outputQty - dailyTargetStyle
       // Còn lại row2 = Kế hoạch row2 - Thực tế row2
-      const banlance2 = targetNow === 0 ? 0 : outputQty - targetNow;
+      const banlance2 = targetNow === 0 ? 0 : outputQty - targetNow
       // Còn lại row3 = Kế hoạch row3 - Thực tế row3
-      const banlance3 = accQty - styleQty;
+      const banlance3 = accQty - styleQty
+
 
       // ==PHẦN TRĂM==
       // Phần trăm row1 = Thực tế row1 / Kế hoạch row1 x 100 -> Kết quả làm tròn lên
-      const percent1 =
-        dailyTargetStyle > 0
-          ? Math.ceil((outputQty / dailyTargetStyle) * 100) + "%"
-          : "0%";
+      const percent1 = dailyTargetStyle > 0 ? Math.ceil((outputQty / dailyTargetStyle) * 100) + '%' : '0%'
       // Phần trăm row3 = Thực tế row3 / Kế hoạch row3 x 100 -> Kết quả làm tròn lên
-      const percent3 =
-        styleQty > 0 ? Math.ceil((accQty / styleQty) * 100) + "%" : "0%";
+      const percent3 = styleQty > 0 ? Math.ceil((accQty / styleQty) * 100) + '%' : '0%'
+
 
       // ==THỜI GIAN==
       // Hr row1 = (Còn lại row1 x smv ) / Số công nhân kế hoạch / 60
-      const hr1 = worker_tg > 0 ? (((banlance1 * -1) * smv) / worker_tg / 60) : 0;
+      const hr1 = worker_tg > 0 ? ((banlance1 * smv) / worker_tg / 60).toFixed(2) : "0.00";
       // Day row1 đặt = 1
-      const day1 = 1;
-
+      const day1 = 1
       // Hr row2 = (Còn lại row2 x smv ) / Số công nhân kế hoạch / 60
-      const hr2 = worker_tg > 0 ? (((banlance2 * -1) * smv) / worker_tg / 60) : 0;
+      const hr2 = worker_tg > 0 ? ((banlance2 * smv) / worker_tg / 60).toFixed(2): "0.00";
       // Day row1 đặt = 1
-      const day2 = 1;
-
+      const day2 = 1
       // Hr row3 = (Còn lại row3 / Kế hoạch row1) x 24 -> Kết quả làm tròn lên
-      const hr3 = dailyTargetStyle > 0 ? Math.ceil((banlance3 * -1 / dailyTargetStyle) * 24) : 0;
+      const hr3 = dailyTargetStyle > 0 ? Math.ceil((banlance3 / dailyTargetStyle) * 24) : 0
       // Day row3 = Còn lại row3 / Kế hoạch row1 -> Kết quả làm tròn lên
-      const day3 =
-        dailyTargetStyle > 0 ? Math.ceil((banlance3 * -1) / dailyTargetStyle) : 0;
+      const day3 = dailyTargetStyle > 0 ? Math.ceil((banlance3 / dailyTargetStyle) * -1) : 0;
+
 
       const startDate = acc?.startDate ? acc.startDate.split("T")[0] : "-";
       const today = new Date(
         new Date().getFullYear(),
         new Date().getMonth(),
-        new Date().getDate(),
+        new Date().getDate()
       );
       today.setDate(today.getDate() + day3);
       const completeDate = today.toISOString().split("T")[0];
@@ -311,8 +306,10 @@ async function loadFlowDashboard() {
         percent1,
         percent2,
         percent3,
-        hr1: hr1 > 0 ? hr1.toFixed(2) : 0,
-        hr2: hr2 > 0 ? hr2.toFixed(2) : 0,
+        hr1: hr1 < 0 ? "0.00" : hr1,
+        day1: "-",
+        hr2: hr2 < 0 ? "0.00" : hr2,
+        day2: "-",
         hr3,
         day3,
         accQty,
@@ -351,17 +348,3 @@ setInterval(updateClock, 1000);
 refreshInterval = setInterval(() => {
   loadFlowDashboard();
 }, 180000);
-
-const flowItem = document.querySelector(".flow-item");
-
-flowItem.addEventListener("click", function () {
-  const flowValue = document.getElementById("flowName").textContent.trim();
-  const styleValue = document.getElementById("style").textContent.trim();
-  const poValue = document.getElementById("po").textContent.trim();
-
-  if (!flowValue || flowValue === "-" || !styleValue || styleValue === "-" || !poValue || poValue === "-") {
-    return;
-  }
-
-  window.location.href = `/pms/monitor/semiFGoods/${flowValue}`;
-});

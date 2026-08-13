@@ -98,6 +98,22 @@ async function getMonitor(req, res, next) {
   }
 }
 
+async function getMonitorByUser(req, res, next) {
+  try {
+    const user = req.user;
+
+    const data = await service.getMonitorByUser(user);
+
+    res.json({
+      success: true,
+      count: data.length,
+      data,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function getFlowDashBoard(req, res, next) {
   try {
     const flow = req.query.flow;
@@ -193,4 +209,5 @@ module.exports = {
   getFlowSemiFGoods,
   getFlowPlan,
   updateFlowPlan,
+  getMonitorByUser,
 };

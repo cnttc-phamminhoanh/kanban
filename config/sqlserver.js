@@ -54,7 +54,7 @@ async function CONNECT_BI_DB() {
     biPool = null;
   });
 
-  return t8Pool
+  return biPool
 }
 
 async function getT8Pool() {

@@ -6,7 +6,7 @@ async function init() {
 
     document.getElementById("flowName").textContent = flow;
 
-    const response = await fetch(`/api/monitor/private/flowSemiFGoods?flow=${flow}`);
+    const response = await authFetch(`/api/monitor/flowSemiFGoods?flow=${flow}`);
 
     const result = await response.json();
 
@@ -18,7 +18,7 @@ async function init() {
     renderData(result.data);
   } catch (error) {
     console.error(error);
-    renderEmpty("Failed to load data");
+    renderEmpty("No data");
   }
 }
 

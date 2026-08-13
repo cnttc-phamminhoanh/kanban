@@ -1,14 +1,16 @@
 const router = require('express').Router();
 const controller = require('../controllers/monitor.controller');
+const authMiddleware = require('../middleware/auth.middleware');
+const flowAccessMiddleware = require('../middleware/flow.middleware');
 
-router.get('/', controller.getMonitor);
+router.get('/flows', authMiddleware, controller.getMonitorByUser);
 
-router.get('/flowDashboard', controller.getFlowDashBoard);
+router.get('/flowDashboard', authMiddleware, flowAccessMiddleware, controller.getFlowDashBoard);
 
-router.get('/flowSemiFGoods', controller.getFlowSemiFGoods);
+router.get('/flowSemiFGoods', authMiddleware, flowAccessMiddleware, controller.getFlowSemiFGoods);
 
-router.get('/api/flowPlan', controller.getFlowPlan);
+router.get('/flowPlan', authMiddleware, controller.getFlowPlan);
 
-router.put('/api/flowPlan', controller.updateFlowPlan);
+router.put('/flowPlan', authMiddleware, controller.updateFlowPlan);
 
 module.exports = router;
