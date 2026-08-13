@@ -1,6 +1,10 @@
 const AUTH_TOKEN_KEY = "kanban_token";
 const AUTH_USER_KEY = "kanban_user";
 
+const REMEMBER_ME_KEY = "kanban_remember_me";
+const REMEMBER_USERNAME_KEY = "kanban_remember_username";
+const REMEMBER_PASSWORD_KEY = "kanban_remember_password";
+
 // GET TOKEN
 function getToken() {
   return localStorage.getItem(AUTH_TOKEN_KEY);
@@ -41,6 +45,31 @@ function setUser(user) {
 function clearAuth() {
   localStorage.removeItem(AUTH_TOKEN_KEY);
   localStorage.removeItem(AUTH_USER_KEY);
+}
+
+// REMEMBER ME
+function saveRememberMe(username, password) {
+  localStorage.setItem(REMEMBER_ME_KEY, "true");
+  localStorage.setItem(REMEMBER_USERNAME_KEY, username);
+  localStorage.setItem(REMEMBER_PASSWORD_KEY, password);
+}
+
+function getRememberMe() {
+  return localStorage.getItem(REMEMBER_ME_KEY) === "true";
+}
+
+function getRememberedUsername() {
+  return localStorage.getItem(REMEMBER_USERNAME_KEY) || "";
+}
+
+function getRememberedPassword() {
+  return localStorage.getItem(REMEMBER_PASSWORD_KEY) || "";
+}
+
+function clearRememberMe() {
+  localStorage.removeItem(REMEMBER_ME_KEY);
+  localStorage.removeItem(REMEMBER_USERNAME_KEY);
+  localStorage.removeItem(REMEMBER_PASSWORD_KEY);
 }
 
 // PARSE JWT
@@ -207,19 +236,33 @@ if (!isLoginPage()) {
 
 // EXPORT
 window.KanbanAuth = {
+  // Authentication
   getToken,
   getUser,
   setAuth,
   setToken,
   setUser,
   clearAuth,
+
+  // Remember Me
+  saveRememberMe,
+  getRememberMe,
+  getRememberedUsername,
+  getRememberedPassword,
+  clearRememberMe,
+
+  // JWT
   parseJwt,
   isTokenExpired,
   isLoginPage,
+
+  // Login / Logout
   redirectToLogin,
   logout,
   requireLogin,
   startTokenWatcher,
+
+  // API
   authFetch,
 
   // CHECK AUTH WITH BACKEND

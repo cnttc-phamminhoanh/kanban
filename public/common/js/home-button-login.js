@@ -1,0 +1,25 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const homeButton = document.createElement("a");
+
+  homeButton.href = "/login/pms/monitor";
+  homeButton.className = "floating-home";
+  homeButton.setAttribute("aria-label", "Back to Monitor");
+  homeButton.setAttribute("title", "Back to Monitor");
+
+  homeButton.innerHTML = `
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M3 10.5L12 3l9 7.5"></path>
+      <path d="M5 9.5V21h14V9.5"></path>
+      <path d="M9 21v-6h6v6"></path>
+    </svg>
+  `;
+
+  document.body.appendChild(homeButton);
+});

@@ -1,0 +1,80 @@
+.floating-home {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+
+  width: 56px;
+  height: 56px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ffffff;
+  color: #1a5794;
+
+  border: 2px solid #1a5794;
+  border-radius: 50%;
+
+  text-decoration: none;
+
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.18);
+
+  z-index: 1000;
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.floating-home svg {
+  width: 25px;
+  height: 25px;
+}
+
+.floating-home:hover {
+  background: #1a5794;
+  color: #ffffff;
+
+  transform: translateY(-4px) scale(1.08);
+
+  box-shadow: 0 12px 28px rgba(26, 87, 148, 0.35);
+}
+
+.floating-home::after {
+  content: "Back to Monitor";
+
+  position: absolute;
+  right: 68px;
+  top: 50%;
+
+  transform: translateY(-50%) translateX(8px);
+
+  background: #1e293b;
+  color: #ffffff;
+
+  padding: 7px 11px;
+
+  border-radius: 7px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  opacity: 0;
+  visibility: hidden;
+
+  pointer-events: none;
+
+  transition: 0.2s ease;
+}
+
+.floating-home:hover::after {
+  opacity: 1;
+  visibility: visible;
+
+  transform: translateY(-50%) translateX(0);
+}

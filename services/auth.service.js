@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-
 const repository = require("../repositories/auth.repository");
 
 async function login(username, password) {
@@ -8,6 +7,8 @@ async function login(username, password) {
   if (!user) {
     throw new Error("INVALID_CREDENTIALS");
   }
+
+  await repository.insertLoginLog(user.user_no);
 
   const payload = {
     id: user.user_no,

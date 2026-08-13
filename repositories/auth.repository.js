@@ -14,7 +14,7 @@ async function findUserByUserNoAndPassword(userNo, password) {
         WHERE
           user_no = @userNo
           AND pass_word = @password
-      `
+      `,
     );
 
   return result.recordset[0] || null;
@@ -31,7 +31,7 @@ async function findUserByUserNo(userNo) {
         SELECT user_no    
         FROM kanban.dbo.kanban_user
         WHERE user_no = @userNo
-      `
+      `,
     );
 
   return result.recordset[0] || null;
@@ -48,14 +48,40 @@ async function findFlowsByUserNo(userNo) {
         SELECT flow    
         FROM kanban.dbo.kanban_flow
         WHERE user_no = @userNo
-      `
+      `,
     );
 
   return result.recordset || null;
+}
+
+async function insertLoginLog(userNo) {
+  const pool = await getBIPool();
+
+  await pool
+    .request()
+    .input("userNo", sql.VarChar(20), userNo)
+    .input("dashboardName", sql.VarChar(100), "Kanban")
+    .query(
+      `
+        INSERT INTO kanban.dbo.kanban_login
+        (
+          user_no,
+          dashboard_name,
+          login_time
+        )
+        VALUES
+        (
+          @userNo,
+          @dashboardName,
+          GETDATE()
+        )
+      `
+    );
 }
 
 module.exports = {
   findUserByUserNoAndPassword,
   findUserByUserNo,
   findFlowsByUserNo,
+  insertLoginLog,
 };

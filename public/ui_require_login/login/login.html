@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kanban Login</title>
-    <link rel="icon" href="/favicon.png" />
+    <link rel="icon" type="image/png" href="/favicons/itgi-favicon2.png">
 
     <style>
       * {
@@ -12,6 +12,7 @@
         padding: 0;
         box-sizing: border-box;
       }
+
       body {
         min-height: 100vh;
         display: flex;
@@ -37,7 +38,7 @@
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
       }
 
-      .logo {
+      /* .logo {
         width: 70px;
         height: 70px;
         margin: 0 auto 20px;
@@ -49,6 +50,25 @@
         font-size: 30px;
         font-weight: bold;
         box-shadow: 0 10px 30px rgba(0, 180, 216, 0.25);
+      } */
+
+      .logo {
+        width: 110px;
+        height: 90px;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border-radius: 0;
+        filter: drop-shadow(0 8px 20px rgba(0, 70, 67, 0.25));
+      }
+
+      .logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
       }
 
       h1 {
@@ -98,6 +118,59 @@
         color: #718096;
       }
 
+      .password-wrapper {
+        position: relative;
+      }
+
+      .password-wrapper input {
+        padding-right: 65px;
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: none;
+        color: #94a3b8;
+        cursor: pointer;
+        font-size: 13px;
+      }
+
+      .toggle-password:hover {
+        color: white;
+      }
+
+      /* REMEMBER ME */
+      .remember-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: -5px;
+        margin-bottom: 20px;
+      }
+
+      .remember-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+        color: #aebdce;
+        font-size: 13px;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .remember-label input {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+        accent-color: #00b4d8;
+      }
+
       .login-button {
         width: 100%;
         border: none;
@@ -145,22 +218,6 @@
         font-size: 12px;
       }
 
-      .password-wrapper {
-        position: relative;
-      }
-
-      .toggle-password {
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        border: none;
-        background: none;
-        color: #94a3b8;
-        cursor: pointer;
-        font-size: 13px;
-      }
-
       @media (max-width: 480px) {
         .login-card {
           padding: 30px 25px;
@@ -172,7 +229,14 @@
   <body>
     <div class="login-container">
       <div class="login-card">
-        <div class="logo">K</div>
+        <!-- <div class="logo">K</div> -->
+
+        <div class="logo">
+          <img
+            src="https://res.cloudinary.com/itxeeydk/image/upload/v1786588547/it_gi_logo_xm001z.png"
+            alt="ITGI Logo"
+          />
+        </div>
 
         <h1>Kanban System</h1>
 
@@ -213,6 +277,15 @@
             </div>
           </div>
 
+          <!-- REMEMBER ME -->
+          <div class="remember-row">
+            <label class="remember-label" for="rememberMe">
+              <input type="checkbox" id="rememberMe" />
+
+              <span> Remember me </span>
+            </label>
+          </div>
+
           <button type="submit" class="login-button" id="loginButton">
             Sign In
           </button>
@@ -222,131 +295,7 @@
       </div>
     </div>
 
-    <script src="/js/auth.js"></script>
-    <script>
-      const form = document.getElementById("loginForm");
-      const usernameInput = document.getElementById("username");
-      const passwordInput = document.getElementById("password");
-      const loginButton = document.getElementById("loginButton");
-      const errorMessage = document.getElementById("errorMessage");
-      const togglePassword = document.getElementById("togglePassword");
-
-      /*
-       * =========================================
-       * Nếu đã login rồi
-       * thì không cần login lại.
-       * =========================================
-      */
-      document.addEventListener("DOMContentLoaded", async () => {
-        const token = KanbanAuth.getToken();
-
-        if (!token) {
-          return;
-        }
-
-        const valid = await KanbanAuth.checkAuth();
-
-        if (valid) {
-          redirectAfterLogin();
-        }
-      });
-
-      // SHOW / HIDE PASSWORD
-      togglePassword.addEventListener("click", () => {
-        if (passwordInput.type === "password") {
-          passwordInput.type = "text";
-
-          togglePassword.textContent = "Hide";
-        } else {
-          passwordInput.type = "password";
-
-          togglePassword.textContent = "Show";
-        }
-      });
-
-      // LOGIN
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        hideError();
-
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value;
-
-        if (!username || !password) {
-          showError("Please enter username and password.");
-          return;
-        }
-
-        loginButton.disabled = true;
-        loginButton.textContent = "Signing in...";
-
-        try {
-          const response = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              username,
-              password,
-            }),
-          });
-
-          const data = await response.json();
-
-          if (!response.ok) {
-            showError(data.message || "Login failed.");
-            return;
-          }
-
-          if (!data.success || !data.token) {
-            showError("Invalid server response.");
-            return;
-          }
-
-          // SAVE TOKEN
-          KanbanAuth.setToken(data.token);
-
-          //SAVE USER
-          KanbanAuth.setUser(data.user);
-
-          //REDIRECT
-          redirectAfterLogin();
-        } catch (error) {
-          console.error("Login error:", error);
-          showError("Cannot connect to server.");
-        } finally {
-          loginButton.disabled = false;
-          loginButton.textContent = "Sign In";
-        }
-      });
-
-      // REDIRECT AFTER LOGIN
-      function redirectAfterLogin() {
-        const params = new URLSearchParams(window.location.search);
-
-        const redirect = params.get("redirect");
-
-        if (redirect && redirect.startsWith("/")) {
-          window.location.href = redirect;
-          return;
-        }
-
-        // Mặc định: login/pms/monitor
-        window.location.href = "login/pms/monitor";
-      }
-
-      // ERROR
-      function showError(message) {
-        errorMessage.textContent = message;
-        errorMessage.style.display = "block";
-      }
-
-      function hideError() {
-        errorMessage.textContent = "";
-        errorMessage.style.display = "none";
-      }
-    </script>
+    <script src="/common/js/auth.js"></script>
+    <script src="/ui_require_login/login/login.js"></script>
   </body>
 </html>
