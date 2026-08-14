@@ -62,7 +62,7 @@ async function getFlowStyleInfo(flow) {
     `
       select flow, o.style, o.buyer, o.orderNo, sum(o.qty) as styleQty, 0 as targetQty, 0 as targetNow
       from (
-        select distinct wrkOrder, flow from pyregsum where StepNo between '302' and '450' and RegDate = curdate()
+        select distinct WrkOrder, flow from pyregsum where StepNo = '450' and RegDate = curdate()
       ) t 
       inner join pywrkord o on o.wrkOrder = t.wrkOrder
       where flow = ?
@@ -85,7 +85,7 @@ async function getFlowStyleSMV(flow) {
         from (
           select t.flow, o.style, o.orderNo, t.WrkOrder, sum(ifnull(ifnull(a.StepTime, 0), s.StepTime)) as smv
           from (
-            select distinct WrkOrder, flow from pyregsum where StepNo between '302' and '450' and RegDate = curdate()
+            select distinct WrkOrder, flow from pyregsum where StepNo = '450' and RegDate = curdate()
           ) t 
           inner join pywrkstp s on t.wrkOrder = s.wrkOrder 
           left join pystpasm a on a.wrkOrder = t.wrkOrder and a.stepNo = s.stepNo
@@ -101,7 +101,7 @@ async function getFlowStyleSMV(flow) {
         from (
           select t.flow, style, orderNo, t.wrkOrder, sum(ifnull(a.stepTime, s.stepTime)) as smv
           from (
-            select distinct wrkOrder, flow from pyregsum where stepNo between '302' and '450' and regDate = curdate()
+            select distinct wrkOrder, flow from pyregsum where stepNo = '450' and regDate = curdate()
           ) t 
           inner join pywrkstp s on t.wrkOrder = s.wrkOrder 
           left join pystpasm a on a.wrkOrder = t.wrkOrder and a.stepNo = s.stepNo
@@ -126,7 +126,7 @@ async function getFlowStyleAccQtyStartCompelete(flow) {
     `
       select r.flow, o.style, o.orderNo, min(regDate) as startDate, max(regDate) as completeDate, sum(r.Qty) as accQty
       from (
-        select distinct wrkOrder,flow from pyregsum where StepNo between '302' and '450' and RegDate = curdate()
+        select distinct wrkOrder,flow from pyregsum where StepNo = '450' and RegDate = curdate()
       ) t
       inner join pyregsum r on t.wrkOrder = r.wrkOrder 
       inner join pywrkord o on o.wrkOrder = t.wrkOrder
@@ -147,7 +147,7 @@ async function getFlowStyleOutput(flow) {
       select r.regDate, r.flow, o.style, o.orderNo, sum(r.Qty) as output
       from pyregsum r
       inner join (
-        select distinct wrkOrder, flow from pyregsum where stepNo between '302' and '450' and RegDate = curdate()
+        select distinct wrkOrder,flow from pyregsum where StepNo = '450' and RegDate = curdate()
       ) t on r.wrkOrder = t.wrkOrder and r.regDate = curdate() and t.flow = r.flow
       inner join pywrkord o on r.wrkOrder = o.wrkOrder 
       where r.stepNo = 450 and r.flow = ?
@@ -168,7 +168,7 @@ async function getDefects(flow) {
       from pyrework w
       inner join pywrkord o on o.wrkOrder = w.wrkOrder 
       inner join (
-        select distinct WrkOrder, Flow from pyregsum where StepNo between '302' and '450' and RegDate = curdate()
+        select distinct wrkOrder,flow from pyregsum where StepNo = '450' and RegDate = curdate()
       ) t on t.wrkOrder = w.wrkOrder and w.Flow = t.Flow
       inner join pyrereason r on r.wrkOrder = w.wrkOrder and r.seqNo = w.seqNo and r.bundleNo = w.bundleNo 
       inner join pycode c on c.code = r.reasonCode and c.CType = 'REWORKREASON'
