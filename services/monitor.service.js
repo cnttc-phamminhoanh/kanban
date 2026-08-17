@@ -40,6 +40,10 @@ async function getFlowPlan() {
   return repository.getFlowPlan();
 }
 
+async function getFlowPlanByUser(user) {
+  return repository.getFlowPlanByUser(user);
+}
+
 async function updateFlowPlan(data) {
   return repository.updateFlowPlan(data);
 }
@@ -56,4 +60,5 @@ module.exports = {
   getFlowSemiFGoods,
   getFlowPlan,
   updateFlowPlan,
+  getFlowPlanByUser,
 };

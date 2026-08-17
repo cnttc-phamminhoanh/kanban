@@ -94,8 +94,8 @@ const flowSelect = document.getElementById("flow");
 
 flows.forEach((flow) => {
   flowSelect.innerHTML += `
-          <option value="${flow}">${flow}</option>
-        `;
+    <option value="${flow}">${flow}</option>
+  `;
 });
 
 flowSelect.value = flows[0];

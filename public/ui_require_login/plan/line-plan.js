@@ -136,30 +136,70 @@ function closeModal() {
 
 // SAVE
 async function saveData() {
-  const worker = Number(document.getElementById("modalWorker").value);
-  const breakFrom = document.getElementById("modalBreakFrom").value;
-  const breakTo = document.getElementById("modalBreakTo").value;
+  if (currentIndex === null || currentIndex === -1) {
+    showToast("No data selected");
+    return;
+  }
 
-  plans[currentIndex].worker_at = worker;
-  plans[currentIndex].break_time_fr = breakFrom;
-  plans[currentIndex].break_time_to = breakTo;
+  const worker = Number(
+    document.getElementById("modalWorker").value
+  );
 
-  await fetch("/pms/monitor/api/flowPlan", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      igm_dept: plans[currentIndex].igm_dept,
-      worker_at: worker,
-      break_time_fr: breakFrom,
-      break_time_to: breakTo,
-    }),
-  });
+  const breakFrom =
+    document.getElementById("modalBreakFrom").value;
 
-  closeModal();
-  queryData();
-  showToast("Saved successfully");
+  const breakTo =
+    document.getElementById("modalBreakTo").value;
+
+  const flow = plans[currentIndex].igm_dept;
+
+  try {
+    const response = await authFetch("/api/monitor/flowPlan", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        igm_dept: flow,
+        worker_at: worker,
+        break_time_fr: breakFrom,
+        break_time_to: breakTo,
+      }),
+    });
+
+    console.log("PUT status:", response.status);
+
+    const result = await response.json();
+
+    console.log("PUT result:", result);
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || `Update failed (${response.status})`
+      );
+    }
+
+    // Cập nhật dữ liệu trên frontend
+    plans[currentIndex].worker_at = worker;
+    plans[currentIndex].break_time_fr = breakFrom;
+    plans[currentIndex].break_time_to = breakTo;
+
+    // Đóng modal
+    closeModal();
+
+    // Render lại bảng
+    queryData();
+
+    // Hiển thị thông báo
+    showToast("Saved successfully");
+
+  } catch (error) {
+    console.error("Update flow plan failed:", error);
+
+    showToast(
+      error.message || "Update failed"
+    );
+  }
 }
 
 // TOAST

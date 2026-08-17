@@ -9,7 +9,7 @@ router.get('/flowDashboard', authMiddleware, flowAccessMiddleware, controller.ge
 
 router.get('/flowSemiFGoods', authMiddleware, flowAccessMiddleware, controller.getFlowSemiFGoods);
 
-router.get('/flowPlan', authMiddleware, controller.getFlowPlan);
+router.get('/flowPlan', authMiddleware, controller.getFlowPlanByUser);
 
 router.put('/flowPlan', authMiddleware, controller.updateFlowPlan);
 

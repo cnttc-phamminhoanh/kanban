@@ -177,6 +177,22 @@ async function getFlowPlan(req, res, next) {
   }
 }
 
+async function getFlowPlanByUser(req, res, next) {
+  try {
+    const user = req.user;
+
+    const data = await service.getFlowPlanByUser(user);
+
+    res.json({
+      success: true,
+      count: data.length,
+      data,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function updateFlowPlan(req, res, next) {
   try {
     const { igm_dept, worker_at, break_time_fr, break_time_to } = req.body;
@@ -210,4 +226,5 @@ module.exports = {
   getFlowPlan,
   updateFlowPlan,
   getMonitorByUser,
+  getFlowPlanByUser,
 };
