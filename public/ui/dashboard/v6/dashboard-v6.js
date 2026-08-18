@@ -74,6 +74,14 @@ function calculateTargetNow(dailyTarget, workingHours) {
   return Math.floor(elapsedMinutes * (dailyTarget / workingHours / 60));
 }
 
+function normalizeBuyer(buyer) {
+  if (!buyer || buyer === "-") {
+    return buyer;
+  }
+
+  return String(buyer).toLowerCase().includes("carters") ? "carter's" : buyer;
+}
+
 function renderFlowDashboard(data) {
   document.getElementById("flowName").innerText = data.flow;
   document.getElementById("style").innerText = data.style;
@@ -294,7 +302,7 @@ async function loadFlowDashboard() {
         // flow: ['SEWING-GD-F1-06A'].includes(info.flow) ? 'GY-1' : info.flow, // Fake flow date
         flow: info.flow,
         style: info.style,
-        buyer: info.buyer,
+        buyer: normalizeBuyer(info.buyer),
         orderNo: info.orderNo,
         smv,
         worker_at,

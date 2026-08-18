@@ -10,26 +10,21 @@ const authRoute = require("./routes/auth.routes");
 
 const START_SERVER = () => {
   const PORT = process.env.PORT || 3000;
-
   const app = express();
-
   app.use(cors());
-
   app.use(express.json());
-
   app.use("/api/auth", authRoute);
-
-  app.use("/api/monitor", monitorRoute);
-
+  app.use("/api/monitor", monitorRoute)
   app.use("/api/monitor/private", monitorPrivateRoute);
-
   app.use(express.static(path.join(__dirname, "public")));
 
   // NOT LOGIN
+  app.get("/production", (req, res) => {
+    res.sendFile(path.join(__dirname, "public/ui/production/production-management.html"));
+  });
   app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public/ui/monitor/monitor.html"));
   });
-
   app.get("/pms/monitor/flowDashboard/:flow", (req, res) => {
     res.sendFile(path.join(__dirname, "public/ui/dashboard/v1/line-dashboard.html"));
   });
@@ -57,7 +52,6 @@ const START_SERVER = () => {
   app.get("/pms/monitor/flowPlan", (req, res) => {
     res.sendFile(path.join(__dirname, "public/ui/plan/line-plan.html"));
   });
-
 
   // REQUIRE LOGIN
   app.get("/login", (req, res) => {
@@ -95,8 +89,6 @@ const START_SERVER = () => {
   });
 
   app.use((err, req, res, next) => {
-    console.error(err);
-
     const status = err.status || 500;
 
     res.status(status).json({
