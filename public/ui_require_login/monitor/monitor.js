@@ -64,7 +64,3 @@ input.addEventListener("input", (e) => {
 });
 
 loadFlows();
-
-function goToManagement() {
-  window.location.href = "/login/pms/monitor/flowPlan";
-}

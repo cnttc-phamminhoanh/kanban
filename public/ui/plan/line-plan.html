@@ -116,7 +116,6 @@
       }
 
       /* TABLE */
-
       .table-card {
         background: white;
         border-radius: 16px;
@@ -154,7 +153,6 @@
       }
 
       /* BUTTON */
-
       .edit-btn {
         border: none;
         background: #2563eb;
@@ -171,7 +169,6 @@
       }
 
       /* MODAL */
-
       .modal-overlay {
         position: fixed;
         inset: 0;
@@ -272,7 +269,6 @@
       }
 
       /* TOAST */
-
       .toast {
         position: fixed;
         top: 30px;
@@ -364,51 +360,43 @@
     </div>
 
     <!-- EDIT MODAL -->
-
     <div id="editModal" class="modal-overlay">
       <div class="modal">
         <div class="modal-header">
           <h3>Edit Sewing Line Plan</h3>
-
           <button id="closeModal">&times;</button>
         </div>
 
         <div class="modal-body">
           <div class="modal-group">
             <label> Flow </label>
-
             <input id="modalFlow" readonly />
           </div>
 
           <div class="modal-group">
             <label> Worker Actual </label>
-
             <input id="modalWorker" type="number" />
           </div>
 
           <div class="modal-group">
             <label> Break From </label>
-
             <input id="modalBreakFrom" type="time" />
           </div>
 
           <div class="modal-group">
             <label> Break To </label>
-
             <input id="modalBreakTo" type="time" />
           </div>
         </div>
 
         <div class="modal-footer">
           <button id="cancelBtn" class="btn-cancel">Cancel</button>
-
           <button id="saveBtn" class="btn-save">Save</button>
         </div>
       </div>
     </div>
 
     <!-- TOAST -->
-
     <div id="toast" class="toast">Saved successfully</div>
 
     <script src="/common/js/home-button.js"></script>

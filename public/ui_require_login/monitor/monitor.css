@@ -97,7 +97,7 @@ body {
 .management-btn {
   position: fixed;
   top: 25px;
-  right: 25px;
+  right: 10px;
   z-index: 9999;
   padding: 12px 22px;
   border: 1px solid #67d8ff;

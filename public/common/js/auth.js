@@ -122,9 +122,24 @@ function redirectToLogin() {
 }
 
 // LOGOUT
-function logout() {
-  clearAuth();
-  redirectToLogin();
+async function logout() {
+  try {
+    const token = getToken();
+
+    if (token) {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+  } catch (error) {
+    console.error("Logout API error:", error);
+  } finally {
+    clearAuth();
+    redirectToLogin();
+  }
 }
 
 // CHECK LOGIN
@@ -227,8 +242,7 @@ async function authFetch(url, options = {}) {
 }
 
 // INITIALIZE
-// Nếu KHÔNG phải login page
-// thì bắt buộc phải login.
+// Nếu KHÔNG phải login page thì bắt buộc phải login.
 if (!isLoginPage()) {
   requireLogin();
   startTokenWatcher();

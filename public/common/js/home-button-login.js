@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   homeButton.href = "/login/pms/monitor";
   homeButton.className = "floating-home";
-  homeButton.setAttribute("aria-label", "Back to Monitor");
-  homeButton.setAttribute("title", "Back to Monitor");
+  homeButton.setAttribute("aria-label", "Back to Factory Dashboard");
+  // homeButton.setAttribute("title", "Back to Factory Dashboard");
 
   homeButton.innerHTML = `
     <svg

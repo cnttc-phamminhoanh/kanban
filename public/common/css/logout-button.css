@@ -1,17 +1,17 @@
-.floating-home {
+.floating-logout {
   position: fixed;
-  right: 8px;
-  bottom: 22px;
+  right: 10px;
+  bottom: 20px;
   width: 50px;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #ffffff;
-  color: #1a5794;
-  border: 2px solid #1a5794;
+  color: #dc2626;
+  border: 2px solid #dc2626;
   border-radius: 50%;
-  text-decoration: none;
+  cursor: pointer;
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.18);
   z-index: 1000;
   transition:
@@ -21,20 +21,21 @@
     box-shadow 0.25s ease;
 }
 
-.floating-home svg {
+.floating-logout svg {
   width: 25px;
   height: 25px;
 }
 
-.floating-home:hover {
-  background: #1a5794;
+.floating-logout:hover {
+  background: #dc2626;
   color: #ffffff;
   transform: translateY(-4px) scale(1.08);
-  box-shadow: 0 12px 28px rgba(26, 87, 148, 0.35);
+  box-shadow: 0 12px 28px rgba(220, 38, 38, 0.35);
 }
 
-.floating-home::after {
-  content: "Back to Factory Dashboard";
+/* TOOLTIP */
+.floating-logout::after {
+  content: "Logout";
   position: absolute;
   right: 68px;
   top: 50%;
@@ -52,7 +53,7 @@
   transition: 0.2s ease;
 }
 
-.floating-home:hover::after {
+.floating-logout:hover::after {
   opacity: 1;
   visibility: visible;
   transform: translateY(-50%) translateX(0);
