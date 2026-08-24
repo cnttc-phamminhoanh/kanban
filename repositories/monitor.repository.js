@@ -124,14 +124,14 @@ async function getFlowStyleAccQtyStartCompelete(flow) {
 
   const [rows] = await pool.execute(
     `
-      select r.flow, o.style, o.orderNo, min(regDate) as startDate, max(regDate) as completeDate, sum(r.Qty) as accQty
+      select t.flow, o.style, o.orderNo, min(regDate) as startDate, max(regDate) as completeDate, sum(r.Qty) as accQty
       from (
-        select distinct wrkOrder,flow from pyregsum where StepNo = '450' and RegDate = curdate()
+        select distinct wrkOrder,flow from pyregsum where StepNo = '450' and RegDate = curdate() and flow = ?
       ) t
       inner join pyregsum r on t.wrkOrder = r.wrkOrder 
       inner join pywrkord o on o.wrkOrder = t.wrkOrder
-      where r.StepNo = 450 and r.flow = ?
-      group by r.flow, o.style, o.orderNo
+      where r.StepNo = 450 
+      group by t.flow, o.style, o.orderNo
     `,
     [flow],
   );
