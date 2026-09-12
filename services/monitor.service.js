@@ -1,51 +1,54 @@
-const repository = require("../repositories/monitor.repository");
+const monitorRepository = require("../repositories/monitor.repository");
+const dashboardRepository = require("../repositories/dashboard.repository");
+const semiFGoodsRepository = require("../repositories/semiFGoods.repository");
+const flowPlanRepository = require("../repositories/flowPlan.repository");
 
 async function getMonitor() {
-  return repository.getMonitorData();
+  return monitorRepository.getMonitorData();
 }
 
 async function getMonitorByUser(user) {
-  return repository.getMonitorDataByUser(user);
+  return monitorRepository.getMonitorDataByUser(user);
 }
 
 async function getFlowStyleSMV(flow) {
-  return repository.getFlowStyleSMV(flow);
+  return dashboardRepository.getFlowStyleSMV(flow);
 }
 
 async function getFlowStyleInfo(flow) {
-  return repository.getFlowStyleInfo(flow);
+  return dashboardRepository.getFlowStyleInfo(flow);
 }
 
 async function getFlowStyleAccQtyStartCompelete(flow) {
-  return repository.getFlowStyleAccQtyStartCompelete(flow);
+  return dashboardRepository.getFlowStyleAccQtyStartCompelete(flow);
 }
 
 async function getFlowStyleOutput(flow) {
-  return repository.getFlowStyleOutput(flow);
+  return dashboardRepository.getFlowStyleOutput(flow);
 }
 
 async function getDefects(flow) {
-  return repository.getDefects(flow);
+  return dashboardRepository.getDefects(flow);
 }
 
 async function getWorkerQty(flow) {
-  return repository.getWorkerQty(flow);
+  return dashboardRepository.getWorkerQty(flow);
 }
 
 async function getFlowSemiFGoods(flow) {
-  return repository.getFlowSemiFGoods(flow);
+  return semiFGoodsRepository.getFlowSemiFGoods(flow);
 }
 
 async function getFlowPlan() {
-  return repository.getFlowPlan();
+  return dashboardRepository.getFlowPlan();
 }
 
 async function getFlowPlanByUser(user) {
-  return repository.getFlowPlanByUser(user);
+  return flowPlanRepository.getFlowPlanByUser(user);
 }
 
 async function updateFlowPlan(data) {
-  return repository.updateFlowPlan(data);
+  return flowPlanRepository.updateFlowPlan(data);
 }
 
 module.exports = {

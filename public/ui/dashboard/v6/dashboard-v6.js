@@ -67,10 +67,9 @@ function calculateTargetNow(dailyTarget, workingHours) {
 
   const startTime = new Date();
   startTime.setHours(7, 30, 0, 0);
-  const elapsedMinutes = Math.max(
-    0,
-    (Date.now() - startTime.getTime()) / (1000 * 60),
-  );
+
+  const elapsedMinutes = Math.max(0, (Date.now() - startTime.getTime()) / (1000 * 60));
+
   return Math.floor(elapsedMinutes * (dailyTarget / workingHours / 60));
 }
 
@@ -179,9 +178,7 @@ async function loadFlowDashboard() {
       const smvObject = smvMap[key];
       const acc = accMap[key];
       const output = outputMap[key];
-      const defects = (defectMap[key] || []).sort(
-        (a, b) => Number(b.reWorkQty) - Number(a.reWorkQty),
-      );
+      const defects = (defectMap[key] || []).sort((a, b) => Number(b.reWorkQty) - Number(a.reWorkQty));
       const smv = Number(smvObject?.smv || 0).toFixed(2);
       const work_hr = workers?.work_hr || 0;
       const worker_tg = workers?.worker_tg || 0;
@@ -189,9 +186,7 @@ async function loadFlowDashboard() {
       const num_eff = workers?.num_eff;
 
       // Hiệu quả chuyền
-      const flowEfficiency = workers.num_eff
-        ? Math.ceil(workers.num_eff * 100) + "%"
-        : "0%";
+      const flowEfficiency = workers.num_eff ? Math.ceil(workers.num_eff * 100) + "%" : "0%";
 
       // ==THỰC TẾ==
       // Thực tế row3
@@ -201,18 +196,13 @@ async function loadFlowDashboard() {
 
       // ==CHẤT LƯỢNG==
       // Số lượng lỗi
-      const defectQty = defects.reduce(
-        (sum, x) => sum + Number(x.reWorkQty),
-        0,
-      );
+      const defectQty = defects.reduce((sum, x) => sum + Number(x.reWorkQty), 0);
       // Phần trăm lỗi
-      const defectPercent =
-        outputQty > 0 ? Math.ceil((defectQty / outputQty) * 100) + "%" : "0%";
+      const defectPercent = outputQty > 0 ? Math.ceil((defectQty / outputQty) * 100) + "%" : "0%";
 
       // ==KẾ HOẠCH==
       // Kế hoạch row1 = (60 / smv) x số giờ làm việc x số công nhân kế hoạch x số hiêu quả -> Kết quả làm tròn lên
-      const dailyTarget =
-        smv > 0 ? Math.ceil((60 / smv) * work_hr * worker_tg * num_eff) : 0;
+      const dailyTarget = smv > 0 ? Math.ceil((60 / smv) * work_hr * worker_tg * num_eff) : 0;
       // Kế hoạch row3
       const styleQty = Number(info?.styleQty || 0);
 
@@ -229,10 +219,9 @@ async function loadFlowDashboard() {
 
       const endTime = new Date(startTime);
       const workHours = Number(workers.work_hr || 0);
+
       // + workHours + 1 giờ nghỉ trưa
-      endTime.setHours(
-        endTime.getHours() + workHours + 1
-      )
+      endTime.setHours(endTime.getHours() + workHours + 1)
 
       // Nếu Thực tế row2 >= Kế hoạch row1 (dailyTargetStyle) thì Kế hoạch row2 = 0 & Phần trăm row2 = 100%
       // Ngược lại Thực tế row2 < Kế hoạch row1
@@ -264,30 +253,21 @@ async function loadFlowDashboard() {
 
       // ==PHẦN TRĂM==
       // Phần trăm row1 = Thực tế row1 / Kế hoạch row1 x 100 -> Kết quả làm tròn lên
-      const percent1 =
-        dailyTargetStyle > 0
-          ? Math.ceil((outputQty / dailyTargetStyle) * 100) + "%"
-          : "0%";
+      const percent1 = dailyTargetStyle > 0 ? Math.ceil((outputQty / dailyTargetStyle) * 100) + "%" : "0%";
       // Phần trăm row3 = Thực tế row3 / Kế hoạch row3 x 100 -> Kết quả làm tròn lên
-      const percent3 =
-        styleQty > 0 ? Math.ceil((accQty / styleQty) * 100) + "%" : "0%";
+      const percent3 = styleQty > 0 ? Math.ceil((accQty / styleQty) * 100) + "%" : "0%";
 
       // ==THỜI GIAN==
       // Hr row1 = (Còn lại row1 x smv ) / Số công nhân kế hoạch / 60
       const hr1 = worker_tg > 0 ? (((banlance1 * -1) * smv) / worker_tg / 60) : 0;
-      // Day row1 đặt = 1
-      const day1 = 1;
 
       // Hr row2 = (Còn lại row2 x smv ) / Số công nhân kế hoạch / 60
       const hr2 = worker_tg > 0 ? (((banlance2 * -1) * smv) / worker_tg / 60) : 0;
-      // Day row1 đặt = 1
-      const day2 = 1;
 
       // Hr row3 = (Còn lại row3 / Kế hoạch row1) x 24 -> Kết quả làm tròn lên
       const hr3 = dailyTargetStyle > 0 ? Math.ceil((banlance3 * -1 / dailyTargetStyle) * 24) : 0;
       // Day row3 = Còn lại row3 / Kế hoạch row1 -> Kết quả làm tròn lên
-      const day3 =
-        dailyTargetStyle > 0 ? Math.ceil((banlance3 * -1) / dailyTargetStyle) : 0;
+      const day3 = dailyTargetStyle > 0 ? Math.ceil((banlance3 * -1) / dailyTargetStyle) : 0;
 
       const startDate = acc?.startDate ? acc.startDate.split("T")[0] : "-";
       const today = new Date(
@@ -299,7 +279,6 @@ async function loadFlowDashboard() {
       const completeDate = today.toISOString().split("T")[0];
 
       renderFlowDashboard({
-        // flow: ['SEWING-GD-F1-06A'].includes(info.flow) ? 'GY-1' : info.flow, // Fake flow date
         flow: info.flow,
         style: info.style,
         buyer: normalizeBuyer(info.buyer),

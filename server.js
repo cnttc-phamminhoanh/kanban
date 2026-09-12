@@ -13,9 +13,11 @@ const START_SERVER = () => {
   const app = express();
   app.use(cors());
   app.use(express.json());
+
   app.use("/api/auth", authRoute);
   app.use("/api/monitor", monitorRoute)
   app.use("/api/monitor/private", monitorPrivateRoute);
+
   app.use(express.static(path.join(__dirname, "public")));
 
   // NOT LOGIN
@@ -97,9 +99,7 @@ const START_SERVER = () => {
     });
   });
 
-  app.listen(PORT, () => {
-    console.log(`Server running at ${PORT}`);
-  });
+  app.listen(PORT, () => { console.log(`Server running at ${PORT}`) });
 }
 
 (async () => {
