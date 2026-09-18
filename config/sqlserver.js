@@ -10,7 +10,7 @@ const t8Config = {
     trustServerCertificate: true,
   },
   pool: {
-    max: 10,
+    max: 25,
     min: 0,
     idleTimeoutMillis: 30000,
   },
@@ -26,7 +26,7 @@ const biConfig = {
     trustServerCertificate: true,
   },
   pool: {
-    max: 10,
+    max: 25,
     min: 0,
     idleTimeoutMillis: 30000,
   },
@@ -59,7 +59,7 @@ async function CONNECT_BI_DB() {
 
 async function getT8Pool() {
   if (!t8Pool?.connected) {
-    throw new Error('Must connect to T8 Database first!')
+    throw new Error('Something went wrong! (T8-503)')
   }
 
   return t8Pool;
@@ -67,7 +67,7 @@ async function getT8Pool() {
 
 async function getBIPool() {
   if (!biPool?.connected) {
-    throw new Error('Must connect to BI Database first!')
+    throw new Error('Something went wrong! (BI-503)')
   }
 
   return biPool;
