@@ -778,3 +778,9 @@ body:not(.show-efficiency) .flow-card .card-top > .dot {
   background: #f1f4f8;
   border-color: #d6deea;
 }
+
+.search input:focus,
+.search input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
