@@ -728,3 +728,26 @@ body:not(.show-efficiency) .flow-card .card-top > .dot {
     margin-left: 0;
   }
 }
+
+.po-badge {
+  max-width: 110px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #edf3fc;
+  color: #164baf;
+  font-size: 12px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.flow-card.last-viewed {
+  border-color: #1677ff;
+  background: #edf5ff;
+  box-shadow: inset 4px 0 0 #1677ff;
+}
+
+.flow-card.last-viewed .card-name h3::after {
+  content: " •";
+  color: #1677ff;
+}
