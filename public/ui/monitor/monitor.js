@@ -258,81 +258,100 @@ function restoreDashboardPosition() {
     });
   });
 }
-
-async function loadFlows() {
-  retry.hidden = true;
-  statusEl.textContent = "Đang tải danh sách chuyền...";
-  container.replaceChildren();
-
-  try {
-    const response = await fetch("/api/monitor/private/flows", {
-      headers: { Accept: "application/json" }
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-
-    const result = await response.json();
-
-    if (!Array.isArray(result.data)) {
-      throw new Error("API data phải là một mảng");
-    }
-
-    flows = result.data
-      .filter(row =>
-        row &&
-        typeof row.flow === "string" &&
-        row.flow.trim()
-      )
-      .map(normalize);
-
-    syncEfficiencyButton();
-    renderFilters();
-    renderFlows();
-    restoreDashboardPosition();
-  } catch (error) {
-    console.error("Không tải được danh sách chuyền:", error);
-    statusEl.textContent =
-      "Không tải được danh sách chuyền. Vui lòng thử lại.";
-    retry.hidden = false;
-  }
+function el(tag, className, text) { const node = document.createElement(tag); if (className) node.className = className; if (text !== undefined) node.textContent = text; return node; }
+function format(n) { return n === null ? "—" : n.toLocaleString("en-US", { maximumFractionDigits: 0 }); }
+function percent(n) { return n === null ? "—" : `${Number(n.toFixed(1))}%`; }
+function summary(rows) {
+  const node = el("div", "summary"); node.append(el("span", "", `Tổng chuyền: ${rows.length}`));
+  for (const c of ["red", "orange", "yellow", "green", "unknown"]) { const count = rows.filter(x => color(x.percent) === c).length; if (c === "unknown" && !count) continue; const s = el("span"); s.append(el("i", `dot ${c}`), document.createTextNode(String(count))); s.title = { red: "Dưới 75%", orange: "75–89%", yellow: "90–99%", green: "Trên 100%", unknown: "Chưa có dữ liệu" }[c]; node.append(s); } return node;
 }
+function makeToggle(key, body) {
+  const button = el("button", "toggle"); button.type = "button";
+  function sync() { const isClosed = collapsed.has(key); body.hidden = isClosed; button.textContent = isClosed ? "Hiện chi tiết ﹀" : "⌃ Thu gọn"; button.setAttribute("aria-expanded", String(!isClosed)); }
+  button.onclick = () => { collapsed.has(key) ? collapsed.delete(key) : collapsed.add(key); sync(); }; sync(); return button;
+}
+function card(row) {
+  const state = color(row.percent);
+  const link = el(
+    "a",
+    `flow-card${sortByEfficiency ? "" : " compact"}`
+  );
 
-input.addEventListener("input", renderFlows);
-retry.addEventListener("click", loadFlows);
+  async function loadFlows() {
+    retry.hidden = true;
+    statusEl.textContent = "Đang tải danh sách chuyền...";
+    container.replaceChildren();
 
-function renderFilters() {
-  const filtersEl = document.getElementById("areaFilters");
-  filtersEl.replaceChildren();
+    try {
+      const response = await fetch("/api/monitor/private/flows", {
+        headers: { Accept: "application/json" }
+      });
 
-  const areas = [
-    "all",
-    ...new Set([
-      "GI", "GA", "GD", "TOY",
-      ...flows.map(row => row.area)
-    ])
-  ];
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
 
-  for (const area of areas) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = area === "all" ? "Tất cả" : area;
-    button.classList.toggle("active", selectedArea === area);
-    button.setAttribute(
-      "aria-pressed",
-      String(selectedArea === area)
-    );
+      const top = el("div", "card-top");
+      const name = el("div", "card-name");
 
-    button.addEventListener("click", () => {
-      selectedArea = area;
+      if (!Array.isArray(result.data)) {
+        throw new Error("API data phải là một mảng");
+      }
+
+      flows = result.data
+        .filter(row =>
+          row &&
+          typeof row.flow === "string" &&
+          row.flow.trim()
+        )
+        .map(normalize);
+
+      syncEfficiencyButton();
       renderFilters();
       renderFlows();
-    });
-
-    filtersEl.appendChild(button);
+      restoreDashboardPosition();
+    } catch (error) {
+      console.error("Không tải được danh sách chuyền:", error);
+      statusEl.textContent =
+        "Không tải được danh sách chuyền. Vui lòng thử lại.";
+      retry.hidden = false;
+    }
   }
-}
 
-renderFilters();
-loadFlows();
+  input.addEventListener("input", renderFlows);
+  retry.addEventListener("click", loadFlows);
+
+  function renderFilters() {
+    const filtersEl = document.getElementById("areaFilters");
+    filtersEl.replaceChildren();
+
+    const areas = [
+      "all",
+      ...new Set([
+        "GI", "GA", "GD", "TOY",
+        ...flows.map(row => row.area)
+      ])
+    ];
+
+    for (const area of areas) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = area === "all" ? "Tất cả" : area;
+      button.classList.toggle("active", selectedArea === area);
+      button.setAttribute(
+        "aria-pressed",
+        String(selectedArea === area)
+      );
+
+      button.addEventListener("click", () => {
+        selectedArea = area;
+        renderFilters();
+        renderFlows();
+      });
+
+      filtersEl.appendChild(button);
+    }
+  }
+
+  renderFilters();
+  loadFlows();
