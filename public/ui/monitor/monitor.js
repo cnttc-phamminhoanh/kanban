@@ -5,7 +5,7 @@ const input = document.getElementById("searchInput");
 const retry = document.getElementById("retry");
 let flows = [], selectedArea = "all";
 const collapsed = new Set();
-const themes = {GI:["#009cff","#e1f2ff"],GA:["#00ac91","#dff5f2"],GD:["#9b36ff","#f0e6ff"],GL:["#d79900","#fff2d4"],TOY:["#e57190","#ffedf3"]};
+const themes = { GI: ["#009cff", "#e1f2ff"], GA: ["#00ac91", "#dff5f2"], GD: ["#9b36ff", "#f0e6ff"], GL: ["#d79900", "#fff2d4"], TOY: ["#e57190", "#ffedf3"] };
 const number = value => value === null || value === undefined || String(value).trim() === "" ? null : Number.isFinite(Number(value)) && Number(value) >= 0 ? Number(value) : null;
 // API contract: total / target are quantities; efficiency is a ratio (0.85 = 85%).
 // Map the actual API field names here. Do not use num_eff (commitment) as actual efficiency.
@@ -43,19 +43,19 @@ function color(p) {
   if (p < 100) return "yellow";
   return "green";
 }
-function el(tag, className, text) {const node=document.createElement(tag); if(className)node.className=className; if(text!==undefined)node.textContent=text;return node;}
+function el(tag, className, text) { const node = document.createElement(tag); if (className) node.className = className; if (text !== undefined) node.textContent = text; return node; }
 function format(n) {
   return n === null ? "—" : String(Math.round(n));
 }
-function percent(n) {return n === null ? "—" : `${Number(n.toFixed(1))}%`;}
+function percent(n) { return n === null ? "—" : `${Number(n.toFixed(1))}%`; }
 function summary(rows) {
-  const node=el("div","summary");node.append(el("span","",`Tổng chuyền: ${rows.length}`));
-  for(const c of ["red","orange","yellow","green","unknown"]){const count=rows.filter(x=>color(x.percent)===c).length;if(c==="unknown"&&!count)continue;const s=el("span");s.append(el("i",`dot ${c}`),document.createTextNode(String(count)));s.title={red:"Dưới 75%",orange:"75–89%",yellow:"90–99%",green:"Trên 100%",unknown:"Chưa có dữ liệu"}[c];node.append(s);}return node;
+  const node = el("div", "summary"); node.append(el("span", "", `Tổng chuyền: ${rows.length}`));
+  for (const c of ["red", "orange", "yellow", "green", "unknown"]) { const count = rows.filter(x => color(x.percent) === c).length; if (c === "unknown" && !count) continue; const s = el("span"); s.append(el("i", `dot ${c}`), document.createTextNode(String(count))); s.title = { red: "Dưới 75%", orange: "75–89%", yellow: "90–99%", green: "Trên 100%", unknown: "Chưa có dữ liệu" }[c]; node.append(s); } return node;
 }
 function makeToggle(key, body) {
-  const button=el("button","toggle");button.type="button";
-  function sync(){const isClosed=collapsed.has(key);body.hidden=isClosed;button.textContent=isClosed?"Hiện chi tiết ﹀":"⌃ Thu gọn";button.setAttribute("aria-expanded",String(!isClosed));}
-  button.onclick=()=>{collapsed.has(key)?collapsed.delete(key):collapsed.add(key);sync();};sync();return button;
+  const button = el("button", "toggle"); button.type = "button";
+  function sync() { const isClosed = collapsed.has(key); body.hidden = isClosed; button.textContent = isClosed ? "Hiện chi tiết ﹀" : "⌃ Thu gọn"; button.setAttribute("aria-expanded", String(!isClosed)); }
+  button.onclick = () => { collapsed.has(key) ? collapsed.delete(key) : collapsed.add(key); sync(); }; sync(); return button;
 }
 function card(row) {
   const state = color(row.percent);
@@ -115,7 +115,7 @@ function card(row) {
 
   return link;
 }
-function group(rows,key){const map=new Map();for(const row of rows){if(!map.has(row[key]))map.set(row[key],[]);map.get(row[key]).push(row);}return [...map].sort(([a],[b])=>a.localeCompare(b,undefined,{numeric:true}));}
+function group(rows, key) { const map = new Map(); for (const row of rows) { if (!map.has(row[key])) map.set(row[key], []); map.get(row[key]).push(row); } return [...map].sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true })); }
 function createAreaIcon() {
   const ns = "http://www.w3.org/2000/svg";
   const svg = document.createElementNS(ns, "svg");
@@ -139,13 +139,13 @@ function createAreaIcon() {
 
   return svg;
 }
-function renderFlows(){
-  const keyword=input.value.trim().toLowerCase();
-  const rows=flows.filter(x=>(selectedArea==="all"||x.area===selectedArea)&&x.flow.toLowerCase().includes(keyword));
-  container.replaceChildren();statusEl.textContent=rows.length?"":"Không tìm thấy chuyền phù hợp.";
-  for(const [area,areaRows] of group(rows,"area")){
-    const region=el("section","region");const theme=themes[area]??["#5c7ba5","#eaf0f8"];region.style.setProperty("--accent",theme[0]);region.style.setProperty("--tint",theme[1]);
-    const head=el("div","region-head"),body=el("div","workshops");
+function renderFlows() {
+  const keyword = input.value.trim().toLowerCase();
+  const rows = flows.filter(x => (selectedArea === "all" || x.area === selectedArea) && x.flow.toLowerCase().includes(keyword));
+  container.replaceChildren(); statusEl.textContent = rows.length ? "" : "Không tìm thấy chuyền phù hợp.";
+  for (const [area, areaRows] of group(rows, "area")) {
+    const region = el("section", "region"); const theme = themes[area] ?? ["#5c7ba5", "#eaf0f8"]; region.style.setProperty("--accent", theme[0]); region.style.setProperty("--tint", theme[1]);
+    const head = el("div", "region-head"), body = el("div", "workshops");
     const title = el("h2", "region-title");
     title.append(
       createAreaIcon(),
@@ -157,8 +157,8 @@ function renderFlows(){
       el("span", "count", String(areaRows.length)),
       makeToggle(JSON.stringify([area]), body)
     );
-    for(const [workshop,workRows] of group(areaRows,"workshop")){
-      const section=el("section","workshop"),wh=el("div","workshop-head"),cards=el("div","cards");
+    for (const [workshop, workRows] of group(areaRows, "workshop")) {
+      const section = el("section", "workshop"), wh = el("div", "workshop-head"), cards = el("div", "cards");
       wh.append(
         makeToggle(JSON.stringify([area, workshop]), cards)
       );
@@ -176,9 +176,9 @@ function renderFlows(){
 
         return a.percent - b.percent || byName;
       });
-      workRows.forEach(row=>cards.append(card(row)));section.append(wh,cards);body.append(section);
+      workRows.forEach(row => cards.append(card(row))); section.append(wh, cards); body.append(section);
     }
-    region.append(head,body);container.append(region);
+    region.append(head, body); container.append(region);
   }
 }
 
