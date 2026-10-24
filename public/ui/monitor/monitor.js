@@ -4,11 +4,20 @@ const statusEl = document.getElementById("status");
 const input = document.getElementById("searchInput");
 const retry = document.getElementById("retry");
 let flows = [], selectedArea = "all";
+let loadingFlows = false;
+let hasLoadedFlows = false;
+let renderedData = "";
+let renderedAreas = "";
 const collapsed = new Set();
 const themes = { GI: ["#009cff", "#e1f2ff"], GA: ["#00ac91", "#dff5f2"], GD: ["#9b36ff", "#f0e6ff"], GL: ["#d79900", "#fff2d4"], TOY: ["#e57190", "#ffedf3"] };
 const number = value => value === null || value === undefined || String(value).trim() === "" ? null : Number.isFinite(Number(value)) && Number(value) >= 0 ? Number(value) : null;
-// API contract: total / target are quantities; efficiency is a ratio (0.85 = 85%).
-// Map the actual API field names here. Do not use num_eff (commitment) as actual efficiency.
+// percent2 từ API đã là phần trăm (ví dụ "87.5%"), không phải tỷ lệ hiệu suất chuyền.
+function parsePercent(value) {
+  if (value === null || value === undefined) return null;
+  const text = String(value).trim();
+  if (!/^\d+(?:\.\d+)?%?$/.test(text)) return null;
+  return number(text.replace(/%$/, ""));
+}
 function normalize(row) {
   const flow = String(row.flow ?? "").trim();
   const parts = flow.split("-");
@@ -108,6 +117,7 @@ function card(row) {
 
     link.append(metrics);
   }
+  link.append(metrics);
 
   const arrow = el("span", "arrow", "›");
   arrow.setAttribute("aria-hidden", "true");
@@ -167,9 +177,9 @@ function renderFlows() {
           numeric: true
         });
 
-        if (!sortByEfficiency) return byName;
+        if (!sortByProgress) return byName;
 
-        // Chuyền chưa có hiệu suất nằm cuối.
+        // Chuyền chưa có phần trăm tiến độ nằm cuối.
         if (a.percent === null && b.percent === null) return byName;
         if (a.percent === null) return 1;
         if (b.percent === null) return -1;
