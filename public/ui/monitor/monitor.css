@@ -98,7 +98,7 @@ h1 {
   flex-shrink: 0;
 }
 
-.efficiency-icon {
+.progress-icon {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
@@ -488,7 +488,7 @@ select {
   margin: 0 auto 20px;
 }
 
-.efficiency-sort-btn {
+.progress-sort-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -502,11 +502,11 @@ select {
   cursor: pointer;
 }
 
-.efficiency-sort-btn:hover {
+.progress-sort-btn:hover {
   background: #eff6ff;
 }
 
-.efficiency-sort-btn.active {
+.progress-sort-btn.active {
   background: #2563eb;
   border-color: #2563eb;
   color: #fff;
@@ -621,7 +621,7 @@ select {
   margin-left: auto;
 }
 
-.efficiency-sort-btn,
+.progress-sort-btn,
 .management-btn {
   display: inline-flex;
   align-items: center;
@@ -639,12 +639,12 @@ select {
   cursor: pointer;
 }
 
-.efficiency-sort-btn:hover,
+.progress-sort-btn:hover,
 .management-btn:hover {
   background: #e2efff;
 }
 
-.efficiency-sort-btn.active {
+.progress-sort-btn.active {
   background: #168cff;
   border-color: #168cff;
   color: white;
@@ -710,10 +710,10 @@ select {
   line-height: 1;
 }
 
-/* Ẩn thông tin màu khi chưa bật sắp xếp hiệu suất */
-body:not(.show-efficiency) .legend,
-body:not(.show-efficiency) .summary span:has(.dot),
-body:not(.show-efficiency) .flow-card .card-top > .dot {
+/* Ẩn thông tin màu khi chưa bật sắp xếp tiến độ */
+body:not(.show-progress) .legend,
+body:not(.show-progress) .summary span:has(.dot),
+body:not(.show-progress) .flow-card .card-top > .dot {
   display: none;
 }
 
