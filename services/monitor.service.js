@@ -2,9 +2,30 @@ const monitorRepository = require("../repositories/monitor.repository");
 const dashboardRepository = require("../repositories/dashboard.repository");
 const semiFGoodsRepository = require("../repositories/semiFGoods.repository");
 const flowPlanRepository = require("../repositories/flowPlan.repository");
+const recipe = require("./recipe.service")
+
 
 async function getMonitor() {
-  return monitorRepository.getMonitorData();
+  const result = await monitorRepository.getMonitorData();
+
+  return Promise.all(
+    result.map(async data => {
+      const {
+        percent2,
+        dailyTarget,
+        poCount,
+        total
+      } = await recipe.recipeTarget(data.flow);
+
+      return {
+        ...data,
+        percent2,
+        dailyTarget,
+        poCount,
+        total
+      };
+    })
+  );
 }
 
 async function getMonitorByUser(user) {

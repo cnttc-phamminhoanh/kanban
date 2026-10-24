@@ -13,9 +13,28 @@ function normalize(row) {
   const flow = String(row.flow ?? "").trim();
   const parts = flow.split("-");
   const parsed = parts[0]?.toUpperCase() === "SEWING";
-  const total = number(row.total), target = number(row.target);
-  const efficiency = number(row.efficiency);
-  return {flow, poCount: number(row.poCount), area:String(row.area ?? (parsed ? parts[1] : null) ?? "KHÁC"), workshop:String(row.workshop ?? (parsed ? parts[2] : null) ?? "Chưa phân xưởng"),total,target,percent:efficiency !== null ? efficiency * 100 : total !== null && target > 0 ? total / target * 100 : null};
+
+  const progressText = String(row.percent2 ?? "").trim();
+
+  const progress = /^\d+(?:\.\d+)?%?$/.test(progressText)
+    ? number(progressText.replace(/%$/, ""))
+    : null;
+
+  return {
+    flow,
+    area: String(
+      row.area ?? (parsed ? parts[1] : null) ?? "KHÁC"
+    ),
+    workshop: String(
+      row.workshop ??
+      (parsed ? parts[2] : null) ??
+      "Chưa phân xưởng"
+    ),
+    poCount: number(row.poCount),
+    total: number(row.total),
+    target: number(row.dailyTarget),
+    percent: progress
+  };
 }
 function color(p) {
   if (p === null || !Number.isFinite(p)) return "unknown";
@@ -25,7 +44,9 @@ function color(p) {
   return "green";
 }
 function el(tag, className, text) {const node=document.createElement(tag); if(className)node.className=className; if(text!==undefined)node.textContent=text;return node;}
-function format(n) {return n === null ? "—" : n.toLocaleString("en-US",{maximumFractionDigits:0});}
+function format(n) {
+  return n === null ? "—" : String(Math.round(n));
+}
 function percent(n) {return n === null ? "—" : `${Number(n.toFixed(1))}%`;}
 function summary(rows) {
   const node=el("div","summary");node.append(el("span","",`Tổng chuyền: ${rows.length}`));
@@ -40,7 +61,7 @@ function card(row) {
   const state = color(row.percent);
   const link = el(
     "a",
-    `flow-card${sortByEfficiency ? "" : " compact"}`
+    `flow-card${sortByEfficiency ? ` pastel-${state}` : " compact"}`
   );
 
   link.dataset.flow = row.flow;
@@ -51,12 +72,9 @@ function card(row) {
   const top = el("div", "card-top");
   const name = el("div", "card-name");
 
-  name.append(
-    el("h3", "", row.flow),
-    el("span", "card-subtitle", "Production Line")
-  );
+  name.append(el("h3", "", row.flow));
 
-  top.append(el("i", `dot ${state}`), name);
+  top.append(name);
 
   if (sortByEfficiency) {
     const po = el(
@@ -75,7 +93,7 @@ function card(row) {
     const metrics = el("div", "metrics");
 
     for (const [label, value, className] of [
-      ["Total", format(row.total), ""],
+      ["Total", `${format(row.total)}/${format(row.target)}`, ""],
       ["Efficiency", percent(row.percent), `eff-${state}`]
     ]) {
       const metric = el("div", "metric");
@@ -164,7 +182,7 @@ function renderFlows(){
   }
 }
 
-let sortByEfficiency = false;
+const sortByEfficiency = true;
 
 const DASHBOARD_STATE_KEY = "factoryDashboardState";
 
@@ -181,9 +199,6 @@ try {
 if (pendingDashboardRestore) {
   selectedArea = pendingDashboardRestore.area || "all";
   input.value = pendingDashboardRestore.keyword || "";
-  sortByEfficiency = Boolean(
-    pendingDashboardRestore.sortByEfficiency
-  );
 
   collapsed.clear();
 
@@ -193,23 +208,7 @@ if (pendingDashboardRestore) {
 }
 
 function syncEfficiencyButton() {
-  document.body.classList.toggle(
-    "show-efficiency",
-    sortByEfficiency
-  );
-
-  efficiencySortBtn.classList.toggle(
-    "active",
-    sortByEfficiency
-  );
-
-  efficiencySortBtn.setAttribute(
-    "aria-pressed",
-    String(sortByEfficiency)
-  );
-
-  document.getElementById("efficiencySortLabel").textContent =
-    sortByEfficiency ? "Efficiency ↑" : "Efficiency";
+  document.body.classList.add("show-efficiency");
 }
 
 // Lưu ngay trước khi người dùng mở một chuyền.
@@ -259,25 +258,6 @@ function restoreDashboardPosition() {
     });
   });
 }
-
-const efficiencySortBtn =
-  document.getElementById("efficiencySortBtn");
-
-efficiencySortBtn.addEventListener("click", () => {
-  sortByEfficiency = !sortByEfficiency;
-  document.body.classList.toggle("show-efficiency", sortByEfficiency);
-
-  efficiencySortBtn.classList.toggle("active", sortByEfficiency);
-  efficiencySortBtn.setAttribute(
-    "aria-pressed",
-    String(sortByEfficiency)
-  );
-
-  document.getElementById("efficiencySortLabel").textContent =
-    sortByEfficiency ? "Efficiency ↑" : "Efficiency";
-
-  renderFlows();
-});
 
 async function loadFlows() {
   retry.hidden = true;
@@ -329,7 +309,7 @@ function renderFilters() {
   const areas = [
     "all",
     ...new Set([
-      "GI", "GA", "GD", "GL", "TOY",
+      "GI", "GA", "GD", "TOY",
       ...flows.map(row => row.area)
     ])
   ];
@@ -355,56 +335,4 @@ function renderFilters() {
 }
 
 renderFilters();
-//loadFlows();
-
-// ===== DỮ LIỆU MẪU TOÀN DASHBOARD =====
-const demoConfig = [
-  { area: "GI", workshop: "F1", count: 8 },
-  { area: "GI", workshop: "F2", count: 6 },
-  { area: "GA", workshop: "F1", count: 9 },
-  { area: "GA", workshop: "F2", count: 6 },
-  { area: "GD", workshop: "F1", count: 12 },
-  { area: "GL", workshop: "F1", count: 8 },
-  { area: "TOY", workshop: "F1", count: 6 }
-];
-
-// Hiệu suất dạng tỷ lệ: 0.85 = 85%.
-const demoEfficiencies = [
-  0.54, 0.72, 0.83, 0.95,
-  1.08, 0.88, 1.15, 0.68,
-  0.99, 0.91, 0.78, null
-];
-
-const demoRows = demoConfig.flatMap(
-  ({ area, workshop, count }, groupIndex) =>
-    Array.from({ length: count }, (_, index) => {
-      const target = 650 + (index % 5) * 100;
-
-      const efficiency =
-        demoEfficiencies[
-          (index + groupIndex * 2) % demoEfficiencies.length
-        ];
-
-      return {
-        flow: `SEWING-${area}-${workshop}-${String(index + 1).padStart(2, "0")}A`,
-        area,
-        workshop,
-        poCount: 1 + ((index + groupIndex) % 5),
-        target,
-        total:
-          efficiency === null
-            ? null
-            : Math.round(target * efficiency),
-        efficiency
-      };
-    })
-);
-
-// Khởi tạo giao diện mặc định.
-flows = demoRows.map(normalize);
-retry.hidden = true;
-
-syncEfficiencyButton();
-renderFilters();
-renderFlows();
-restoreDashboardPosition();
+loadFlows();

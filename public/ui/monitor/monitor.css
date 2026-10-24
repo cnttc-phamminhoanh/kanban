@@ -383,7 +383,7 @@ select {
 }
 
 .card-top h3 {
-  font-size: 14px;
+  font-size: 18px;
   overflow-wrap: anywhere;
   margin: 0;
   flex: 1;
@@ -441,7 +441,8 @@ select {
 }
 
 .metric strong {
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .eff-red {
@@ -750,4 +751,30 @@ body:not(.show-efficiency) .flow-card .card-top > .dot {
 .flow-card.last-viewed .card-name h3::after {
   content: " •";
   color: #1677ff;
+}
+
+/* Nền pastel theo Efficiency */
+.flow-card.pastel-red {
+  background: #fff0f1;
+  border-color: #ffc7cd;
+}
+
+.flow-card.pastel-orange {
+  background: #fff4e8;
+  border-color: #ffd7ae;
+}
+
+.flow-card.pastel-yellow {
+  background: #fffbe6;
+  border-color: #f2e2a0;
+}
+
+.flow-card.pastel-green {
+  background: #eaf9f1;
+  border-color: #b9e8ce;
+}
+
+.flow-card.pastel-unknown {
+  background: #f1f4f8;
+  border-color: #d6deea;
 }

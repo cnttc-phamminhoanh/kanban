@@ -165,6 +165,34 @@ async function loadFlowDashboard() {
 
     const workers = data.workersData?.find((x) => x.igm_dept === flow) || {};
 
+    // [VẤN ĐỀ 1] Chia đều công nhân kế hoạch cho các PO đang chạy
+    //start
+    const keyOf = (p) => `${p.flow}|${p.style}|${p.orderNo}`;
+    const totalWorkerTg = Number(workers.worker_tg || 0);
+    const poCount = data.infoData.length;
+    const baseShare = Math.floor(totalWorkerTg / poCount); // phần chia đều
+    const remainder = totalWorkerTg % poCount;             // số người dư
+    // Xếp PO theo SL hôm nay giảm dần (bằng nhau thì theo số PO để không bị nhấp nháy)
+    const rankedPOs = [...data.infoData].sort(
+      (a, b) =>
+        Number(outputMap[keyOf(b)]?.output || 0) - Number(outputMap[keyOf(a)]?.output || 0) ||
+        String(a.orderNo).localeCompare(String(b.orderNo)),
+    );
+    const workerShareMap = {};
+    rankedPOs.forEach((p, i) => {
+      workerShareMap[keyOf(p)] = baseShare + (i < remainder ? 1 : 0); // PO SL cao nhận thêm người dư
+    });
+
+    // [VẤN ĐỀ 1] Công nhân THỰC TẾ (worker_at) chia theo cùng quy tắc, cùng thứ tự PO
+    const totalWorkerAt = Number(workers.worker_at || 0);
+    const baseShareAt = Math.floor(totalWorkerAt / poCount);
+    const remainderAt = totalWorkerAt % poCount;
+    const workerAtShareMap = {};
+    rankedPOs.forEach((p, i) => {
+      workerAtShareMap[keyOf(p)] = baseShareAt + (i < remainderAt ? 1 : 0);
+    });
+    // end
+
     let currentIndex = 0;
 
     function renderCurrent() {
@@ -182,7 +210,9 @@ async function loadFlowDashboard() {
       const smv = Number(smvObject?.smv || 0).toFixed(2);
       const work_hr = workers?.work_hr || 0;
       const worker_tg = workers?.worker_tg || 0;
+      const worker_share = workerShareMap[key] ?? worker_tg;
       const worker_at = workers?.worker_at || 0;
+      const worker_at_share = workerAtShareMap[key] ?? worker_at;
       const num_eff = workers?.num_eff;
 
       // Hiệu quả chuyền
@@ -202,7 +232,8 @@ async function loadFlowDashboard() {
 
       // ==KẾ HOẠCH==
       // Kế hoạch row1 = (60 / smv) x số giờ làm việc x số công nhân kế hoạch x số hiêu quả -> Kết quả làm tròn lên
-      const dailyTarget = smv > 0 ? Math.ceil((60 / smv) * work_hr * worker_tg * num_eff) : 0;
+      // const dailyTarget = smv > 0 ? Math.ceil((60 / smv) * work_hr * worker_tg * num_eff) : 0;
+      const dailyTarget = smv > 0 ? Math.ceil((60 / smv) * work_hr * worker_share * num_eff) : 0;
       // Kế hoạch row3
       const styleQty = Number(info?.styleQty || 0);
 
@@ -259,10 +290,12 @@ async function loadFlowDashboard() {
 
       // ==THỜI GIAN==
       // Hr row1 = (Còn lại row1 x smv ) / Số công nhân kế hoạch / 60
-      const hr1 = worker_tg > 0 ? (((banlance1 * -1) * smv) / worker_tg / 60) : 0;
+      // const hr1 = worker_tg > 0 ? (((banlance1 * -1) * smv) / worker_tg / 60) : 0;
+      const hr1 = worker_share > 0 ? (((banlance1 * -1) * smv) / worker_share / 60) : 0;
 
       // Hr row2 = (Còn lại row2 x smv ) / Số công nhân kế hoạch / 60
-      const hr2 = worker_tg > 0 ? (((banlance2 * -1) * smv) / worker_tg / 60) : 0;
+      // const hr2 = worker_tg > 0 ? (((banlance2 * -1) * smv) / worker_tg / 60) : 0;
+      const hr2 = worker_share > 0 ? (((banlance2 * -1) * smv) / worker_share / 60) : 0;
 
       // Hr row3 = (Còn lại row3 / Kế hoạch row1) x 24 -> Kết quả làm tròn lên
       const hr3 = dailyTargetStyle > 0 ? Math.ceil((banlance3 * -1 / dailyTargetStyle) * 24) : 0;
@@ -284,8 +317,10 @@ async function loadFlowDashboard() {
         buyer: normalizeBuyer(info.buyer),
         orderNo: info.orderNo,
         smv,
-        worker_at,
-        worker_tg,
+        // worker_at,
+        // worker_tg,
+        worker_at: worker_at_share, // TT (ACTUAL) đã chia cho PO
+        worker_tg: worker_share,    // KH (PLAN) đã chia cho PO
         styleQty,
         startDate,
         completeDate,
