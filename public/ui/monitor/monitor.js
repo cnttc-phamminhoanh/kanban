@@ -4,7 +4,6 @@ const statusEl = document.getElementById("status");
 const input = document.getElementById("searchInput");
 const retry = document.getElementById("retry");
 let flows = [], selectedArea = "all";
-const collapsed = new Set();
 const themes = {GI:["#009cff","#e1f2ff"],GA:["#00ac91","#dff5f2"],GD:["#9b36ff","#f0e6ff"],GL:["#d79900","#fff2d4"],TOY:["#e57190","#ffedf3"]};
 const number = value => value === null || value === undefined || String(value).trim() === "" ? null : Number.isFinite(Number(value)) && Number(value) >= 0 ? Number(value) : null;
 // API contract: total / target are quantities; efficiency is a ratio (0.85 = 85%).
@@ -52,11 +51,7 @@ function summary(rows) {
   const node=el("div","summary");node.append(el("span","",`Tổng chuyền: ${rows.length}`));
   for(const c of ["red","orange","yellow","green","unknown"]){const count=rows.filter(x=>color(x.percent)===c).length;if(c==="unknown"&&!count)continue;const s=el("span");s.append(el("i",`dot ${c}`),document.createTextNode(String(count)));s.title={red:"Dưới 75%",orange:"75–89%",yellow:"90–99%",green:"Trên 100%",unknown:"Chưa có dữ liệu"}[c];node.append(s);}return node;
 }
-function makeToggle(key, body) {
-  const button=el("button","toggle");button.type="button";
-  function sync(){const isClosed=collapsed.has(key);body.hidden=isClosed;button.textContent=isClosed?"Hiện chi tiết ﹀":"⌃ Thu gọn";button.setAttribute("aria-expanded",String(!isClosed));}
-  button.onclick=()=>{collapsed.has(key)?collapsed.delete(key):collapsed.add(key);sync();};sync();return button;
-}
+
 function card(row) {
   const state = color(row.percent);
   const link = el(
@@ -154,14 +149,11 @@ function renderFlows(){
 
     head.append(
       title,
-      el("span", "count", String(areaRows.length)),
-      makeToggle(JSON.stringify([area]), body)
+      el("span", "count", String(areaRows.length))
     );
     for(const [workshop,workRows] of group(areaRows,"workshop")){
-      const section=el("section","workshop"),wh=el("div","workshop-head"),cards=el("div","cards");
-      wh.append(
-        makeToggle(JSON.stringify([area, workshop]), cards)
-      );
+      const section = el("section", "workshop");
+      const cards = el("div", "cards");
       workRows.sort((a, b) => {
         const byName = a.flow.localeCompare(b.flow, "vi", {
           numeric: true
@@ -176,7 +168,9 @@ function renderFlows(){
 
         return a.percent - b.percent || byName;
       });
-      workRows.forEach(row=>cards.append(card(row)));section.append(wh,cards);body.append(section);
+      workRows.forEach(row => cards.append(card(row)));
+      section.append(cards);
+      body.append(section);
     }
     region.append(head,body);container.append(region);
   }
@@ -199,12 +193,6 @@ try {
 if (pendingDashboardRestore) {
   selectedArea = pendingDashboardRestore.area || "all";
   input.value = pendingDashboardRestore.keyword || "";
-
-  collapsed.clear();
-
-  for (const key of pendingDashboardRestore.collapsed || []) {
-    collapsed.add(key);
-  }
 }
 
 function syncEfficiencyButton() {
@@ -224,7 +212,6 @@ container.addEventListener("click", event => {
         area: selectedArea,
         keyword: input.value,
         sortByEfficiency,
-        collapsed: [...collapsed],
         scrollY: window.scrollY,
         flow: card.dataset.flow
       })

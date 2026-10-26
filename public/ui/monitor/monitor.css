@@ -307,17 +307,6 @@ select {
   height: 11px;
 }
 
-.toggle {
-  margin-left: auto;
-  border: 0;
-  background: transparent;
-  color: #1455cb;
-  font-size: 12px;
-  cursor: pointer;
-  padding: 7px;
-  white-space: nowrap;
-}
-
 .workshops {
   padding: 12px;
   display: grid;
@@ -352,8 +341,8 @@ select {
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
-  gap: 10px;
-  padding: 0 10px 12px;
+  padding: 14px 12px 18px;
+  gap: 14px;
 }
 
 .flow-card {
@@ -366,13 +355,14 @@ select {
   border-radius: 9px;
   padding: 15px 26px 15px 15px;
   transition:
-    transform 0.15s,
-    box-shadow 0.15s;
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .flow-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px #27599715;
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.14);
+  z-index: 1;
   border-color: #a9ceff;
 }
 
@@ -755,23 +745,23 @@ body:not(.show-efficiency) .flow-card .card-top > .dot {
 
 /* Nền pastel theo Efficiency */
 .flow-card.pastel-red {
-  background: #fff0f1;
-  border-color: #ffc7cd;
+  background: #ffe0e3;
+  border-color: #ff8f9c;
 }
 
 .flow-card.pastel-orange {
-  background: #fff4e8;
-  border-color: #ffd7ae;
+  background: #ffe8d1;
+  border-color: #ffb36b;
 }
 
 .flow-card.pastel-yellow {
-  background: #fffbe6;
-  border-color: #f2e2a0;
+  background: #fff3c4;
+  border-color: #edcc55;
 }
 
 .flow-card.pastel-green {
-  background: #eaf9f1;
-  border-color: #b9e8ce;
+  background: #d5f2e3;
+  border-color: #79d4a5;
 }
 
 .flow-card.pastel-unknown {
