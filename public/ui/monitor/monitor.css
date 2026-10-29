@@ -654,6 +654,9 @@ select {
 .card-name {
   flex: 1;
   min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .card-subtitle {
@@ -773,4 +776,71 @@ body:not(.show-efficiency) .flow-card .card-top > .dot {
 .search input:focus-visible {
   outline: none;
   box-shadow: none;
+}
+
+.card-name h3 {
+  min-width: 0;
+}
+
+.warning-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.warning-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Viền đỏ luôn hiện; quầng sáng và icon nhấp nháy */
+.flow-card.efficiency-alert {
+  box-shadow: none;
+  animation: none;
+  border-color: #dc2626;
+}
+
+.flow-card.efficiency-alert:hover {
+  border-color: #dc2626;
+}
+
+.flow-card.efficiency-alert .warning-icon {
+  animation: warning-icon-blink 1.4s ease-in-out infinite;
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 28px;
+  height: 28px;
+}
+
+@keyframes warning-icon-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-card.efficiency-alert .warning-icon {
+    animation: none;
+  }
+}
+
+.region-process {
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  color: #102b73;
+  letter-spacing: normal;
+}
+
+.flow-card .arrow {
+  display: none;
 }

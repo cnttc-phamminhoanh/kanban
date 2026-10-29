@@ -67,7 +67,51 @@ function card(row) {
   const top = el("div", "card-top");
   const name = el("div", "card-name");
 
-  name.append(el("h3", "", row.flow));
+  // Chỉ rút gọn tên hiển thị; giữ nguyên mã gốc cho link và tìm kiếm.
+  const displayName = row.flow.replace(/^SEWING-/i, "");
+  name.append(el("h3", "", displayName));
+
+  // Thêm cảnh báo cho chuyền có hiệu suất dưới 75%.
+  if (state === "red") {
+    link.classList.add("efficiency-alert");
+
+    const warning = el("span", "warning-icon");
+    warning.title = "Cảnh báo: Hiệu suất dưới 75%";
+    warning.setAttribute("role", "img");
+    warning.setAttribute(
+      "aria-label",
+      "Cảnh báo: Hiệu suất dưới 75%"
+    );
+
+    const ns = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(ns, "svg");
+
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("aria-hidden", "true");
+
+    const triangle = document.createElementNS(ns, "path");
+    triangle.setAttribute("d", "M12 3 22 21H2Z");
+    triangle.setAttribute("fill", "#ffdf32");
+    triangle.setAttribute("stroke", "#dc2626");
+    triangle.setAttribute("stroke-width", "1.7");
+    triangle.setAttribute("stroke-linejoin", "round");
+
+    const mark = document.createElementNS(ns, "path");
+    mark.setAttribute("d", "M12 9v5");
+    mark.setAttribute("stroke", "#7f1d1d");
+    mark.setAttribute("stroke-width", "2.5");
+    mark.setAttribute("stroke-linecap", "round");
+
+    const dot = document.createElementNS(ns, "circle");
+    dot.setAttribute("cx", "12");
+    dot.setAttribute("cy", "17");
+    dot.setAttribute("r", "1.3");
+    dot.setAttribute("fill", "#7f1d1d");
+
+    svg.append(triangle, mark, dot);
+    warning.append(svg);
+    name.append(warning);
+  }
 
   top.append(name);
 
@@ -151,6 +195,12 @@ function renderFlows(){
       title,
       el("span", "count", String(areaRows.length))
     );
+
+    // Đưa nhãn SEWING lên cạnh tên khu vực và số lượng.
+    if (areaRows.some(row => /^SEWING-/i.test(row.flow))) {
+      head.append(el("span", "region-process", "SEWING"));
+    }
+    
     for(const [workshop,workRows] of group(areaRows,"workshop")){
       const section = el("section", "workshop");
       const cards = el("div", "cards");
