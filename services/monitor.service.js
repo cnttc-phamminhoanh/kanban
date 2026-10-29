@@ -2,13 +2,50 @@ const monitorRepository = require("../repositories/monitor.repository");
 const dashboardRepository = require("../repositories/dashboard.repository");
 const semiFGoodsRepository = require("../repositories/semiFGoods.repository");
 const flowPlanRepository = require("../repositories/flowPlan.repository");
+const recipe = require("./recipe.service")
 
+
+// Dashboard chung
 async function getMonitor() {
-  return monitorRepository.getMonitorData();
+  const rows = await monitorRepository.getMonitorData();
+
+  return Promise.all(
+    rows.map(async data => {
+      const {
+        percent2,
+        dailyTarget,
+        poCount,
+        total
+      } = await recipe.recipeTarget(data.flow);
+
+      return {
+        ...data,
+        percent2,
+        dailyTarget,
+        poCount,
+        total
+      };
+    })
+  );
 }
 
+// Dashboard tổ trưởng: chỉ lấy chuyền được phân quyền
 async function getMonitorByUser(user) {
-  return monitorRepository.getMonitorDataByUser(user);
+  const rows = await monitorRepository.getMonitorDataByUser(user);
+
+  return Promise.all(
+    rows.map(async data => {
+      const metrics = await recipe.recipeTarget(data.flow);
+
+      return {
+        ...data,
+        percent2: metrics.percent2,
+        dailyTarget: metrics.dailyTarget,
+        poCount: metrics.poCount,
+        total: metrics.total
+      };
+    })
+  );
 }
 
 async function getFlowStyleSMV(flow) {
