@@ -844,3 +844,39 @@ body:not(.show-efficiency) .flow-card .card-top > .dot {
 .flow-card .arrow {
   display: none;
 }
+/* Nhóm số ngày và PO cạnh nhau */
+.card-badges {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Nhãn số ngày */
+/* Số ngày có giao diện giống số PO */
+.days-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 110px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #edf3fc;
+  color: #164baf;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Điều chỉnh trên màn hình nhỏ */
+@media (max-width: 480px) {
+  .card-badges {
+    gap: 4px;
+  }
+
+  .days-badge {
+    padding: 6px 7px;
+    font-size: 11px;
+  }
+}
