@@ -88,16 +88,29 @@ async function getFlowStyleAccQtyStartCompelete(flow) {
 async function getFlowStyleOutput(flow) {
   const pool = await getIgPool();
 
+  // const [rows] = await pool.execute(
+  //   `
+  //     select r.regDate, r.flow, o.style, o.orderNo, sum(r.Qty) as output
+  //     from pyregsum r
+  //     inner join (
+  //       select distinct wrkOrder,flow from pyregsum where StepNo = '450' and RegDate = curdate()
+  //     ) t on r.wrkOrder = t.wrkOrder and r.regDate = curdate() and t.flow = r.flow
+  //     inner join pywrkord o on r.wrkOrder = o.wrkOrder 
+  //     where r.stepNo = 450 and r.flow = ?
+  //     group by r.regDate, r.flow, o.style, o.orderNo
+  //   `,
+  //   [flow],
+  // );
+
   const [rows] = await pool.execute(
     `
-      select r.regDate, r.flow, o.style, o.orderNo, sum(r.Qty) as output
-      from pyregsum r
-      inner join (
-        select distinct wrkOrder,flow from pyregsum where StepNo = '450' and RegDate = curdate()
-      ) t on r.wrkOrder = t.wrkOrder and r.regDate = curdate() and t.flow = r.flow
-      inner join pywrkord o on r.wrkOrder = o.wrkOrder 
-      where r.stepNo = 450 and r.flow = ?
-      group by r.regDate, r.flow, o.style, o.orderNo
+      SELECT r.regDate, r.flow, o.style, o.orderNo, SUM(r.Qty) AS output
+      FROM pyregsum r
+      INNER JOIN pywrkord o ON r.wrkOrder = o.wrkOrder
+      WHERE r.stepNo IN ('450','700')
+      AND r.regDate = CURDATE()
+      AND r.flow = ?
+      GROUP BY r.regDate, r.flow, o.style, o.orderNo;
     `,
     [flow],
   );
