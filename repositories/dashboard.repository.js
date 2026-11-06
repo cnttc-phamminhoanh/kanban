@@ -172,7 +172,7 @@ async function getDefects(flow) {
       from pyrework w
       inner join pywrkord o on o.wrkOrder = w.wrkOrder 
       inner join (
-        select distinct wrkOrder,flow from pyregsum where StepNo = '450' and RegDate = curdate()
+        select distinct wrkOrder,flow from pyregsum where StepNo in ('450','700') and RegDate = curdate()
       ) t on t.wrkOrder = w.wrkOrder and w.Flow = t.Flow
       inner join pyrereason r on r.wrkOrder = w.wrkOrder and r.seqNo = w.seqNo and r.bundleNo = w.bundleNo 
       inner join pycode c on c.code = r.reasonCode and c.CType = 'REWORKREASON'
