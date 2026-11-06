@@ -387,5 +387,74 @@ function renderFilters() {
   }
 }
 
+let refreshingFlows = false;
+
+async function refreshFlows() {
+  if (refreshingFlows) return;
+  refreshingFlows = true;
+
+  try {
+    const response = await fetch("/api/monitor/private/flows", {
+      cache: "no-store",
+      headers: { Accept: "application/json" },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    if (!Array.isArray(result.data)) {
+      throw new Error("API data phải là một mảng");
+    }
+
+    const scrollY = window.scrollY;
+
+    flows = result.data
+      .filter(row =>
+        row &&
+        typeof row.flow === "string" &&
+        row.flow.trim()
+      )
+      .map(normalize);
+
+    syncEfficiencyButton();
+    renderFilters();
+    renderFlows();
+
+    window.scrollTo({
+      top: scrollY,
+      behavior: "instant",
+    });
+  } catch (error) {
+    console.error("Không cập nhật được danh sách chuyền:", error);
+  } finally {
+    refreshingFlows = false;
+  }
+}
+
+const dashboardChannel = new BroadcastChannel("kanban-dashboard");
+
+dashboardChannel.onmessage = ({ data }) => {
+  if (data?.type === "dashboard-updated") {
+    refreshFlows();
+  }
+};
+
+// Cập nhật khi quay lại bằng nút Back và trình duyệt phục hồi trang cũ.
+window.addEventListener("pageshow", event => {
+  if (event.persisted) {
+    refreshFlows();
+  }
+});
+
+// Cập nhật khi người dùng quay lại tab tổng quan.
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    refreshFlows();
+  }
+});
+
 renderFilters();
 loadFlows();
