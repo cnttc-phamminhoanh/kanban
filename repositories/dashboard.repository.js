@@ -8,7 +8,7 @@ async function getFlowStyleInfo(flow) {
     `
       select flow, o.style, o.buyer, o.orderNo, sum(o.qty) as styleQty, 0 as targetQty, 0 as targetNow
       from (
-        select distinct WrkOrder, flow from pyregsum where StepNo = '450' and RegDate = curdate()
+        select distinct WrkOrder, flow from pyregsum where StepNo in ('450', '700') and RegDate = curdate()
       ) t 
       inner join pywrkord o on o.wrkOrder = t.wrkOrder
       where flow = ?
@@ -31,7 +31,7 @@ async function getFlowStyleSMV(flow) {
         from (
           select t.flow, o.style, o.orderNo, t.WrkOrder, sum(ifnull(ifnull(a.StepTime, 0), s.StepTime)) as smv
           from (
-            select distinct WrkOrder, flow from pyregsum where StepNo = '450' and RegDate = curdate()
+            select distinct WrkOrder, flow from pyregsum WHERE StepNo in ('450', '700') and RegDate = curdate()
           ) t 
           inner join pywrkstp s on t.wrkOrder = s.wrkOrder 
           left join pystpasm a on a.wrkOrder = t.wrkOrder and a.stepNo = s.stepNo
@@ -47,7 +47,7 @@ async function getFlowStyleSMV(flow) {
         from (
           select t.flow, style, orderNo, t.wrkOrder, sum(ifnull(a.stepTime, s.stepTime)) as smv
           from (
-            select distinct wrkOrder, flow from pyregsum where stepNo = '450' and regDate = curdate()
+            select distinct wrkOrder, flow from pyregsum where stepNo in ('450', '700') and regDate = curdate()
           ) t 
           inner join pywrkstp s on t.wrkOrder = s.wrkOrder 
           left join pystpasm a on a.wrkOrder = t.wrkOrder and a.stepNo = s.stepNo
@@ -70,16 +70,61 @@ async function getFlowStyleAccQtyStartCompelete(flow) {
 
   const [rows] = await pool.execute(
     `
-      select t.flow, o.style, o.orderNo, min(regDate) as startDate, max(regDate) as completeDate, sum(r.Qty) as accQty
-      from (
-        select distinct wrkOrder,flow from pyregsum where StepNo = '450' and RegDate = curdate() and flow = ?
-      ) t
-      inner join pyregsum r on t.wrkOrder = r.wrkOrder 
-      inner join pywrkord o on o.wrkOrder = t.wrkOrder
-      where r.StepNo = 450 
-      group by t.flow, o.style, o.orderNo
+      SELECT
+          x.flow,
+          x.style,
+          x.orderNo,
+          MIN(x.startDate) AS startDate,
+          MAX(x.completeDate) AS completeDate,
+          SUM(x.accQty) AS accQty
+      FROM (
+          SELECT
+              t.flow,
+              o.style,
+              o.orderNo,
+              MIN(r.regDate) AS startDate,
+              MAX(r.regDate) AS completeDate,
+              SUM(r.Qty) AS accQty
+          FROM (
+              SELECT DISTINCT wrkOrder, flow
+              FROM pyregsum
+              WHERE StepNo = '450'
+                AND RegDate = CURDATE()
+                AND flow = ?
+          ) t
+          INNER JOIN pyregsum r
+              ON t.wrkOrder = r.wrkOrder
+          INNER JOIN pywrkord o
+              ON o.wrkOrder = t.wrkOrder
+          WHERE r.StepNo = '450'
+          GROUP BY t.flow, o.style, o.orderNo
+
+          UNION ALL
+
+          SELECT
+              t.flow,
+              o.style,
+              o.orderNo,
+              MIN(r.regDate) AS startDate,
+              MAX(r.regDate) AS completeDate,
+              SUM(r.Qty) AS accQty
+          FROM (
+              SELECT DISTINCT wrkOrder, flow
+              FROM pyregsum
+              WHERE StepNo = '700'
+                AND RegDate = CURDATE()
+                AND flow = ?
+          ) t
+          INNER JOIN pyregsum r
+              ON t.wrkOrder = r.wrkOrder
+          INNER JOIN pywrkord o
+              ON o.wrkOrder = t.wrkOrder
+          WHERE r.StepNo = '700'
+          GROUP BY t.flow, o.style, o.orderNo
+      ) x
+      GROUP BY x.flow, x.style, x.orderNo;
     `,
-    [flow],
+    [flow, flow],
   );
 
   return rows;
@@ -107,7 +152,7 @@ async function getFlowStyleOutput(flow) {
       SELECT r.regDate, r.flow, o.style, o.orderNo, SUM(r.Qty) AS output
       FROM pyregsum r
       INNER JOIN pywrkord o ON r.wrkOrder = o.wrkOrder
-      WHERE r.stepNo IN ('450','700')
+      WHERE r.stepNo in ('450', '700')
       AND r.regDate = CURDATE()
       AND r.flow = ?
       GROUP BY r.regDate, r.flow, o.style, o.orderNo;
