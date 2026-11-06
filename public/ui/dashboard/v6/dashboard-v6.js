@@ -122,6 +122,8 @@ function renderFlowDashboard(data) {
 let slideInterval = null;
 let refreshInterval = null;
 
+const dashboardChannel = new BroadcastChannel("kanban-dashboard");
+
 async function loadFlowDashboard() {
   try {
     const flow = window.location.pathname.split("/").pop();
@@ -366,6 +368,11 @@ async function loadFlowDashboard() {
     }
 
     slideInterval = setInterval(renderCurrent, 20000);
+
+    dashboardChannel.postMessage({
+      type: "dashboard-updated",
+      flow,
+    });
   } catch (err) {
     console.error(err);
     renderFlowDashboard(defaultData);
