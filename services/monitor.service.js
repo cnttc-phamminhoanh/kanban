@@ -15,7 +15,8 @@ async function getMonitor() {
         percent2,
         dailyTarget,
         poCount,
-        total
+        total,
+        daysFromStart
       } = await recipe.recipeTarget(data.flow);
 
       return {
@@ -23,7 +24,8 @@ async function getMonitor() {
         percent2,
         dailyTarget,
         poCount,
-        total
+        total,
+        daysFromStart
       };
     })
   );
@@ -42,7 +44,8 @@ async function getMonitorByUser(user) {
         percent2: metrics.percent2,
         dailyTarget: metrics.dailyTarget,
         poCount: metrics.poCount,
-        total: metrics.total
+        total: metrics.total,
+        daysFromStart: metrics.daysFromStart
       };
     })
   );

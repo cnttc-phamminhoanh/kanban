@@ -234,9 +234,10 @@ async function loadFlowDashboard() {
       // Kế hoạch row1 = (60 / smv) x số giờ làm việc x số công nhân kế hoạch x số hiêu quả -> Kết quả làm tròn lên
       // const dailyTarget = smv > 0 ? Math.ceil((60 / smv) * work_hr * worker_tg * num_eff) : 0;
       const dailyTarget = smv > 0 ? Math.ceil((60 / smv) * work_hr * worker_share * num_eff) : 0;
+
       // Kế hoạch row3
       const styleQty = Number(info?.styleQty || 0);
-
+      // console.log("ngày: ",dailyTarget, "styleQty: ", styleQty, "work_hr: ", work_hr, "worker_share: ", worker_share);
       // ==KẾ HOẠCH & PHẦN TRĂM ROW2==
       // Kế hoạch row2
       let targetNow = 0;
@@ -258,7 +259,9 @@ async function loadFlowDashboard() {
       // Ngược lại Thực tế row2 < Kế hoạch row1
       //   + Thời điểm xem báo cáo > 16h30: Kế hoạch row2 = Kế hoạch row1 & Phần trăm row2 = Thực tế row2 / Kế hoạch row1 x 100
       //   + Thời điểm xem báo cáo < 16h30:
-      //     - Kế hoạch row2 = Số phút từ 7h30 đến thời điểm xem báo cáo x（Kế hoạch row1 / Số giờ làm việc của công nhân / 60）
+      //     + nếu kế hoạch row1 (dailyTarget) > Kế hoạch row3 (styleQty) thì
+      //        - Kế hoạch row2 = Số phút từ 7h30 đến thời điểm xem báo cáo x（Kế hoạch row1 (dailyTarget) / Số giờ làm việc của công nhân / 60）
+      //        - Kế hoạch row2 = Số phút từ 7h30 đến thời điểm xem báo cáo x（Kế hoạch row1 (dailyTargetStyle) / Số giờ làm việc của công nhân / 60）
       //     - Phần trăm row2 = (Thực tế row2 / Kế hoạch row2) x 100 -> Kết quả làm tròn lên
 
       const dailyTargetStyle = dailyTarget > styleQty ? styleQty : dailyTarget;
@@ -270,7 +273,11 @@ async function loadFlowDashboard() {
         targetNow = dailyTargetStyle;
         percent2 = dailyTargetStyle > 0 ? Math.ceil((outputQty / dailyTargetStyle) * 100) + "%" : "0%";
       } else if (now >= startTime) {
-        targetNow = calculateTargetNow(dailyTargetStyle, workers.work_hr);
+        if (dailyTarget > styleQty) {
+          targetNow = calculateTargetNow(dailyTarget, workers.work_hr);
+        } else {
+          targetNow = calculateTargetNow(dailyTargetStyle, workers.work_hr);
+        }
         percent2 = targetNow > 0 ? Math.ceil((outputQty / targetNow) * 100) + "%" : "0%";
       }
 

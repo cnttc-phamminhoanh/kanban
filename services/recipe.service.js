@@ -13,11 +13,12 @@ function calculateTargetNow(dailyTarget, workingHours) {
 
 // Tính kế hoạch theo từng dòng style + orderNo rồi gộp kết quả của cả flow.
 async function recipeTarget(flow) {
-    const [infoData, smvData, workerData, outputData] = await Promise.all([
+    const [infoData, smvData, workerData, outputData, accQtyStartCompeleteData] = await Promise.all([
         dashboardRepository.getFlowStyleInfo(flow),
         dashboardRepository.getFlowStyleSMV(flow),
         dashboardRepository.getWorkerQty(flow),
-        dashboardRepository.getFlowStyleOutput(flow)
+        dashboardRepository.getFlowStyleOutput(flow),
+        dashboardRepository.getFlowStyleAccQtyStartCompelete(flow)
     ]);
 
     if (infoData.length === 0) {
@@ -25,8 +26,44 @@ async function recipeTarget(flow) {
             percent2: null,
             dailyTarget: 0,
             poCount: 0,
-            total: 0
+            total: 0,
+            startDate: null,
+            daysFromStart: null
         };
+    }
+    // tính ngày từ ngày bắt đầu sản xuất (lấy PO gần nhất) đến hôm nay, dựa vào accQtyStartCompeleteData.
+    const today = new Date();
+    const todayDay = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+    const latestStart = accQtyStartCompeleteData.reduce((latest, item) => {
+        if (!item.startDate) return latest;
+        const date = new Date(item.startDate);
+        if (Number.isNaN(date.getTime())) return latest;
+
+        const day = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+        if (day > todayDay || (latest && day <= latest.day)) return latest;
+        return { startDate: item.startDate, day };
+    }, null);
+    // Tính số ngày từ startDate đến hôm nay, bỏ qua Chủ nhật
+    let daysFromStart = null;
+
+    if (latestStart) {
+        let count = 1; // tính cả ngày startDate
+
+        // Bắt đầu tính từ ngày sau startDate
+        for (
+            let day = latestStart.day + 86400000;
+            day <= todayDay;
+            day += 86400000
+        ) {
+            const currentDate = new Date(day);
+
+            // getUTCDay() === 0 là Chủ nhật
+            if (currentDate.getUTCDay() !== 0) {
+                count++;
+            }
+        }
+
+        daysFromStart = count;
     }
 
     // Mỗi dòng style + orderNo là một nhóm riêng, giống dữ liệu dashboard-v6.
@@ -97,7 +134,9 @@ async function recipeTarget(flow) {
         percent2,
         dailyTarget,
         poCount,
-        total: styleQty
+        total: styleQty,
+        startDate: latestStart?.startDate ?? null,
+        daysFromStart
     };
 }
 
