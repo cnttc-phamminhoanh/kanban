@@ -62,15 +62,53 @@ function renderDefects(defects = []) {
   });
 }
 
+// function calculateTargetNow(dailyTarget, workingHours) {
+//   console.log('giờ', workingHours);
+
+//   if (workingHours <= 0) return 0;
+
+//   const startTime = new Date();
+//   startTime.setHours(7, 30, 0, 0);
+
+//   const elapsedMinutes = Math.max(0, (Date.now() - startTime.getTime()) / (1000 * 60));
+
+//   return Math.floor(elapsedMinutes * (dailyTarget / workingHours / 60));
+// }
 function calculateTargetNow(dailyTarget, workingHours) {
   if (workingHours <= 0) return 0;
+
+  const now = new Date();
 
   const startTime = new Date();
   startTime.setHours(7, 30, 0, 0);
 
-  const elapsedMinutes = Math.max(0, (Date.now() - startTime.getTime()) / (1000 * 60));
+  const lunchStart = new Date();
+  lunchStart.setHours(11, 30, 0, 0);
 
-  return Math.floor(elapsedMinutes * (dailyTarget / workingHours / 60));
+  const lunchEnd = new Date();
+  lunchEnd.setHours(12, 30, 0, 0);
+
+  const elapsedMinutes = Math.max(
+    0,
+    (now.getTime() - startTime.getTime()) / 60000
+  );
+
+  const lunchMinutes = Math.max(
+    0,
+    (
+      Math.min(now.getTime(), lunchEnd.getTime()) -
+      lunchStart.getTime()
+    ) / 60000
+  );
+
+  const actualMinutes = Math.min(
+    workingHours * 60,
+    Math.max(0, elapsedMinutes - lunchMinutes)
+  );
+
+  return Math.floor(
+    actualMinutes * (dailyTarget / workingHours / 60)
+  );
 }
 
 function normalizeBuyer(buyer) {
