@@ -83,10 +83,10 @@ function calculateTargetNow(dailyTarget, workingHours) {
   startTime.setHours(7, 30, 0, 0);
 
   const lunchStart = new Date();
-  lunchStart.setHours(11, 30, 0, 0);
+  lunchStart.setHours(11, 0, 0, 0);
 
   const lunchEnd = new Date();
-  lunchEnd.setHours(12, 30, 0, 0);
+  lunchEnd.setHours(12, 0, 0, 0);
 
   const elapsedMinutes = Math.max(
     0,
