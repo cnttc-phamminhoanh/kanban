@@ -1,14 +1,35 @@
 const dashboardRepository = require("../repositories/dashboard.repository");
 
-function calculateTargetNow(dailyTarget, workingHours) {
-    if (workingHours <= 0) return 0;
+function timeToMinutes(value) {
+    const match = String(value || "").match(/^(\d{1,2}):(\d{2})/);
+    if (!match) return null;
 
-    const startTime = new Date();
-    startTime.setHours(7, 30, 0, 0);
+    const hours = Number(match[1]);
+    const minutes = Number(match[2]);
+    if (hours > 23 || minutes > 59) return null;
 
-    const elapsedMinutes = Math.max(0, (Date.now() - startTime.getTime()) / (1000 * 60));
+    return hours * 60 + minutes;
+}
 
-    return Math.floor(elapsedMinutes * (dailyTarget / workingHours / 60));
+function calculateWorkedHours(now, startTime, workHours, breakFrom, breakTo) {
+    if (workHours <= 0 || now <= startTime) return 0;
+
+    const elapsedMinutes = (now.getTime() - startTime.getTime()) / (1000 * 60);
+    const currentMinute = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
+    const startMinute = startTime.getHours() * 60 + startTime.getMinutes();
+    const breakStart = timeToMinutes(breakFrom);
+    const breakEnd = timeToMinutes(breakTo);
+    let breakMinutes = 0;
+
+    if (breakStart !== null && breakEnd !== null && breakEnd > breakStart) {
+        breakMinutes = Math.max(
+            0,
+            Math.min(currentMinute, breakEnd) - Math.max(startMinute, breakStart)
+        );
+    }
+
+    const workedMinutes = Math.max(0, elapsedMinutes - breakMinutes);
+    return Math.min(workedMinutes / 60, workHours);
 }
 
 // Tính kế hoạch theo từng dòng style + orderNo rồi gộp kết quả của cả flow.
@@ -73,6 +94,7 @@ async function recipeTarget(flow) {
 
     const workers = workerData.find((item) => item.igm_dept === flow) || workerData[0] || {};
     const totalWorkerTg = Number(workers.worker_tg || 0);
+    const actualWorkers = Number(workers.worker_at || 0);
     const work_hr = Number(workers.work_hr || 0);
     const num_eff = Number(workers.num_eff || 0);
 
@@ -85,16 +107,12 @@ async function recipeTarget(flow) {
         String(a.orderNo).localeCompare(String(b.orderNo))
     );
 
-    // Giữ các mốc thời gian và cách tính phần trăm row 2 của công thức cũ.
-    const now = new Date();
     const startTime = new Date();
     startTime.setHours(7, 30, 0, 0);
-    const endTime = new Date(startTime);
-    endTime.setHours(endTime.getHours() + work_hr + 1);
 
     let dailyTarget = 0;
     let styleQty = 0;
-    let totalPercent2 = 0;
+    let totalStandardHours = 0;
 
     rankedPOs.forEach((po, index) => {
         const key = keyOf(po);
@@ -109,27 +127,29 @@ async function recipeTarget(flow) {
         const poDailyTarget = Math.min(calculatedTarget, poStyleQty);
         dailyTarget += poDailyTarget;
         styleQty += outputQty;
-        // styleQty += poStyleQty;
 
-        // Tính phần trăm row 2 cho từng dòng trước khi lấy trung bình cộng của flow.
-        let poPercent2 = 0;
-        if (outputQty >= poDailyTarget) {
-            poPercent2 = 100;
-        } else if (now > endTime) {
-            poPercent2 = poDailyTarget > 0
-                ? Math.ceil((outputQty / poDailyTarget) * 100)
-                : 0;
-        } else if (now >= startTime) {
-            const targetNow = calculateTargetNow(poDailyTarget, work_hr);
-            poPercent2 = targetNow > 0
-                ? Math.ceil((outputQty / targetNow) * 100)
-                : 0;
+        // Giờ công tiêu chuẩn của PO = sản lượng thực tế × SMV / 60.
+        if (smv > 0 && outputQty > 0) {
+            totalStandardHours += (outputQty * smv) / 60;
         }
-        totalPercent2 += poPercent2;
     });
 
-    // Kế hoạch và số lượng là tổng các dòng; phần trăm là trung bình cộng các dòng.
-    const percent2 = `${Number((totalPercent2 / poCount).toFixed(2))}%`;
+    // Hiệu suất chuyền = tổng giờ công tiêu chuẩn / tổng giờ công thực tế.
+    // Số giờ đã làm không bao gồm giờ nghỉ và không vượt quá tổng giờ của ca.
+    const actualWorkedHours = calculateWorkedHours(
+        new Date(),
+        startTime,
+        work_hr,
+        workers.break_time_fr,
+        workers.break_time_to
+    );
+    const totalActualLaborHours = actualWorkers * actualWorkedHours;
+    const efficiency = totalActualLaborHours > 0
+        ? (totalStandardHours / totalActualLaborHours) * 100
+        : null;
+    const percent2 = efficiency === null
+        ? null
+        : `${Number(efficiency.toFixed(2))}%`;
     return {
         percent2,
         dailyTarget,
