@@ -159,7 +159,6 @@ async function recipeTarget(flow) {
             poPercent2 = targetNow > 0
                 ? Math.ceil((outputQty / targetNow) * 100)
                 : 0;
-            console.log(flow, targetNow, " + ", outputQty);
 
         }
         totalPercent2 += poPercent2;
