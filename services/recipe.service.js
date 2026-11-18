@@ -1,43 +1,34 @@
 const dashboardRepository = require("../repositories/dashboard.repository");
 
-function calculateTargetNow(dailyTarget, workingHours) {
-    if (workingHours <= 0) return 0;
+function timeToMinutes(value) {
+    if (value === null || value === undefined) return null;
 
-    const now = new Date();
+    const match = String(value).match(/^(\d{1,2}):(\d{2})/);
+    if (!match) return null;
 
-    const startTime = new Date();
-    startTime.setHours(7, 30, 0, 0);
+    const hours = Number(match[1]);
+    const minutes = Number(match[2]);
+    if (hours > 23 || minutes > 59) return null;
 
-    const lunchStart = new Date();
-    lunchStart.setHours(11, 0, 0, 0);
-
-    const lunchEnd = new Date();
-    lunchEnd.setHours(12, 0, 0, 0);
-
-    const elapsedMinutes = Math.max(
-        0,
-        (now.getTime() - startTime.getTime()) / 60000
-    );
-
-    const lunchMinutes = Math.max(
-        0,
-        (
-            Math.min(now.getTime(), lunchEnd.getTime()) -
-            lunchStart.getTime()
-        ) / 60000
-    );
-
-    const actualMinutes = Math.min(
-        workingHours * 60,
-        Math.max(0, elapsedMinutes - lunchMinutes)
-    );
-
-    return Math.floor(
-        actualMinutes * (dailyTarget / workingHours / 60)
-    );
+    return hours * 60 + minutes;
 }
 
-// Tính kế hoạch theo từng dòng style + orderNo rồi gộp kết quả của cả flow.
+function calculateWorkedHours(now, startTime, workHours) {
+    if (!Number.isFinite(workHours) || workHours <= 0 || now <= startTime) return 0;
+
+    const elapsedMinutes = (now.getTime() - startTime.getTime()) / 60000;
+    const lunchStart = new Date(startTime);
+    lunchStart.setHours(11, 0, 0, 0);
+    const lunchEnd = new Date(startTime);
+    lunchEnd.setHours(12, 0, 0, 0);
+    const breakMinutes = Math.max(
+        0,
+        (Math.min(now.getTime(), lunchEnd.getTime()) - lunchStart.getTime()) / 60000
+    );
+
+    return Math.min(Math.max(0, elapsedMinutes - breakMinutes) / 60, workHours);
+}
+
 async function recipeTarget(flow) {
     const [infoData, smvData, workerData, outputData, accQtyStartCompeleteData] = await Promise.all([
         dashboardRepository.getFlowStyleInfo(flow),
@@ -57,9 +48,9 @@ async function recipeTarget(flow) {
             daysFromStart: null
         };
     }
-    // tính ngày từ ngày bắt đầu sản xuất (lấy PO gần nhất) đến hôm nay, dựa vào accQtyStartCompeleteData.
-    const today = new Date();
-    const todayDay = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+
+    const now = new Date();
+    const todayDay = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
     const latestStart = accQtyStartCompeleteData.reduce((latest, item) => {
         if (!item.startDate) return latest;
         const date = new Date(item.startDate);
@@ -69,40 +60,26 @@ async function recipeTarget(flow) {
         if (day > todayDay || (latest && day <= latest.day)) return latest;
         return { startDate: item.startDate, day };
     }, null);
-    // Tính số ngày từ startDate đến hôm nay, bỏ qua Chủ nhật
+
     let daysFromStart = null;
-
     if (latestStart) {
-        let count = 1; // tính cả ngày startDate
-
-        // Bắt đầu tính từ ngày sau startDate
-        for (
-            let day = latestStart.day + 86400000;
-            day <= todayDay;
-            day += 86400000
-        ) {
-            const currentDate = new Date(day);
-
-            // getUTCDay() === 0 là Chủ nhật
-            if (currentDate.getUTCDay() !== 0) {
-                count++;
-            }
+        let count = 1;
+        for (let day = latestStart.day + 86400000; day <= todayDay; day += 86400000) {
+            if (new Date(day).getUTCDay() !== 0) count++;
         }
-
         daysFromStart = count;
     }
 
-    // Mỗi dòng style + orderNo là một nhóm riêng, giống dữ liệu dashboard-v6.
     const keyOf = (item) => `${item.flow}|${item.style}|${item.orderNo}`;
-    const smvMap = new Map(smvData.map((item) => [keyOf(item), item.smv]));
+    const smvMap = new Map(smvData.map((item) => [keyOf(item), Number(item.smv || 0)]));
     const outputMap = new Map(outputData.map((item) => [keyOf(item), Number(item.output || 0)]));
 
-    const workers = workerData.find((item) => item.igm_dept === flow) || workerData[0] || {};
+    const workers = workerData.find((item) => item.igm_dept === flow) || {};
     const totalWorkerTg = Number(workers.worker_tg || 0);
+    const actualWorkers = Number(workers.worker_at || 0);
     const work_hr = Number(workers.work_hr || 0);
     const num_eff = Number(workers.num_eff || 0);
 
-    // Chia nguyên công nhân theo số dòng; người dư ưu tiên dòng có sản lượng hôm nay cao hơn.
     const poCount = infoData.length;
     const baseShare = Math.floor(totalWorkerTg / poCount);
     const remainder = totalWorkerTg % poCount;
@@ -111,51 +88,44 @@ async function recipeTarget(flow) {
         String(a.orderNo).localeCompare(String(b.orderNo))
     );
 
-    // Giữ các mốc thời gian và cách tính phần trăm row 2 của công thức cũ.
-    const now = new Date();
-    const startTime = new Date();
-    startTime.setHours(7, 30, 0, 0);
-    const endTime = new Date(startTime);
-    endTime.setHours(endTime.getHours() + work_hr + 1);
-
     let dailyTarget = 0;
     let styleQty = 0;
-    let totalPercent2 = 0;
+    let totalStandardHours = 0;
 
     rankedPOs.forEach((po, index) => {
         const key = keyOf(po);
-        const smv = Number(Number(smvMap.get(key) || 0).toFixed(2));
+        const smv = smvMap.get(key) || 0;
         const outputQty = outputMap.get(key) || 0;
         const poStyleQty = Number(po.styleQty || 0);
         const workerShare = baseShare + (index < remainder ? 1 : 0);
-        // Kế hoạch của dòng = min(ceil((60 / SMV) × giờ × công nhân được chia × hiệu suất), styleQty).
+
         const calculatedTarget = smv > 0
             ? Math.ceil((60 / smv) * work_hr * workerShare * num_eff)
             : 0;
         const poDailyTarget = Math.min(calculatedTarget, poStyleQty);
         dailyTarget += poDailyTarget;
         styleQty += outputQty;
-        // styleQty += poStyleQty;
 
-        // Tính phần trăm row 2 cho từng dòng trước khi lấy trung bình cộng của flow.
-        let poPercent2 = 0;
-        if (outputQty >= poDailyTarget) {
-            poPercent2 = 100;
-        } else if (now > endTime) {
-            poPercent2 = poDailyTarget > 0
-                ? Math.ceil((outputQty / poDailyTarget) * 100)
-                : 0;
-        } else if (now >= startTime) {
-            const targetNow = calculateTargetNow(poDailyTarget, work_hr);
-            poPercent2 = targetNow > 0
-                ? Math.ceil((outputQty / targetNow) * 100)
-                : 0;
+        if (Number.isFinite(smv) && smv > 0 && Number.isFinite(outputQty) && outputQty > 0) {
+            totalStandardHours += (outputQty * smv) / 60;
         }
-        totalPercent2 += poPercent2;
     });
 
-    // Kế hoạch và số lượng là tổng các dòng; phần trăm là trung bình cộng các dòng.
-    const percent2 = `${Number((totalPercent2 / poCount).toFixed(2))}%`;
+    const startTime = new Date(now);
+    startTime.setHours(7, 30, 0, 0);
+    const actualWorkedHours = calculateWorkedHours(
+        now,
+        startTime,
+        work_hr
+    );
+    const totalActualLaborHours = actualWorkers * actualWorkedHours;
+    const efficiency = Number.isFinite(totalActualLaborHours) && totalActualLaborHours > 0
+        ? (totalStandardHours / totalActualLaborHours) * 100
+        : null;
+    const percent2 = efficiency !== null && Number.isFinite(efficiency)
+        ? `${Number(efficiency.toFixed(2))}%`
+        : null;
+
     return {
         percent2,
         dailyTarget,

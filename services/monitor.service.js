@@ -3,7 +3,7 @@ const dashboardRepository = require("../repositories/dashboard.repository");
 const semiFGoodsRepository = require("../repositories/semiFGoods.repository");
 const flowPlanRepository = require("../repositories/flowPlan.repository");
 const recipe = require("./recipe.service")
-const recipeTest = require("./test")
+//const recipeTest = require("./test")
 
 
 // Dashboard chung
@@ -18,7 +18,7 @@ async function getMonitor() {
         poCount,
         total,
         daysFromStart
-      } = await recipeTest.recipeTarget(data.flow);
+      } = await recipe.recipeTarget(data.flow);
 
       return {
         ...data,
